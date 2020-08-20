@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <link rel="stylesheet" href="/src/assets/css/popup.css" />
+    <link rel="stylesheet" href="/src/assets/css/all.min.css" />
+
+    <title>BrowserNote</title>
+  </head>
+
+  <body>
+    <div class="header">
+      <div class="search">
+        <div class="search-bar">
+          <input class="input-text" type="text" />
+          <label><i class="fas fa-search"></i></label>
+        </div>
+      </div>
+      <!-- END search -->
+
+      <div class="tools">
+        <button class="btn btn-accent">
+          <i class="fas fa-plus"></i>
+          <span>New Note</span>
+        </button>
+        <button class="btn btn-accent">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <!-- END tools -->
+    </div>
+    <!-- END header -->
+
+    <div class="content">
+      <ul class="note-list">
+        <li class="note-item">
+          <div class="note-content">
+            <div style="padding: 10px 20px 5px;">
+              <label class="note-title">Inline text / note sammary</label>
+              <div class="note-body hidden">
+                はーいーとぼーーー！
+              </div>
+            </div>
+        
+            <div class="note-switch">
+              <i class="fas fa-caret-down fa-lg"></i>
+            </div>
+          </div>
+          <div class="note-label"></div>
+        </li>
+        <!-- END note-item -->
+
+        <li class="note-item">
+          <div class="note-content">
+            <div style="padding: 10px 20px 0px;">
+              <label class="note-title">Inline text / note sammary</label>
+              <div class="note-body">
+                It is a long established fact that a reader will be distracted by the readable content of a page when
+                looking at its
+                layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as
+                opposed to using
+                'Content here, content here', making it look like readable English. Many desktop publishing packages and
+                web page
+                editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many
+                web sites
+                still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on
+                purpose
+                (injected humour and the like).
+              </div>
+            </div>
+
+            <div class="note-switch">
+              <i class="fas fa-caret-down fa-lg"></i>
+            </div>
+          </div>
+          <div class="note-label"></div>
+        </li>
+        <!-- END note-item -->
+      </ul>
+      <!-- END note-list -->
+    </div>
+    <!-- END content -->
+    <script src="popup.js"></script>
+  </body>
+
+</html>
