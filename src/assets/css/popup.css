@@ -1,0 +1,143 @@
+html {
+  font-size: 16px;
+  color: #000000;
+  max-width: 500px;
+}
+
+body {
+  margin: 0;
+  background-color: #E8F1F2;
+}
+
+.h1, .h2, .h3, .h4, .h5, .h6 {
+  margin-block-start: .5em;
+  margin-block-end: .5em;
+  font-weight: normal;
+}
+
+.hidden {
+  display: none;
+}
+
+.btn {
+  box-sizing: border-box;
+  border: 2px solid transparent;
+  padding: 5px;
+}
+
+.btn:focus {
+  outline: none;
+}
+
+.btn-accent {
+  color: #E8F1F2;
+  border-color: #005271;
+  background-color: #005271;
+}
+
+.btn-accent:hover {
+  opacity: .7;
+}
+
+.btn-base {
+  color: #005271;
+  border-color: #E8F1F2;
+  background-color: #E8F1F2;
+}
+
+.btn-base:hover {
+  opacity: .7;
+}
+
+.round {
+  border-radius: 50%;
+  width: auto;
+}
+
+.col-base {
+  color: #E8F1F2;
+}
+
+.header {
+  background-color: #005271;
+  width: 100%;
+  color: #E8F1F2;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 2px 25px;
+  box-sizing: border-box;
+}
+
+.header .search-bar {
+  background-color: #E8F1F2;
+  color: #000000;
+  border-radius: 20px;
+  padding: 0px 15px;
+  color: #005271;
+}
+
+.header .search .input-text {
+  background-color: transparent;
+  color: #000000;
+  border: 0;
+  font-size: .8rem;
+  width: 12rem;
+}
+
+.header .search .input-text:focus {
+  outline: none;
+}
+
+.content {
+  background-color: #E8F1F2;
+}
+
+.note-list {
+  list-style: none;
+  width: 100%;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+.note-item {
+  display: flex;
+  margin-top: 10px;
+}
+
+.note-content {
+  background-color: #ffffff;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.note-switch {
+  text-align: center;
+  color: #005271;
+}
+
+.note-switch:hover {
+  opacity: .5;
+}
+
+.note-title {
+  margin-block-start: 0.5rem;
+  margin-block-end: 0.5rem;
+  font-weight: normal;
+}
+
+.note-body {
+  border-top: 1px solid #5996ac;
+  margin-top: 5px;
+  padding-top: 5px;
+  font-size: .9rem;
+}
+
+.note-label {
+  background-color: #00C0CC;
+  height: 63px;
+  width: 30px;
+  border-bottom-right-radius: 8px;
+  border-top-right-radius: 8px;
+}
