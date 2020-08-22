@@ -1,0 +1,147 @@
+$main-color: #000000;
+$base-color: #E8F1F2;
+$accent-color: #005271;
+$accent-hover-color: #5996ac;
+$sub-color: #aaaaaa;
+
+$label-color: #00C0CC;
+
+$window-width: 300px;
+
+// html {
+//   background-color: $base-color;
+// }
+
+// body {
+//   margin: 0;
+// }
+
+._page-note-wrapper {
+  position: absolute;
+  width: $window-width;
+  height: 100px;
+  font-size: small;
+  .al-right {
+    text-align: right;
+  }
+
+  .ps-top-right {
+    position: absolute;
+    top: 7px;
+    right: 10px;
+  }
+
+  .btn {
+    box-sizing: border-box;
+    border: 2px solid transparent;
+    padding: 3px 5px;
+    border-radius: 5px;
+    &:focus {
+      outline: none;
+    }
+    &-accent {
+      color: $base-color;
+      border-color: $accent-color;
+      background-color: $accent-color;
+      &:hover {
+        opacity: .7;
+      }
+    }
+    &-base {
+      color: $accent-color;
+      border-color: $base-color;
+      background-color: $base-color;
+      &:hover {
+        opacity: .7;
+      }
+    }
+    &-submit {
+      color: #fff;
+      border-color: $accent-hover-color;
+      background-color: $accent-hover-color;
+      &:hover {
+        opacity: .7;
+      }
+    }
+  }
+}
+
+._page-note {
+  position: relative;
+  box-shadow: 0 10px 25px 0 rgba(0, 0, 0, .5);
+  background-color: #fff;
+  &-header {
+    background-color: $accent-color;
+    display: flex;
+    justify-content: space-between;
+    padding: 3px 10px;
+  }
+  &-content {
+    padding: 10px 10px 20px;
+    box-sizing: border-box;
+    position: relative;
+  }
+}
+
+._page-note-content-form {
+  &-item {
+    margin-bottom: 10px;
+  }
+  &-color-label {
+    display: inline-flex;
+    width: 30px;
+    height: 24px;
+    border-radius: 5px;
+    justify-content: center;
+    align-items: center;
+    margin-right: 7px;
+  }
+  &-input {
+    &-label {
+      font-size: .8rem;
+      color: $sub-color;
+      // font-weight: bold;
+      display: block;
+      margin-bottom: 4px;
+    }
+    &-text {
+      box-sizing: border-box;
+      font-size: 15px;
+      border: 0;
+      border-bottom: 1px solid $sub-color;
+      padding: 5px 8px;
+      width: 100%;
+      background-color: transparent;
+      &:focus {
+        outline: none;
+        border-bottom: 2px solid $accent-hover-color;
+      }
+    }
+    &-textarea {
+      box-sizing: border-box;
+      padding: 5px 8px;
+      width: 100%;
+      min-height: 100px;
+      max-height: 200px;
+      resize: vertical;
+      border: 1px solid $sub-color;
+      background-color: transparent;
+      &:focus {
+        outline: none;
+        border: 2px solid $accent-hover-color;
+      }
+    }
+    &-radio {
+      display: none;
+      &:checked + ._page-note-content-form-color-label {
+        &::before {
+          color: #fff;
+          font-family: "Font Awesome 5 Free";
+          font-weight: 900;
+          content: "\f00c";
+        }
+      }
+    }
+    
+  }
+}
