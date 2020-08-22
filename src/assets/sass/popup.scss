@@ -107,6 +107,7 @@ body {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
+    margin-bottom: 10px;
   }
   &-item {
     display: flex;
@@ -121,6 +122,7 @@ body {
   &-switch {
     text-align: center;
     color: $accent-color;
+    padding: 5px;
     &:hover {
       opacity: .5;
     }
@@ -145,8 +147,4 @@ body {
     border-bottom-right-radius: 8px;
     border-top-right-radius: 8px;
   }
-}
-
-.note-list {
-
 }
