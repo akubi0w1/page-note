@@ -57,6 +57,10 @@ body {
   color: #E8F1F2;
 }
 
+.al-right {
+  text-align: right;
+}
+
 .header {
   background-color: #005271;
   width: 100%;
@@ -143,4 +147,22 @@ body {
   width: 30px;
   border-bottom-right-radius: 8px;
   border-top-right-radius: 8px;
+}
+
+.note-tag-list {
+  list-style: none;
+  margin: 0;
+  margin-top: 8px;
+  padding: 0;
+}
+
+.note-tag-list li {
+  display: inline-block;
+  margin-left: 5px;
+  font-size: .9rem;
+  color: #5996ac;
+}
+
+.note-tag-list li::before {
+  content: "#";
 }

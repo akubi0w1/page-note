@@ -1,36 +1,60 @@
 let noteListElement = document.getElementsByClassName("note-list")[0];
 
+const SAMPLE_NOTES = [
+  {
+    id: 1,
+    title: "page title",
+    url: "https://sample.com",
+    inlineDom: "something",
+    inlineText: "inline text",
+    summary: "notesummary",
+    body: "note detail",
+    labelColor: "red",
+    tags: ["tag2", "tag1"]
+  },
+  {
+    id: 2,
+    title: "page title2",
+    url: "https://sample2.com",
+    inlineDom: "something2",
+    inlineText: "inline text2",
+    summary: "notesummar2y",
+    body: "note detail2",
+    labelColor: "purple",
+    tags: ["tag3", "tag4"]
+  }
+];
+
 /**
  * 初期処理
  */
 (function() {
-  // TODO: データ仕込んで
-  const body = `It is a long established fact that a reader will be distracted by the readable content of a page when
-  looking at its
-  layout.The point of using Lorem Ipsum is that it has a more - or - less normal distribution of letters, as
-  opposed to using
-  'Content here, content here', making it look like readable English.Many desktop publishing packages and
-  web page
-  editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many
-  web sites
-  still in their infancy.Various versions have evolved over the years, sometimes by accident, sometimes on
-  purpose
-    (injected humour and the like).`
-  noteListElement.appendChild(createNoteItemElement("title", body));
+  // TODO: dbからデータ欲しい
+  SAMPLE_NOTES.forEach(note => {
+    noteListElement.appendChild(createNoteItemElement(note));
+  });
 })();
 
 /**
  * 
- * @param {string} title 
- * @param {string} body 
+ * @param {Object} note 
+ * @param {Number} note.id
+ * @param {string} note.title
+ * @param {string} note.url
+ * @param {string} note.inlineDom
+ * @param {string} note.inlineText
+ * @param {string} note.summary
+ * @param {string} note.body
+ * @param {string} note.labelColor
+ * @param {Array} note.tags
  * @return {HTMLLIElement}
  */
-function createNoteItemElement(title, body) {
+function createNoteItemElement(note) {
   let noteItemElement = document.createElement("li");
   noteItemElement.className = "note-item";
 
-  let noteContent = createNoteContentElement(title, body);
-  let noteLabel = createNoteLabelElement();
+  let noteContent = createNoteContentElement(note.title, note.body, note.tags);
+  let noteLabel = createNoteLabelElement(note.labelColor);
 
   noteItemElement.appendChild(noteContent);
   noteItemElement.appendChild(noteLabel);
@@ -42,13 +66,14 @@ function createNoteItemElement(title, body) {
  * 
  * @param {string} title 
  * @param {string} body 
+ * @param {Array} tags
  * @return {HTMLDivElement}
  */
-function createNoteContentElement(title, body) {
+function createNoteContentElement(title, body, tags) {
   let noteContent = document.createElement("div");
   noteContent.className = "note-content";
   
-  let frame = createNoteFrameElement(title, body);
+  let frame = createNoteFrameElement(title, body, tags);
   let extendSwitch = createExtendSwitchElement();
 
   noteContent.appendChild(frame);
@@ -60,9 +85,10 @@ function createNoteContentElement(title, body) {
  * 
  * @param {string} title 
  * @param {string} body 
+ * @param {Array} tags
  * @return {HTMLDivElement}
  */
-function createNoteFrameElement(title, body) {
+function createNoteFrameElement(title, body, tags) {
   let frame = document.createElement("div");
   frame.style = "padding: 10px 20px 5px;";
 
@@ -70,13 +96,37 @@ function createNoteFrameElement(title, body) {
   titleElement.className = "note-title";
   titleElement.textContent = title;
 
+  frame.appendChild(titleElement);
+  frame.appendChild(createNoteBodyElement(body, tags));
+  return frame;
+}
+
+/**
+ * 
+ * @param {string} body 
+ * @param {Array} tags 
+ * @return {HTMLDivElement}
+ */
+function createNoteBodyElement(body, tags) {
+
+  let noteBody = document.createElement("div");
+  noteBody.innerText = body;
+
+  let tagList = document.createElement("ul");
+  tagList.className = "note-tag-list al-right";
+  tags.map(tag => {
+    let item = document.createElement("li");
+    item.innerText = tag;
+    tagList.appendChild(item);
+  });
+
   let bodyElement = document.createElement("div");
   bodyElement.className = "note-body hidden";
-  bodyElement.innerText = body;
-
-  frame.appendChild(titleElement);
-  frame.appendChild(bodyElement);
-  return frame;
+  
+  bodyElement.appendChild(noteBody);
+  bodyElement.appendChild(tagList);
+  
+  return bodyElement;
 }
 
 /**
@@ -86,6 +136,7 @@ function createExtendSwitchElement() {
   let extendSwitch = document.createElement("div");
   extendSwitch.className = "note-switch";
   extendSwitch.appendChild(createIconElement("fas fa-caret-down fa-lg"));
+  
   extendSwitch.onclick = function (e) {
     let switchElem = this;
     let target = this.parentElement.getElementsByClassName("note-body")[0];
