@@ -110,7 +110,8 @@ $window-width: 300px;
       border: 0;
       border-bottom: 1px solid $sub-color;
       padding: 5px 8px;
-      width: 100%;      
+      width: 100%;
+      background-color: transparent;
       &:focus {
         outline: none;
         border-bottom: 2px solid $accent-hover-color;
@@ -124,6 +125,7 @@ $window-width: 300px;
       max-height: 200px;
       resize: vertical;
       border: 1px solid $sub-color;
+      background-color: transparent;
       &:focus {
         outline: none;
         border: 2px solid $accent-hover-color;
