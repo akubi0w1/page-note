@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <link rel="stylesheet" href="../src/assets/css/newNote.css" />
+  <link rel="stylesheet" href="../src/assets/css/all.min.css" />
+
+  <title>BrowserNote</title>
+</head>
+
+<body>
+  <div class="_page-note-wrapper">
+    <div class="_page-note">
+      <div class="_page-note-header">
+        <div class="_page-note-header-item">
+        </div>
+        <div class="_page-note-header-tools">
+          <button class="btn btn-accent">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+        <!-- END _page-note-header-tools -->
+      </div>
+      <!-- END _page-note-header -->
+      <div class="_page-note-content">
+        <form class="_page-note-content-form">
+          <div class="_page-note-content-form-item al-right ps-top-right">
+            <button type="submit" class="btn btn-accent">save</button>
+          </div>
+
+          <div class="_page-note-content-form-item">
+            <!-- <label class="_page-note-content-form-input-label">label</label> -->
+          
+            <div style="display: flex; align-items: center;">
+              <input id="_page-note-label-color-red" type="radio" name="label" value="red" checked
+                class="_page-note-content-form-input-radio" />
+              <label for="_page-note-label-color-red" class="_page-note-content-form-color-label"
+                style="background-color: red;"></label>
+          
+              <input id="_page-note-label-color-green" type="radio" name="label" value="green"
+                class="_page-note-content-form-input-radio" />
+              <label for="_page-note-label-color-green" class="_page-note-content-form-color-label"
+                style="background-color: green;"></label>
+          
+              <input id="_page-note-label-color-blue" type="radio" name="label" value="blue"
+                class="_page-note-content-form-input-radio" />
+              <label for="_page-note-label-color-blue" class="_page-note-content-form-color-label"
+                style="background-color: blue;"></label>
+            </div>
+          
+          </div>
+          
+          <div class="_page-note-content-form-item">
+            <label class="_page-note-content-form-input-label">summary (require)</label>
+            <input type="text" class="_page-note-content-form-input-text" />
+          </div>
+          
+          <div class="_page-note-content-form-item">
+            <label class="_page-note-content-form-input-label">detail (require)</label>
+            <textarea type="text" class="_page-note-content-form-input-textarea"></textarea>
+          </div>
+          
+          <div class="_page-note-content-form-item">
+            <label class="_page-note-content-form-input-label">tags</label>
+            <input type="text" class="_page-note-content-form-input-text" />
+          </div>
+          
+          <!-- <input type="text" name="url"/> -->
+        </form>
+      </div>
+      <!-- END _page-note-content -->
+    </div>
+    <!-- END _page-note -->
+  </div>
+  <!-- END _page-note-wrapper -->
+</body>
+
+</html>
