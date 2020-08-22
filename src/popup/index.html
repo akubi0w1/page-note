@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <link rel="stylesheet" href="/src/assets/css/popup.css" />
+    <link rel="stylesheet" href="/src/assets/css/all.min.css" />
+
+    <title>BrowserNote</title>
+  </head>
+
+  <body>
+    <div class="header">
+      <div class="search">
+        <div class="search-bar">
+          <input class="input-text" type="text" name="keyword" />
+          <label><i class="fas fa-search"></i></label>
+        </div>
+      </div>
+      <!-- END search -->
+
+      <div class="tools">
+        <button id="add-note-btn" class="btn btn-accent">
+          <i class="fas fa-plus"></i>
+          <span>New Note</span>
+        </button>
+        <button id="close-btn" class="btn btn-accent">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <!-- END tools -->
+    </div>
+    <!-- END header -->
+
+    <div class="content">
+      <ul class="note-list">
+      </ul>
+      <!-- END note-list -->
+    </div>
+    <!-- END content -->
+    <script src="popup.js"></script>
+  </body>
+
+</html>
