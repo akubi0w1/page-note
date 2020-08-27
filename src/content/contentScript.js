@@ -1,3 +1,10 @@
+// TODO: DBから値取得
+const RED_CODE = "#ff389b";
+const PURPLE_CODE = "#9b38ff";
+const BLUE_CODE = "#389bff";
+const GREEN_CODE = "#00cc33";
+const ORANGE_CODE = "#ff9b38";
+
 let pageNoteWrapper = document.createElement("div");
 pageNoteWrapper.className = "_page-note-wrapper";
 pageNoteWrapper.id = "_page-note-wrapper";
@@ -11,7 +18,6 @@ pageNoteWrapper.id = "_page-note-wrapper";
   pageNote.appendChild(createContent());
 
   pageNoteWrapper.appendChild(pageNote);
-  console.log(pageNoteWrapper);
 
   document.body.appendChild(pageNoteWrapper);
 })();
@@ -55,8 +61,7 @@ function createContent() {
   submitButtonInput.appendChild(submitButton);
 
   // labelColor
-  // TODO: カラーコードの定数化
-  let colorList = [{ label: "red", code: "#ff389b", checked: true }, { label: "purple", code: "#9b38ff", checked: false }, { label: "blue", code: "#389bff", checked: false }, { label: "green", code: "#00cc33", checked: false }, { label: "orange", code: "#ff9b38", checked: false }];
+  let colorList = [{ label: "red", code: RED_CODE, checked: true }, { label: "purple", code: PURPLE_CODE, checked: false }, { label: "blue", code: BLUE_CODE, checked: false }, { label: "green", code: GREEN_CODE, checked: false }, { label: "orange", code: ORANGE_CODE, checked: false }];
   let labelInput = createElement("div", "_page-note-content-form-item");
   let labelFrame = document.createElement("div");
   labelFrame.style = "display: flex; align-items: center;";
@@ -117,7 +122,7 @@ function createContent() {
 
 }
 
-// TODO: dryがあああ
+// // TODO: dryがあああ
 /**
  * fontawesomeで使うアイコンを作る
  * @param {string} className 
