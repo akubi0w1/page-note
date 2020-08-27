@@ -1,11 +1,38 @@
 // モジュールの読み込み
 var gulp = require("gulp");
 var sass = require("gulp-sass");
+var eslint = require("gulp-eslint");
 
-var targetDir = "src/assets/"
+var targetDir = "src/assets/";
+var applyLintPaths = {
+  allSrcJs: "src/**/*.js",
+  gulpFile: "gulpfile.js"
+};
 
-// タスクを作成
-// gulp.task("タスク名", 実行される処理)
+/**
+ * lint
+ */
+gulp.task("lint", function() {
+  return (
+    gulp.src([
+      applyLintPaths.allSrcJs,
+      applyLintPaths.gulpFile
+    ])
+      .pipe(eslint())
+      .pipe(eslint.format())
+      .pipe(eslint.failAfterError())
+  );
+});
+
+gulp.task("lint-watch", function() {
+  return (
+    gulp.watch(applyLintPaths.allSrcJs, gulp.task("lint"))
+  );
+});
+
+/**
+ * sass
+ */
 gulp.task("sass", function () {
   return (
     gulp.src(targetDir + "sass/**/*.scss")  // 取得するファイル
