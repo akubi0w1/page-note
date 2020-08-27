@@ -8,6 +8,10 @@ const ORANGE_CODE = "#ff9b38";
 let pageNoteWrapper = document.createElement("div");
 pageNoteWrapper.className = "_page-note-wrapper";
 pageNoteWrapper.id = "_page-note-wrapper";
+// pageNoteWrapper.addEventListener("mousedown", mouseDown, false);
+// 座標
+// var x;
+// var y;
 (function() {
   // TODO: あれを作るぞ...( ˘ω˘ )
 
@@ -145,3 +149,51 @@ function createElement(tag, className) {
   elem.className = className;
   return elem;
 }
+
+// TODO: d & d
+// function mouseDown(e) {
+//   document.getElementsByClassName("_page-note")[0].classList.add("drag");
+
+//   if (e.type === "mousedown") {
+//     var event = e;
+//   } else {
+//     var event = e.changedTouches[0];
+//   }
+//   x = event.pageX - e.srcElement.offsetLeft;
+//   y = event.pageY - e.srcElement.offsetTop;
+//   console.log(x, y);
+
+//   document.body.addEventListener("mousemove", mouseMove, false);
+//   document.body.addEventListener("touchmove", mouseMove, false);
+// }
+
+// function mouseMove(e) {
+//   var drag = document.getElementsByClassName("drag")[0];
+
+//   if (e.type === "mousemove") {
+//     var event = e;
+//   } else {
+//     var event = e.changedTouches[0];
+//   }
+
+//   e.preventDefault();
+
+//   drag.style.top = event.pageY - y + "px";
+//   drag.style.left = event.pageX - x + "px";
+
+//   drag.addEventListener("mouseup", mouseUp, false);
+//   document.body.addEventListener("mouseleave", mouseUp, false);
+//   drag.addEventListener("touchend", mouseUp, false);
+//   document.body.addEventListener("touchleave", mouseUp, false);
+// }
+
+// function mouseUp() {
+//   var drag = document.getElementsByClassName("drag")[0];
+
+//   document.body.removeEventListener("mousemove", mouseMove, false);
+//   drag.removeEventListener("mouseup", mouseUp, false);
+//   document.body.removeEventListener("touchmove", mouseMove, false);
+//   drag.removeEventListener("touchend", mouseUp, false);
+
+//   drag.classList.remove("drag");
+// }
