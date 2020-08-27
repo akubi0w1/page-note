@@ -193,9 +193,7 @@ document.getElementById("close-btn").onclick = function() {
  * AddNoteのイベントを追加
  */
 document.getElementById("add-note-btn").onclick = function () {
-  // TODO: 画面にnewまどを追加
   chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-    console.log(tabs);
     chrome.tabs.executeScript(
       tabs[0].id,
       { code: "document.getElementById(\"_page-note-wrapper\").style.display = \"block\";" }

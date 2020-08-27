@@ -31,7 +31,6 @@ function createHeader() {
   let closeButton = document.createElement("button");
   closeButton.className = "btn btn-accent";
   closeButton.appendChild(createIconElement("fas fa-times"));
-  // TODO: add event listener
   closeButton.onclick = function() {
     pageNoteWrapper.style = "display: none";
   };
