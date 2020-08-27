@@ -34,7 +34,7 @@ function createHeader() {
   // TODO: add event listener
   closeButton.onclick = function() {
     pageNoteWrapper.style = "display: none";
-  }
+  };
 
   headerTools.appendChild(closeButton);
   
@@ -73,7 +73,7 @@ function createContent() {
     label.style = "background-color: " + item.code;
     labelFrame.appendChild(input);
     labelFrame.appendChild(label);
-  })
+  });
   labelInput.appendChild(labelFrame);
 
   // summary

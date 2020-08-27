@@ -1,3 +1,3 @@
 chrome.runtime.onInstalled.addListener(function () {
-  console.log("insetall")
+  console.log("insetall");
 });

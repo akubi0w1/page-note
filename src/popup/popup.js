@@ -1,5 +1,3 @@
-let noteListElement = document.getElementsByClassName("note-list")[0];
-
 const SAMPLE_NOTES = [
   {
     id: 1,
@@ -30,6 +28,7 @@ const SAMPLE_NOTES = [
  */
 (function() {
   // TODO: dbからデータ欲しい
+  let noteListElement = document.getElementsByClassName("note-list")[0];
   SAMPLE_NOTES.forEach(note => {
     noteListElement.appendChild(createNoteItemElement(note));
   });
@@ -137,7 +136,7 @@ function createExtendSwitchElement() {
   extendSwitch.className = "note-switch";
   extendSwitch.appendChild(createIconElement("fas fa-caret-down fa-lg"));
   
-  extendSwitch.onclick = function (e) {
+  extendSwitch.onclick = function () {
     let switchElem = this;
     let target = this.parentElement.getElementsByClassName("note-body")[0];
     if (target.className.indexOf("hidden") > 0) {
@@ -147,7 +146,7 @@ function createExtendSwitchElement() {
       target.className = "note-body hidden";
       switchElem.children[0].className = "fas fa-caret-down fa-lg";
     }
-  }
+  };
 
   return extendSwitch;
 }
@@ -162,23 +161,23 @@ function createNoteLabelElement(color) {
   labelElement.className = "note-label";
   switch(color) {
     case "red":
-      labelElement.style = "background-color: #ff389b"
-      break
+      labelElement.style = "background-color: #ff389b";
+      break;
     case "purple":
-      labelElement.style = "background-color: #9b38ff"
-      break
+      labelElement.style = "background-color: #9b38ff";
+      break;
     case "blue":
-      labelElement.style = "background-color: #389bff"
-      break
+      labelElement.style = "background-color: #389bff";
+      break;
     case "green":
-      labelElement.style = "background-color: #00cc33"
-      break
+      labelElement.style = "background-color: #00cc33";
+      break;
     case "orange":
-      labelElement.style = "background-color: #ff9b38"
-      break
+      labelElement.style = "background-color: #ff9b38";
+      break;
     default:
-      labelElement.style = "background-color: #ff389b"
-      break
+      labelElement.style = "background-color: #ff389b";
+      break;
   }
   return labelElement;
 }
@@ -188,18 +187,18 @@ function createNoteLabelElement(color) {
  */
 document.getElementById("close-btn").onclick = function() {
   window.close();
-}
+};
 
 /**
  * AddNoteのイベントを追加
  */
-document.getElementById("add-note-btn").onclick = function (e) {
+document.getElementById("add-note-btn").onclick = function () {
   // TODO: 画面にnewまどを追加
   chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
     console.log(tabs);
     chrome.tabs.executeScript(
       tabs[0].id,
-      { code: `document.getElementById("_page-note-wrapper").style.display = "block";` }
+      { code: "document.getElementById(\"_page-note-wrapper\").style.display = \"block\";" }
     );
   });
   window.close();
