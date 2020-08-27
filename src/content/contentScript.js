@@ -1,7 +1,8 @@
+let pageNoteWrapper = document.createElement("div");
+pageNoteWrapper.className = "_page-note-wrapper";
+pageNoteWrapper.id = "_page-note-wrapper";
 (function() {
   // TODO: あれを作るぞ...( ˘ω˘ )
-  let pageNoteWrapper = document.createElement("div");
-  pageNoteWrapper.className = "_page-note-wrapper";
 
   let pageNote = document.createElement("div");
   pageNote.className = "_page-note";
@@ -31,6 +32,9 @@ function createHeader() {
   closeButton.className = "btn btn-accent";
   closeButton.appendChild(createIconElement("fas fa-times"));
   // TODO: add event listener
+  closeButton.onclick = function() {
+    pageNoteWrapper.style = "display: none";
+  }
 
   headerTools.appendChild(closeButton);
   
@@ -53,7 +57,7 @@ function createContent() {
 
   // labelColor
   // TODO: カラーコードの定数化
-  let colorList = [{ label: "red", code: "#ff389b" }, { label: "purple", code: "#9b38ff" }, { label: "blue", code: "#389bff" }, { label: "green", code: "#00cc33" }, { label: "orange", code: "#ff9b38" }];
+  let colorList = [{ label: "red", code: "#ff389b", checked: true }, { label: "purple", code: "#9b38ff", checked: false }, { label: "blue", code: "#389bff", checked: false }, { label: "green", code: "#00cc33", checked: false }, { label: "orange", code: "#ff9b38", checked: false }];
   let labelInput = createElement("div", "_page-note-content-form-item");
   let labelFrame = document.createElement("div");
   labelFrame.style = "display: flex; align-items: center;";
@@ -63,12 +67,12 @@ function createContent() {
     input.type = "radio";
     input.name = "labelColor";
     input.value = item.label;
-    // input.checked = true;
+    input.checked = item.checked;
     let label = createElement("label", "_page-note-content-form-color-label");
-    label.for = "_page-note-label-color-" + item.label;
+    label.setAttribute("for", "_page-note-label-color-" + item.label );
     label.style = "background-color: " + item.code;
-    labelFrame.appendChild(label);
     labelFrame.appendChild(input);
+    labelFrame.appendChild(label);
   })
   labelInput.appendChild(labelFrame);
 

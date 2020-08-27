@@ -17,11 +17,14 @@ $window-width: 300px;
 // }
 
 ._page-note-wrapper {
-  position: absolute;
-  width: 100%;
-  height: 100%;
+  position: fixed;
+  width: auto;
+  height: auto;
   font-size: small;
-  z-index: 200;
+  top: 0;
+  left: 0;
+  z-index: 20000;
+  display: none;
   .al-right {
     text-align: right;
   }
@@ -73,6 +76,7 @@ $window-width: 300px;
   // height: 100px;
   box-shadow: 0 10px 25px 0 rgba(0, 0, 0, .5);
   background-color: #fff;
+  // z-index: 3000;
   &-header {
     background-color: $accent-color;
     display: flex;
@@ -101,7 +105,7 @@ $window-width: 300px;
   }
   &-input {
     &-label {
-      font-size: .8rem;
+      font-size: 14px;
       color: $sub-color;
       // font-weight: bold;
       display: block;
