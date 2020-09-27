@@ -16,11 +16,15 @@ $window-width: 300px;
 //   margin: 0;
 // }
 
-._page-note-wrapper {
-  position: absolute;
-  width: $window-width;
-  height: 100px;
+#_page-note-wrapper {
+  position: fixed;
+  width: auto;
+  height: auto;
   font-size: small;
+  top: 0;
+  left: 0;
+  z-index: 20000;
+  display: none;
   .al-right {
     text-align: right;
   }
@@ -36,6 +40,8 @@ $window-width: 300px;
     border: 2px solid transparent;
     padding: 3px 5px;
     border-radius: 5px;
+    box-shadow: none;
+    min-height: 0;
     &:focus {
       outline: none;
     }
@@ -68,8 +74,11 @@ $window-width: 300px;
 
 ._page-note {
   position: relative;
+  width: $window-width;
+  // height: 100px;
   box-shadow: 0 10px 25px 0 rgba(0, 0, 0, .5);
   background-color: #fff;
+  // z-index: 3000;
   &-header {
     background-color: $accent-color;
     display: flex;
@@ -98,7 +107,7 @@ $window-width: 300px;
   }
   &-input {
     &-label {
-      font-size: .8rem;
+      font-size: 14px;
       color: $sub-color;
       // font-weight: bold;
       display: block;
@@ -135,10 +144,12 @@ $window-width: 300px;
       display: none;
       &:checked + ._page-note-content-form-color-label {
         &::before {
+          // TODO: font awesomeつかいてえ
           color: #fff;
-          font-family: "Font Awesome 5 Free";
-          font-weight: 900;
-          content: "\f00c";
+          content: "v";
+          // font-family: "Font Awesome 5 Free";
+          // font-weight: 900;
+          // content: "\f00c";
         }
       }
     }

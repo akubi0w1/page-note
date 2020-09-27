@@ -1,63 +1,70 @@
-._page-note-wrapper {
-  position: absolute;
-  width: 300px;
-  height: 100px;
+#_page-note-wrapper {
+  position: fixed;
+  width: auto;
+  height: auto;
   font-size: small;
+  top: 0;
+  left: 0;
+  z-index: 20000;
+  display: none;
 }
 
-._page-note-wrapper .al-right {
+#_page-note-wrapper .al-right {
   text-align: right;
 }
 
-._page-note-wrapper .ps-top-right {
+#_page-note-wrapper .ps-top-right {
   position: absolute;
   top: 7px;
   right: 10px;
 }
 
-._page-note-wrapper .btn {
+#_page-note-wrapper .btn {
   box-sizing: border-box;
   border: 2px solid transparent;
   padding: 3px 5px;
   border-radius: 5px;
+  box-shadow: none;
+  min-height: 0;
 }
 
-._page-note-wrapper .btn:focus {
+#_page-note-wrapper .btn:focus {
   outline: none;
 }
 
-._page-note-wrapper .btn-accent {
+#_page-note-wrapper .btn-accent {
   color: #E8F1F2;
   border-color: #005271;
   background-color: #005271;
 }
 
-._page-note-wrapper .btn-accent:hover {
+#_page-note-wrapper .btn-accent:hover {
   opacity: .7;
 }
 
-._page-note-wrapper .btn-base {
+#_page-note-wrapper .btn-base {
   color: #005271;
   border-color: #E8F1F2;
   background-color: #E8F1F2;
 }
 
-._page-note-wrapper .btn-base:hover {
+#_page-note-wrapper .btn-base:hover {
   opacity: .7;
 }
 
-._page-note-wrapper .btn-submit {
+#_page-note-wrapper .btn-submit {
   color: #fff;
   border-color: #5996ac;
   background-color: #5996ac;
 }
 
-._page-note-wrapper .btn-submit:hover {
+#_page-note-wrapper .btn-submit:hover {
   opacity: .7;
 }
 
 ._page-note {
   position: relative;
+  width: 300px;
   box-shadow: 0 10px 25px 0 rgba(0, 0, 0, 0.5);
   background-color: #fff;
 }
@@ -90,7 +97,7 @@
 }
 
 ._page-note-content-form-input-label {
-  font-size: .8rem;
+  font-size: 14px;
   color: #aaaaaa;
   display: block;
   margin-bottom: 4px;
@@ -133,7 +140,5 @@
 
 ._page-note-content-form-input-radio:checked + ._page-note-content-form-color-label::before {
   color: #fff;
-  font-family: "Font Awesome 5 Free";
-  font-weight: 900;
-  content: "\f00c";
+  content: "v";
 }
