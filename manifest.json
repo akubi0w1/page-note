@@ -19,8 +19,8 @@
     {
       "matches": ["*://*/*"],
       "css": [
-        "src/assets/css/all.min.css",
-        "src/assets/css/newNote.css"
+        "src/assets/css/newNote.css",
+        "src/assets/css/all.min.css"
       ],
       "js": ["src/content/contentScript.js"]
     }

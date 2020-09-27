@@ -40,7 +40,9 @@ function createHeader() {
   headerTools.className = "_page-note-header-tools";
   let closeButton = document.createElement("button");
   closeButton.className = "btn btn-accent";
-  closeButton.appendChild(createIconElement("fas fa-times"));
+  // TODO: fontawesomeを使いたい...
+  closeButton.innerHTML = "close";
+  // closeButton.appendChild(createIconElement("fas fa-times"));
   closeButton.onclick = function() {
     pageNoteWrapper.style = "display: none";
   };
@@ -126,17 +128,17 @@ function createContent() {
 
 }
 
-// // TODO: dryがあああ
-/**
- * fontawesomeで使うアイコンを作る
- * @param {string} className 
- * @return {HTMLElement}
- */
-function createIconElement(className) {
-  let elem = document.createElement("i");
-  elem.className = className;
-  return elem;
-};
+// // // TODO: dryがあああ
+// /**
+//  * fontawesomeで使うアイコンを作る
+//  * @param {string} className 
+//  * @return {HTMLElement}
+//  */
+// function createIconElement(className) {
+//   let elem = document.createElement("i");
+//   elem.className = className;
+//   return elem;
+// };
 
 /**
  * 

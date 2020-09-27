@@ -16,7 +16,7 @@ $window-width: 300px;
 //   margin: 0;
 // }
 
-._page-note-wrapper {
+#_page-note-wrapper {
   position: fixed;
   width: auto;
   height: auto;
@@ -40,6 +40,8 @@ $window-width: 300px;
     border: 2px solid transparent;
     padding: 3px 5px;
     border-radius: 5px;
+    box-shadow: none;
+    min-height: 0;
     &:focus {
       outline: none;
     }
@@ -142,10 +144,12 @@ $window-width: 300px;
       display: none;
       &:checked + ._page-note-content-form-color-label {
         &::before {
+          // TODO: font awesomeつかいてえ
           color: #fff;
-          font-family: "Font Awesome 5 Free";
-          font-weight: 900;
-          content: "\f00c";
+          content: "v";
+          // font-family: "Font Awesome 5 Free";
+          // font-weight: 900;
+          // content: "\f00c";
         }
       }
     }
