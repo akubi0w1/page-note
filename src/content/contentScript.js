@@ -64,6 +64,27 @@ function createContent() {
   let submitButton = createElement("button", "btn btn-accent");
   submitButton.type = "submit";
   submitButton.innerText = "save";
+  submitButton.onclick = function(evt) {
+    evt.preventDefault();
+    // TODO: url, inline_dom, inline_text, titleの取得
+    var summaryValue = summaryInput.value;
+    var bodyValue = bodyInput.value;
+    var tagsValue = tagsInput.value; // TODO: 切り離しandリストに
+    var labelValue = labelInput.value; // TODO: とれてない
+    chrome.runtime.sendMessage({
+      type: "ADD_NOTE", // TODO: constantsに切り出し
+      payload: {
+        url: "",
+        inlineDom: "",
+        inlineText: "",
+        title: "",
+        summary: summaryValue,
+        body: bodyValue,
+        tags: [],
+        label: labelValue
+      }
+    });
+  }
   submitButtonInput.appendChild(submitButton);
 
   // labelColor
@@ -199,3 +220,4 @@ function createElement(tag, className) {
 
 //   drag.classList.remove("drag");
 // }
+
