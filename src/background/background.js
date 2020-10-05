@@ -33,10 +33,10 @@ function createDB() {
   var openReq = window.indexedDB.open(DB_NAME, DB_VERSION);
   openReq.onerror = (event) => {
     console.log("failed to create database");
-  }
+  };
   openReq.onsuccess = (event) => {
     console.log("success to create database");
-  }
+  };
   // create table
   openReq.onupgradeneeded = (event) => {
     var db = event.target.result;
@@ -49,8 +49,8 @@ function createDB() {
     objStore.createIndex("body", "body", { unique: false });
     objStore.createIndex("tags", "tags", { unique: false });
     // red / purple / blue / green / orange
-    objStore.createIndex("label", "url", { unique: true });
-  }
+    objStore.createIndex("label", "label", { unique: false });
+  };
 }
 
 /**
@@ -78,7 +78,7 @@ function insertNote(url, inlineDom, inlineText, title, summary, body, tags, labe
     addRequest.onsuccess = function(event) {
       console.log("success add data");
     };
-    trans.oncomplete = function() {
+    trans.oncomplete = function(event) {
       console.log("complete transaction");
     };
   };
@@ -97,5 +97,14 @@ chrome.runtime.onMessage.addListener(function (msg, sender) {
   // TODO: switch caseでmsg.typeをハンドリング
   console.log(msg.type);
   console.log(msg.payload);
-  insertNote(msg.payload.url, msg.payload.inlineDom, msg.payload.inlineText, msg.payload.title, msg.payload.summary, msg.payload.body, msg.payload.tags, msg.payload.label);
+  insertNote(
+    msg.payload.url,
+    msg.payload.inlineDom,
+    msg.payload.inlineText,
+    msg.payload.title,
+    msg.payload.summary,
+    msg.payload.body,
+    msg.payload.tags,
+    msg.payload.label
+  );
 });

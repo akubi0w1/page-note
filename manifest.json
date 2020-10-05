@@ -22,7 +22,10 @@
         "src/assets/css/newNote.css",
         "src/assets/css/all.min.css"
       ],
-      "js": ["src/content/contentScript.js"]
+      "js": [
+        "src/content/contentScript.js",
+        "src/utils/constant.js"
+      ]
     }
   ],
   "web_accessible_resources": [
