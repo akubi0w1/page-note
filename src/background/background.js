@@ -93,18 +93,20 @@ const LABEL_COLOR = {
   ORANGE: "orange"
 };
 
+// contentから送られるてくるmessageのハンドリング
 chrome.runtime.onMessage.addListener(function (msg, sender) {
-  // TODO: switch caseでmsg.typeをハンドリング
-  console.log(msg.type);
-  console.log(msg.payload);
-  insertNote(
-    msg.payload.url,
-    msg.payload.inlineDom,
-    msg.payload.inlineText,
-    msg.payload.title,
-    msg.payload.summary,
-    msg.payload.body,
-    msg.payload.tags,
-    msg.payload.label
-  );
+  switch(msg.type) {
+    case "ADD_NOTE":
+      insertNote(
+        msg.payload.url,
+        msg.payload.inlineDom,
+        msg.payload.inlineText,
+        msg.payload.title,
+        msg.payload.summary,
+        msg.payload.body,
+        msg.payload.tags,
+        msg.payload.label
+      );
+      break;
+  }
 });
