@@ -81,6 +81,7 @@ function insertNote(url, inlineDom, inlineText, title, summary, body, tags, labe
     var addRequest = store.add({url, inlineDom, inlineText, title, summary, body, tags, label});
     addRequest.onsuccess = function(event) {
       console.log("success add data");
+      getAllNotes();
     };
     trans.oncomplete = function(event) {
       console.log("complete transaction");
