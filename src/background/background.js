@@ -1,6 +1,9 @@
 const DB_VERSION = 1;
 const DB_NAME = "pageNote";
 
+// TODO: popup <-> backgroundのmessage passing実装して、ここの部分をなくしたい
+var NOTE_LIST = [];
+
 chrome.runtime.onInstalled.addListener(function () {
   // create contextMenu
   chrome.contextMenus.create({
@@ -24,6 +27,7 @@ chrome.runtime.onInstalled.addListener(function () {
     window.alert("このブラウザーは安定版の IndexedDB をサポートしていません。IndexedDB の機能は利用できません。");
   }
   createDB();
+  getAllNotes();
 });
 
 /**
@@ -79,6 +83,26 @@ function insertNote(url, inlineDom, inlineText, title, summary, body, tags, labe
       console.log("success add data");
     };
     trans.oncomplete = function(event) {
+      console.log("complete transaction");
+    };
+  };
+}
+
+function getAllNotes() {
+  var openReq = window.indexedDB.open(DB_NAME, DB_VERSION);
+  openReq.onerror = function (event) {
+    console.log("failed to open db");
+  };
+  openReq.onsuccess = function (event) {
+    var db = event.target.result;
+    var trans = db.transaction(["notes"], "readwrite");
+    var store = trans.objectStore("notes");
+    var getRequest = store.getAll();
+    getRequest.onsuccess = function (event) {
+      NOTE_LIST = event.target.result;
+      console.log("success get data");
+    };
+    trans.oncomplete = function (event) {
       console.log("complete transaction");
     };
   };
