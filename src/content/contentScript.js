@@ -1,4 +1,4 @@
-// TODO: DBから値取得
+// TODO: DBから値取得 or constantsをつかう
 const RED_CODE = "#ff389b";
 const PURPLE_CODE = "#9b38ff";
 const BLUE_CODE = "#389bff";
@@ -13,7 +13,6 @@ pageNoteWrapper.id = "_page-note-wrapper";
 // var x;
 // var y;
 (function() {
-  // TODO: あれを作るぞ...( ˘ω˘ )
 
   let pageNote = document.createElement("div");
   pageNote.className = "_page-note";
@@ -41,7 +40,7 @@ function createHeader() {
   let closeButton = document.createElement("button");
   closeButton.className = "btn btn-accent";
   // TODO: fontawesomeを使いたい...
-  closeButton.innerHTML = "close";
+  closeButton.innerHTML = "X";
   // closeButton.appendChild(createIconElement("fas fa-times"));
   closeButton.onclick = function() {
     pageNoteWrapper.style = "display: none";
@@ -67,10 +66,11 @@ function createContent() {
   submitButton.onclick = function(evt) {
     evt.preventDefault();
     // TODO: url, inline_dom, inline_text, titleの取得
+    // TODO: バリデーション？contentでやるか？
     var summaryValue = summaryInput.value;
     var bodyValue = bodyInput.value;
     var tagsValue = tagsInput.value; // TODO: 切り離しandリストに
-    var labelValue = labelInput.value; // TODO: とれてない
+    var labelValue = labelInput.value; // TODO: とれてない。ラジオボタンの値ってどうとるんやろな...
     chrome.runtime.sendMessage({
       type: "ADD_NOTE", // TODO: constantsに切り出し
       payload: {
