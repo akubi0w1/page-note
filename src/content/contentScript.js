@@ -174,6 +174,7 @@ function createContent() {
   // errorList
   let errors = document.createElement("div");
   errors.id = "errorList";
+  errors.style = "color: red;";
 
   form.appendChild(submitButtonInput);
   form.appendChild(labelInput);
