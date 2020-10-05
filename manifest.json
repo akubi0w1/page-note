@@ -23,8 +23,7 @@
         "src/assets/css/all.min.css"
       ],
       "js": [
-        "src/content/contentScript.js",
-        "src/utils/constant.js"
+        "src/content/contentScript.js"
       ]
     }
   ],

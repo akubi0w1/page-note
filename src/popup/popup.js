@@ -9,7 +9,6 @@ const ORANGE_CODE = "#ff9b38";
  * 初期処理
  */
 (function() {
-  chrome.extension.getBackgroundPage().getAllNotes();
   let noteListElement = document.getElementsByClassName("note-list")[0];
   chrome.extension.getBackgroundPage().NOTE_LIST.forEach(note => {
     noteListElement.appendChild(createNoteItemElement(note));
