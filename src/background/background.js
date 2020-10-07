@@ -28,6 +28,9 @@ chrome.runtime.onInstalled.addListener(function () {
   }
   createDB();
   getAllNotes();
+
+  // TODO: けして
+  chrome.tabs.create({url: "src/note/index.html"});
 });
 
 /**
