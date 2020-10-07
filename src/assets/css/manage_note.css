@@ -1,0 +1,95 @@
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #fff;
+  font-size: 16px;
+  color: #000000;
+}
+
+.mt-10 {
+  margin-top: 10px;
+}
+
+.mt-20 {
+  margin-top: 20px;
+}
+
+.btn {
+  padding: 2px 8px;
+  font-size: 1em;
+}
+
+.btn:focus {
+  outline: none;
+}
+
+.btn-accent-outline {
+  background-color: #fff;
+  color: #005271;
+  border: 0;
+}
+
+.btn-accent-outline:hover {
+  color: #5996ac;
+}
+
+.header {
+  background-color: #005271;
+  padding: 7px 20px;
+}
+
+.header .logo {
+  font-size: 1.2em;
+  color: #E8F1F2;
+}
+
+.search-bar {
+  padding: 10px 20px;
+}
+
+.search-bar input[type=text] {
+  border: 0;
+  border-bottom: 1px solid #aaaaaa;
+  padding: 3px 5px;
+  font-size: 1em;
+  min-width: 300px;
+}
+
+.search-bar input[type=text]:focus {
+  outline: none;
+}
+
+.search-bar .form-label {
+  font-weight: 600;
+}
+
+.table table {
+  border-spacing: 0;
+  width: 100%;
+}
+
+.table tr {
+  border: 1px solid #aaaaaa;
+}
+
+.table th {
+  background-color: #f0f0f0;
+  border-right: 1px solid #aaaaaa;
+  border-top: 1px solid #aaaaaa;
+  border-bottom: 2px solid #aaaaaa;
+  padding: 5px 10px;
+}
+
+.table th:last-child {
+  border-right: 0px solid #aaaaaa;
+}
+
+.table td {
+  border-right: 1px solid #aaaaaa;
+  border-bottom: 1px solid #aaaaaa;
+  padding: 5px 10px;
+}
+
+.table td:last-child {
+  border-right: 0px solid #aaaaaa;
+}

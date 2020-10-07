@@ -1,0 +1,100 @@
+$main-color: #000000;
+$base-color: #E8F1F2;
+$accent-color: #005271;
+$accent-hover-color: #5996ac;
+$sub-color: #aaaaaa;
+
+$label-color: #00C0CC;
+
+$window-width: 300px;
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #fff;
+  font-size: 16px;
+  color: $main-color;
+}
+
+.mt {
+  &-10 {
+    margin-top: 10px;
+  }
+  &-20 {
+    margin-top: 20px;
+  }
+}
+
+.btn {
+  padding: 2px 8px;
+  font-size: 1em;
+  &:focus {
+    outline: none;
+  }
+  &-accent-outline {
+    background-color: #fff;
+    color: $accent-color;
+    border: 0;
+    &:hover {
+      color: $accent-hover-color;
+    }
+  }
+}
+
+.header {
+  background-color: $accent-color;
+  padding: 7px 20px;
+  .logo {
+    font-size: 1.2em;
+    color: $base-color;
+  }
+}
+
+.container {
+
+}
+
+.search-bar {
+  padding: 10px 20px;
+  input[type=text] {
+    border: 0;
+    border-bottom: 1px solid $sub-color;
+    padding: 3px 5px;
+    font-size: 1em;
+    min-width: 300px;
+    &:focus {
+      outline: none;
+    }
+  }
+  .form-label {
+    font-weight: 600;
+  }
+}
+
+.table {
+  table {
+    border-spacing: 0;
+    width: 100%;
+  }
+  tr {
+    border: 1px solid $sub-color;
+  }
+  th {
+    background-color: #f0f0f0;
+    border-right: 1px solid $sub-color;
+    border-top: 1px solid $sub-color;
+    border-bottom: 2px solid $sub-color;
+    padding: 5px 10px;
+    &:last-child {
+      border-right: 0px solid $sub-color;
+    }
+  }
+  td {
+    border-right: 1px solid $sub-color;
+    border-bottom: 1px solid $sub-color;
+    padding: 5px 10px;
+    &:last-child {
+      border-right: 0px solid $sub-color;
+    }
+  }
+}
