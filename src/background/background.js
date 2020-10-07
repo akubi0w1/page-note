@@ -30,7 +30,7 @@ chrome.runtime.onInstalled.addListener(function () {
   getAllNotes();
 
   // TODO: けして
-  chrome.tabs.create({url: "src/note/index.html"});
+  chrome.tabs.create({url: "src/notelist/index.html"});
 });
 
 /**

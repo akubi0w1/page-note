@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="../assets/css/all.min.css">
+  <link rel="stylesheet" href="../assets/css/note_list.css">
+  <title>manage note</title>
+</head>
+
+<body>
+  <div class="header">
+    <label class="logo">Manage Note</label>
+  </div>
+  <div class="container">
+    <div class="search-bar">
+      <form>
+        <label class="form-label">Filter: </label>
+        <input type="text" name="keyword">
+      </form>
+    </div>
+
+    <div class="table">
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>URL</th>
+            <th>PageTitle</th>
+            <th>Summary</th>
+            <th>Body...</th>
+            <th>Tags</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="note-list">
+          <tr>
+            <td>1</td>
+            <td>https://example.com</td>
+            <td>example page</td>
+            <td>note title</td>
+            <td>note body</td>
+            <td>tag, tag</td>
+            <td><button class="btn btn-accent-outline"><i class="fas fa-edit"></i></button></td>
+          </tr>
+          <tr>
+            <td>1</td>
+            <td>https://example.com</td>
+            <td>example page</td>
+            <td>note title</td>
+            <td>note body</td>
+            <td>tag, tag</td>
+            <td><button class="btn btn-accent-outline"><i class="fas fa-edit"></i></button></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="footer"></div>
+  <script src="./notelist.js"></script>
+</body>
+
+</html>
