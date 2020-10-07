@@ -1,9 +1,18 @@
-// TODO: DBから値取得
+// TODO: DBから値取得 or constantsをつかう
 const RED_CODE = "#ff389b";
 const PURPLE_CODE = "#9b38ff";
 const BLUE_CODE = "#389bff";
 const GREEN_CODE = "#00cc33";
 const ORANGE_CODE = "#ff9b38";
+
+const LABEL_COLOR = {
+  RED: "red",
+  PURPLE: "purple",
+  BLUE: "blue",
+  GREEN: "green",
+  ORANGE: "orange"
+};
+
 
 let pageNoteWrapper = document.createElement("div");
 pageNoteWrapper.className = "_page-note-wrapper";
@@ -13,7 +22,6 @@ pageNoteWrapper.id = "_page-note-wrapper";
 // var x;
 // var y;
 (function() {
-  // TODO: あれを作るぞ...( ˘ω˘ )
 
   let pageNote = document.createElement("div");
   pageNote.className = "_page-note";
@@ -41,7 +49,7 @@ function createHeader() {
   let closeButton = document.createElement("button");
   closeButton.className = "btn btn-accent";
   // TODO: fontawesomeを使いたい...
-  closeButton.innerHTML = "close";
+  closeButton.innerHTML = "X";
   // closeButton.appendChild(createIconElement("fas fa-times"));
   closeButton.onclick = function() {
     pageNoteWrapper.style = "display: none";
@@ -64,6 +72,53 @@ function createContent() {
   let submitButton = createElement("button", "btn btn-accent");
   submitButton.type = "submit";
   submitButton.innerText = "save";
+  submitButton.onclick = function(evt) {
+    evt.preventDefault();
+
+    var errorStack = [];
+
+    // TODO: inline_dom, inline_textの取得
+    const tabTitle = document.title;
+    const tabUrl = document.URL;
+
+    const summaryValue = form.summary.value;
+    if (validSummary(summaryValue) !== "") { errorStack.push(validSummary(summaryValue)); }
+
+    const bodyValue = form.body.value;
+    if (validBody(bodyValue) !== "") { errorStack.push(validBody(bodyValue)); }
+    
+    const tagsList = form.tags.value
+      .split(" ")
+      .filter(tag => validTag(tag));
+    
+    const labelValue = form.labelColor.value;
+    if (validLabel(labelValue) !== "") { errorStack.push(validLabel(labelValue)); }
+
+    if (errorStack.length > 0) {
+      // TODO: きしょい
+      errorStack.forEach(err => {
+        document.getElementById("errorList").innerHTML += err + "\n";
+      });
+      return;
+    }
+
+    // NOTE: 登録したくなければ、ここ以前に弾いてください
+    chrome.runtime.sendMessage({
+      type: "ADD_NOTE", // TODO: constantsに切り出し
+      payload: {
+        url: tabUrl,
+        inlineDom: "",
+        inlineText: "",
+        title: tabTitle,
+        summary: summaryValue,
+        body: bodyValue,
+        tags: tagsList,
+        label: labelValue
+      }
+    });
+    pageNoteWrapper.style = "display: none";
+  };
+  // NOTE: end on click
   submitButtonInput.appendChild(submitButton);
 
   // labelColor
@@ -99,7 +154,7 @@ function createContent() {
   // body
   let bodyForm = createElement("div", "_page-note-content-form-item");
   let bodyLabel = createElement("label", "_page-note-content-form-input-label");
-  bodyLabel.innerText = "body (required)";
+  bodyLabel.innerText = "body";
   let bodyInput = createElement("textarea", "_page-note-content-form-input-textarea");
   bodyInput.name = "body";
   bodyInput.type = "textarea";
@@ -116,16 +171,72 @@ function createContent() {
   tagsForm.appendChild(tagsLabel);
   tagsForm.appendChild(tagsInput);
 
+  // errorList
+  let errors = document.createElement("div");
+  errors.id = "errorList";
+  errors.style = "color: red;";
+
   form.appendChild(submitButtonInput);
   form.appendChild(labelInput);
   form.appendChild(summaryForm);
   form.appendChild(bodyForm);
   form.appendChild(tagsForm);
+  form.appendChild(errors);
 
   let content = createElement("div", "_page-note-content");
   content.appendChild(form);
   return content;
 
+}
+
+// NOTE: validation
+/**
+ * summaryに対してバリデーションを行う
+ * 
+ * @param {String} summary 
+ * @return {String}
+ */
+function validSummary(summary) {
+  if (summary === "") {
+    return "summary is empty";
+  }
+  return "";
+}
+
+/**
+ * bodyに対してバリデーションを行う
+ * 
+ * @param {String} body 
+ * @return {String}
+ */
+function validBody(body) {
+  return "";
+}
+
+/**
+ * tagに対してバリデーションを行う
+ * 
+ * @param {String} tag 
+ * @return {Boolean}
+ */
+function validTag(tag) {
+  if (tag === "") {
+    return false;
+  }
+  return true;
+}
+
+/**
+ * labelに対してバリデーションを行う
+ * 
+ * @param {String} label 
+ * @return {Boolean}
+ */
+function validLabel(label) {
+  if (label != LABEL_COLOR.RED && label != LABEL_COLOR.PURPLE && label != LABEL_COLOR.BLUE && label != LABEL_COLOR.GREEN && label != LABEL_COLOR.ORANGE) {
+    return "label is invalid";
+  }
+  return "";
 }
 
 // // // TODO: dryがあああ
@@ -199,3 +310,4 @@ function createElement(tag, className) {
 
 //   drag.classList.remove("drag");
 // }
+

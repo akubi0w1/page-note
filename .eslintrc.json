@@ -17,7 +17,7 @@
         "comma-dangle": "error",
         "no-console": "warn",
         "consistent-return": "error",
-        "no-unused-vars": "error"
+        "no-unused-vars": "warn"
     },
     "env": {
         "browser": true

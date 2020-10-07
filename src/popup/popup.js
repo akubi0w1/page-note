@@ -5,38 +5,12 @@ const BLUE_CODE = "#389bff";
 const GREEN_CODE = "#00cc33";
 const ORANGE_CODE = "#ff9b38";
 
-const SAMPLE_NOTES = [
-  {
-    id: 1,
-    title: "page title",
-    url: "https://sample.com",
-    inlineDom: "something",
-    inlineText: "inline text",
-    summary: "notesummary",
-    body: "note detail",
-    labelColor: "red",
-    tags: ["tag2", "tag1"]
-  },
-  {
-    id: 2,
-    title: "page title2",
-    url: "https://sample2.com",
-    inlineDom: "something2",
-    inlineText: "inline text2",
-    summary: "notesummar2y",
-    body: "note detail2",
-    labelColor: "purple",
-    tags: ["tag3", "tag4"]
-  }
-];
-
 /**
  * 初期処理
  */
 (function() {
-  // TODO: dbからデータ欲しい
   let noteListElement = document.getElementsByClassName("note-list")[0];
-  SAMPLE_NOTES.forEach(note => {
+  chrome.extension.getBackgroundPage().NOTE_LIST.forEach(note => {
     noteListElement.appendChild(createNoteItemElement(note));
   });
 })();
@@ -60,7 +34,7 @@ function createNoteItemElement(note) {
   let noteItemElement = document.createElement("li");
   noteItemElement.className = "note-item";
 
-  let noteContent = createNoteContentElement(note.title, note.body, note.tags);
+  let noteContent = createNoteContentElement(note.summary, note.body, note.tags);
   let noteLabel = createNoteLabelElement(note.labelColor);
 
   noteItemElement.appendChild(noteContent);
@@ -71,16 +45,16 @@ function createNoteItemElement(note) {
 
 /**
  * 
- * @param {string} title 
+ * @param {string} summary 
  * @param {string} body 
  * @param {Array} tags
  * @return {HTMLDivElement}
  */
-function createNoteContentElement(title, body, tags) {
+function createNoteContentElement(summary, body, tags) {
   let noteContent = document.createElement("div");
   noteContent.className = "note-content";
   
-  let frame = createNoteFrameElement(title, body, tags);
+  let frame = createNoteFrameElement(summary, body, tags);
   let extendSwitch = createExtendSwitchElement();
 
   noteContent.appendChild(frame);
@@ -90,20 +64,20 @@ function createNoteContentElement(title, body, tags) {
 
 /**
  * 
- * @param {string} title 
+ * @param {string} summary 
  * @param {string} body 
  * @param {Array} tags
  * @return {HTMLDivElement}
  */
-function createNoteFrameElement(title, body, tags) {
+function createNoteFrameElement(summary, body, tags) {
   let frame = document.createElement("div");
   frame.style = "padding: 10px 20px 5px;";
 
-  let titleElement = document.createElement("label");
-  titleElement.className = "note-title";
-  titleElement.textContent = title;
+  let summaryElement = document.createElement("label");
+  summaryElement.className = "note-title";
+  summaryElement.textContent = summary;
 
-  frame.appendChild(titleElement);
+  frame.appendChild(summaryElement);
   frame.appendChild(createNoteBodyElement(body, tags));
   return frame;
 }
