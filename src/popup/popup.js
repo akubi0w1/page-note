@@ -35,7 +35,7 @@ function createNoteItemElement(note) {
   noteItemElement.className = "note-item";
 
   let noteContent = createNoteContentElement(note.summary, note.body, note.tags);
-  let noteLabel = createNoteLabelElement(note.labelColor);
+  let noteLabel = createNoteLabelElement(note.label);
 
   noteItemElement.appendChild(noteContent);
   noteItemElement.appendChild(noteLabel);
