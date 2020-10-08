@@ -73,6 +73,26 @@ body {
   font-weight: 600;
 }
 
+.note-list .label {
+  border-radius: 5px;
+  height: .7em;
+  width: 40px;
+  background-color: #000000;
+}
+
+.note-list .page-link {
+  color: #005271;
+  text-decoration: none;
+}
+
+.note-list .page-link:hover {
+  color: #5996ac;
+}
+
+.note-list td {
+  font-size: 14px;
+}
+
 .table table {
   border-spacing: 0;
   width: 100%;

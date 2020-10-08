@@ -82,6 +82,25 @@ body {
   }
 }
 
+.note-list {
+  .label {
+    border-radius: 5px;
+    height: .7em;
+    width: 40px;
+    background-color: $main-color;
+  }
+  .page-link {
+    color: $accent-color;
+    text-decoration: none;
+    &:hover {
+      color: $accent-hover-color;
+    }
+  }
+  td {
+    font-size: 14px;
+  }
+}
+
 .table {
   table {
     border-spacing: 0;

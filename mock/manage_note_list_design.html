@@ -19,11 +19,12 @@
         </form>
       </div>
 
-      <div class="table">
+      <div class="table note-list">
         <table>
           <thead>
             <tr>
-              <th>ID</th>
+              <th>id</th>
+              <th>label</th>
               <th>URL</th>
               <th>PageTitle</th>
               <th>Summary</th>
@@ -35,7 +36,9 @@
           <tbody>
             <tr>
               <td>1</td>
-              <td>https://example.com</td>
+              <td><div class="label"></div></td>
+              <td>
+                <a href="https://example.com" class="page-link">title</a></td>
               <td>example page</td>
               <td>note title</td>
               <td>note body</td>
@@ -48,6 +51,9 @@
             
             <tr>
               <td>1</td>
+              <td>
+                <div class="label"></div>
+              </td>
               <td>https://example.com</td>
               <td>example page</td>
               <td>note title</td>
