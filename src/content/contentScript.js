@@ -87,6 +87,7 @@ function createContent() {
     const bodyValue = form.body.value;
     if (validBody(bodyValue) !== "") { errorStack.push(validBody(bodyValue)); }
     
+    // TODO: 重複削除
     const tagsList = form.tags.value
       .split(" ")
       .filter(tag => validTag(tag));
@@ -116,6 +117,7 @@ function createContent() {
         label: labelValue
       }
     });
+    // TODO: 値のリセット
     pageNoteWrapper.style = "display: none";
   };
   // NOTE: end on click
@@ -140,6 +142,8 @@ function createContent() {
     labelFrame.appendChild(label);
   });
   labelInput.appendChild(labelFrame);
+
+  // TODO: inline text, url, titleの表示
 
   // summary
   let summaryForm = createElement("div", "_page-note-content-form-item");

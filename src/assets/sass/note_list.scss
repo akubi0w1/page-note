@@ -3,6 +3,9 @@ $base-color: #E8F1F2;
 $accent-color: #005271;
 $accent-hover-color: #5996ac;
 $sub-color: #aaaaaa;
+$danger-color: #dc3545;
+$danger-hover-color: #e6717c;
+
 
 $label-color: #00C0CC;
 
@@ -37,6 +40,14 @@ body {
     border: 0;
     &:hover {
       color: $accent-hover-color;
+    }
+  }
+  &-danger-outline {
+    background-color: #fff;
+    color: $danger-color;
+    border: 0;
+    &:hover {
+      color: $danger-hover-color;
     }
   }
 }

@@ -33,6 +33,16 @@ body {
   color: #5996ac;
 }
 
+.btn-danger-outline {
+  background-color: #fff;
+  color: #dc3545;
+  border: 0;
+}
+
+.btn-danger-outline:hover {
+  color: #e6717c;
+}
+
 .header {
   background-color: #005271;
   padding: 7px 20px;
