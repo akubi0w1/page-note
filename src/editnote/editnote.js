@@ -8,6 +8,13 @@ const LABEL_COLOR = {
 
 
 (function(){
+  // TODO: manage系で共通化したい
+  document.getElementById("header-logo").onclick = function() {
+    chrome.tabs.getCurrent(function(tab) {
+      chrome.tabs.update(tab.id, { url: "src/notelist/index.html" });
+    });
+  }
+
   const idQuery = divideQuery(location.search.substr(1))
     .find(query => query.key === "id");
 
