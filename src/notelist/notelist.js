@@ -1,5 +1,3 @@
-alert("aaaa");
-
 const RED_CODE = "#ff389b";
 const PURPLE_CODE = "#9b38ff";
 const BLUE_CODE = "#389bff";
@@ -15,7 +13,6 @@ var noteListElem = document.getElementById("note-list");
 (function(){
 
   chrome.extension.getBackgroundPage().NOTE_LIST.forEach(note => {
-    console.log(note);
     noteListElem.appendChild(createNoteListRow(note));
   });
 })();
@@ -40,13 +37,30 @@ function createNoteListRow(note) {
   
   var idCol = document.createElement("td");
   
-  // TODO: 色をちゃんと分岐
+  // label
   var labelCol = document.createElement("td");
   var labelBar = document.createElement("div");
   labelBar.className = "label";
-  labelBar.style = "background-color: #ff389b";
+  switch (note.label) {
+    case "red":
+      labelBar.style = "background-color: " + RED_CODE;
+      break;
+    case "blue":
+      labelBar.style = "background-color: " + BLUE_CODE;
+      break;
+    case "green":
+      labelBar.style = "background-color: " + GREEN_CODE;
+      break;
+    case "purple":
+      labelBar.style = "background-color: " + PURPLE_CODE;
+      break;
+    case "orange":
+      labelBar.style = "background-color: " + ORANGE_CODE;
+      break;
+  }
   labelCol.appendChild(labelBar);
 
+  // origin page
   var pageCol = document.createElement("td");
   var pageLink = document.createElement("a");
   pageLink.className = "page-link";
@@ -55,15 +69,19 @@ function createNoteListRow(note) {
   pageLink.innerText = note.title;
   pageCol.appendChild(pageLink);
 
+  // summary
   var summaryCol = document.createElement("td");
   summaryCol.innerText = note.summary;
   
+  // body
   var bodyCol = document.createElement("td");
   bodyCol.innerText = note.body;
   
+  // tags
   var tagsCol = document.createElement("td");
   tagsCol.innerText = note.tags;
 
+  // button area
   var buttonCol = document.createElement("td");
   buttonCol.style = "min-width: 75px; font-size: 16px;";
   var editBtn = document.createElement("button");
