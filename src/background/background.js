@@ -29,7 +29,7 @@ chrome.runtime.onInstalled.addListener(function () {
   createDB();
   getAllNotes();
 
-  // TODO: けして
+  // TODO: デバッグ用
   chrome.tabs.create({url: "src/notelist/index.html"});
 });
 
@@ -47,7 +47,7 @@ function createDB() {
   // create table
   openReq.onupgradeneeded = (event) => {
     var db = event.target.result;
-    var objStore = db.createObjectStore("notes", { autoIncrement: true });
+    var objStore = db.createObjectStore("notes", { keyPath: "id", autoIncrement: true });
     objStore.createIndex("url", "url", { unique: false });
     objStore.createIndex("inline_dom", "inline_dom", { unique: false });
     objStore.createIndex("inline_text", "inline_text", { unique: false });

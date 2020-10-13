@@ -22,6 +22,7 @@ var noteListElem = document.getElementById("note-list");
  * note listの一行を作成
  * 
  * @param {Object} note 
+ * @param {Object} note.id
  * @param {String} note.url
  * @param {String} note.title
  * @param {String} note.label
@@ -33,9 +34,11 @@ var noteListElem = document.getElementById("note-list");
  * @returns {HTMLElement}
  */
 function createNoteListRow(note) {
+  // TODO: styleの調整
   var row = document.createElement("tr");
   
   var idCol = document.createElement("td");
+  idCol.innerText = note.id;
   
   // label
   var labelCol = document.createElement("td");
