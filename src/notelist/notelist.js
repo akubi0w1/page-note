@@ -12,9 +12,6 @@ var noteListElem = document.getElementById("note-list");
 
 (function(){
   renderNoteList(chrome.extension.getBackgroundPage().NOTE_LIST);
-  // chrome.extension.getBackgroundPage().NOTE_LIST.forEach(note => {
-  //   noteListElem.appendChild(createNoteListRow(note));
-  // });
 })();
 
 /**
@@ -107,6 +104,9 @@ function createNoteListRow(note) {
   buttonCol.style = "min-width: 75px; font-size: 16px;";
   var editBtn = document.createElement("button");
   editBtn.className = "btn btn-accent-outline";
+  editBtn.addEventListener("click", () => {
+    chrome.tabs.create({ url: `src/editnote/index.html?id=${note.id}` });
+  });
   editBtn.appendChild(createIconElement("fas fa-edit"));
   var deleteBtn = document.createElement("button");
   deleteBtn.className = "btn btn-danger-outline";

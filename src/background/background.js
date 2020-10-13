@@ -30,7 +30,8 @@ chrome.runtime.onInstalled.addListener(function () {
   getAllNotes();
 
   // TODO: デバッグ用
-  chrome.tabs.create({url: "src/notelist/index.html"});
+  chrome.tabs.create({ url: "src/notelist/index.html" });
+  chrome.tabs.create({ url: "src/editnote/index.html" });
 });
 
 /**
@@ -87,6 +88,38 @@ function insertNote(url, inlineDom, inlineText, title, summary, body, tags, labe
       getAllNotes();
     };
     trans.oncomplete = function(event) {
+      console.log("complete transaction");
+    };
+  };
+}
+
+/**
+ * 
+ * @param {Number} id 
+ * @param {String} url
+ * @param {String} inlineDom
+ * @param {String} inlineText
+ * @param {String} title
+ * @param {String} summary
+ * @param {String} body
+ * @param {Array} tags
+ * @param {String} label
+ */
+function updateNoteById(id, url, inlineDom, inlineText, title, summary, body, tags, label) {
+  var openReq = window.indexedDB.open(DB_NAME, DB_VERSION);
+  openReq.onerror = function (event) {
+    console.log("failed to open db");
+  };
+  openReq.onsuccess = function (event) {
+    var db = event.target.result;
+    var trans = db.transaction(["notes"], "readwrite");
+    var store = trans.objectStore("notes");
+    var updateRequest = store.put({ id, url, inlineDom, inlineText, title, summary, body, tags, label });
+    updateRequest.onsuccess = function (event) {
+      console.log("success update data");
+      getAllNotes();
+    };
+    trans.oncomplete = function (event) {
       console.log("complete transaction");
     };
   };

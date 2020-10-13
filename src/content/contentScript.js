@@ -89,7 +89,7 @@ function createContent() {
     
     // TODO: 重複削除
     const tagsList = form.tags.value
-      .split(" ")
+      .split(",")
       .filter(tag => validTag(tag));
     
     const labelValue = form.labelColor.value;
@@ -168,7 +168,7 @@ function createContent() {
   // tags
   let tagsForm = createElement("div", "_page-note-content-form-item");
   let tagsLabel = createElement("label", "_page-note-content-form-input-label");
-  tagsLabel.innerText = "tags (divide space)";
+  tagsLabel.innerText = "tags (divide comma)";
   let tagsInput = createElement("input", "_page-note-content-form-input-text");
   tagsInput.name = "tags";
   tagsInput.type = "text";
