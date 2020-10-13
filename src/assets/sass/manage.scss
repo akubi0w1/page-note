@@ -19,6 +19,13 @@ body {
   color: $main-color;
 }
 
+a {
+  color: $accent-color;
+  &:hover {
+    opacity: .7;
+  }
+}
+
 .mt {
   &-10 {
     margin-top: 10px;
@@ -28,11 +35,30 @@ body {
   }
 }
 
+.ml {
+  &-10 {
+    margin-left: 10px;
+  }
+  &-20 {
+    margin-left: 20px;
+  }
+}
+
 .btn {
   padding: 2px 8px;
   font-size: 1em;
+  border-radius: 5px;
+  border: 2px solid transparent;
   &:focus {
     outline: none;
+  }
+  &-accent {
+    color: $base-color;
+    border-color: $accent-color;
+    background-color: $accent-color;
+    &:hover {
+      opacity: .7;
+    }
   }
   &-accent-outline {
     background-color: #fff;
@@ -62,8 +88,8 @@ body {
 }
 
 .container {
-
 }
+
 
 .search-bar {
   padding: 10px 20px;
@@ -102,9 +128,11 @@ body {
 }
 
 .table {
+  &-wide {
+    width: 100%;
+  }
   table {
     border-spacing: 0;
-    width: 100%;
   }
   tr {
     border: 1px solid $sub-color;
@@ -123,8 +151,61 @@ body {
     border-right: 1px solid $sub-color;
     border-bottom: 1px solid $sub-color;
     padding: 5px 10px;
+    word-break: break-word;
     &:last-child {
       border-right: 0px solid $sub-color;
     }
+  }
+}
+
+.form {
+  .form-item {
+    display: block;
+    margin-bottom: 20px;
+  }
+  .form-label {
+    display: block;
+    color: $accent-color;
+    font-size: smaller;
+  }
+  .form-color-label {
+    display: inline-flex;
+    width: 50px;
+    height: 24px;
+    justify-content: center;
+    align-items: center;
+    margin-right: 7px;
+    border-radius: 5px;
+  }
+  .input-text, .input-textarea {
+    font-size: .9em;
+    width: 400px;
+  }
+  .input-text {
+    border: 0;
+    border-bottom: 1px solid $sub-color;
+    &:focus {
+      outline: none;
+    }
+  }
+  .input-textarea {
+    border: 1px solid $sub-color;
+    resize: vertical;
+    min-height: 160px;
+    &:focus {
+      outline: none;
+    }
+  }
+  .input-radio {
+    display: none;
+      &:checked + .form-color-label {
+        &::before {
+          // TODO: font awesomeつかいてえ
+          color: #fff;
+          font-family: "Font Awesome 5 Free";
+          font-weight: 900;
+          content: "\f00c";
+        }
+      }
   }
 }

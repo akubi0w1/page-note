@@ -6,6 +6,14 @@ body {
   color: #000000;
 }
 
+a {
+  color: #005271;
+}
+
+a:hover {
+  opacity: .7;
+}
+
 .mt-10 {
   margin-top: 10px;
 }
@@ -14,13 +22,33 @@ body {
   margin-top: 20px;
 }
 
+.ml-10 {
+  margin-left: 10px;
+}
+
+.ml-20 {
+  margin-left: 20px;
+}
+
 .btn {
   padding: 2px 8px;
   font-size: 1em;
+  border-radius: 5px;
+  border: 2px solid transparent;
 }
 
 .btn:focus {
   outline: none;
+}
+
+.btn-accent {
+  color: #E8F1F2;
+  border-color: #005271;
+  background-color: #005271;
+}
+
+.btn-accent:hover {
+  opacity: .7;
 }
 
 .btn-accent-outline {
@@ -93,9 +121,12 @@ body {
   font-size: 14px;
 }
 
+.table-wide {
+  width: 100%;
+}
+
 .table table {
   border-spacing: 0;
-  width: 100%;
 }
 
 .table tr {
@@ -118,8 +149,65 @@ body {
   border-right: 1px solid #aaaaaa;
   border-bottom: 1px solid #aaaaaa;
   padding: 5px 10px;
+  word-break: break-word;
 }
 
 .table td:last-child {
   border-right: 0px solid #aaaaaa;
+}
+
+.form .form-item {
+  display: block;
+  margin-bottom: 20px;
+}
+
+.form .form-label {
+  display: block;
+  color: #005271;
+  font-size: smaller;
+}
+
+.form .form-color-label {
+  display: inline-flex;
+  width: 50px;
+  height: 24px;
+  justify-content: center;
+  align-items: center;
+  margin-right: 7px;
+  border-radius: 5px;
+}
+
+.form .input-text, .form .input-textarea {
+  font-size: .9em;
+  width: 400px;
+}
+
+.form .input-text {
+  border: 0;
+  border-bottom: 1px solid #aaaaaa;
+}
+
+.form .input-text:focus {
+  outline: none;
+}
+
+.form .input-textarea {
+  border: 1px solid #aaaaaa;
+  resize: vertical;
+  min-height: 160px;
+}
+
+.form .input-textarea:focus {
+  outline: none;
+}
+
+.form .input-radio {
+  display: none;
+}
+
+.form .input-radio:checked + .form-color-label::before {
+  color: #fff;
+  font-family: "Font Awesome 5 Free";
+  font-weight: 900;
+  content: "\f00c";
 }
