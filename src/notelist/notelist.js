@@ -11,12 +11,30 @@ const ORANGE_CODE = "#ff9b38";
 var noteListElem = document.getElementById("note-list");
 
 (function(){
-
-  chrome.extension.getBackgroundPage().NOTE_LIST.forEach(note => {
-    noteListElem.appendChild(createNoteListRow(note));
-  });
+  renderNoteList(chrome.extension.getBackgroundPage().NOTE_LIST);
+  // chrome.extension.getBackgroundPage().NOTE_LIST.forEach(note => {
+  //   noteListElem.appendChild(createNoteListRow(note));
+  // });
 })();
 
+/**
+ * リストを作成する
+ * 
+ * @param {Array} noteList 
+ */
+function renderNoteList(noteList) {
+  noteList.forEach(note => {
+    noteListElem.appendChild(createNoteListRow(note));
+  });
+}
+
+/**
+ * リストを吹き飛ばす
+ */
+function clearNoteList() {
+  var clone = noteListElem.cloneNode(false);
+  noteListElem.parentNode.replaceChild(clone, noteListElem);
+}
 
 /**
  * note listの一行を作成
@@ -93,6 +111,13 @@ function createNoteListRow(note) {
   var deleteBtn = document.createElement("button");
   deleteBtn.className = "btn btn-danger-outline";
   deleteBtn.appendChild(createIconElement("fas fa-trash"));
+  deleteBtn.addEventListener("click", () => {
+    chrome.extension.getBackgroundPage().deleteNoteById(note.id);
+    // TODO: clear table
+    // clearNoteList();
+    // TODO: rerender
+    
+  });
   buttonCol.appendChild(editBtn);
   buttonCol.appendChild(deleteBtn);
 
