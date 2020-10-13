@@ -12,9 +12,9 @@ chrome.runtime.onInstalled.addListener(function () {
     "contexts": ["all"],
     "onclick": chrome.contextMenus.onClicked.addListener(function(info, tab) {
       chrome.tabs.get(tab.id, function(tab) {
-        chrome.tabs.executeScript(
+        chrome.tabs.sendMessage(
           tab.id,
-          { code: "document.getElementById(\"_page-note-wrapper\").style.display = \"block\";" }
+          { type: "OPEN_NEW_NOTE_WINDOW", payload: {} }
         );
       });
     })

@@ -174,7 +174,6 @@ document.getElementById("close-btn").onclick = function() {
  * AddNoteのイベントを追加
  */
 document.getElementById("add-note-btn").onclick = function () {
-  // TODO: send message: open content script.
   chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
     chrome.tabs.sendMessage(
       tabs[0].id,

@@ -85,7 +85,9 @@ function createHeader() {
 
 // TODO: 改良...
 function createContent() {
-  // TODO: inline_dom, inline_textの取得
+  // TODO: inline_domの取得
+  const selectedText = document.getSelection().toString();
+  // console.log(document.getSelection().anchorNode.parentNode.previousSibling);
   const tabTitle = document.title;
   const tabUrl = document.URL;
 
@@ -116,10 +118,15 @@ function createContent() {
     if (validLabel(labelValue) !== "") { errorStack.push(validLabel(labelValue)); }
 
     if (errorStack.length > 0) {
-      // TODO: きしょい
+      let errorBarElem = createElement("div", "_page-note-error-bar");
+      let ulElem = document.createElement("ul");
       errorStack.forEach(err => {
-        document.getElementById("errorList").innerHTML += err + "\n";
+        let liElem = document.createElement("li");
+        liElem.innerText = err;
+        ulElem.appendChild(liElem);
       });
+      errorBarElem.appendChild(ulElem);
+      document.getElementById("errorList").appendChild(errorBarElem);
       return;
     }
 
@@ -129,7 +136,7 @@ function createContent() {
       payload: {
         url: tabUrl,
         inlineDom: "",
-        inlineText: "",
+        inlineText: selectedText,
         title: tabTitle,
         summary: summaryValue,
         body: bodyValue,
@@ -162,7 +169,21 @@ function createContent() {
   });
   labelInput.appendChild(labelFrame);
 
-  // TODO: inline text, url, titleの表示
+  // selected text info
+  let selectedTextInfo = createElement("div", "_page-note-content-form-item");
+  selectedTextInfo.innerHTML = `
+  <label class="_page-note-content-form-input-label">selected text</label>
+  <label class="_page-note-content-info">${selectedText}</label>
+  `;
+  
+  // selected origin page info
+  let originInfo = createElement("div", "_page-note-content-form-item");
+  originInfo.innerHTML = `
+  <label class="_page-note-content-form-input-label">origin page</label>
+  <label class="_page-note-content-info">
+    <a href="${tabUrl}" target="_blank">${tabTitle}</a>
+  </label>
+  `;
 
   // summary
   let summaryForm = createElement("div", "_page-note-content-form-item");
@@ -195,16 +216,17 @@ function createContent() {
   tagsForm.appendChild(tagsInput);
 
   // errorList
-  let errors = document.createElement("div");
-  errors.id = "errorList";
-  errors.style = "color: red;";
+  let errorBar = createElement("div", "_page-note-content-form-item");
+  errorBar.id = "errorList";
 
   form.appendChild(submitButtonInput);
   form.appendChild(labelInput);
+  form.appendChild(errorBar);
+  form.appendChild(selectedTextInfo);
+  form.appendChild(originInfo);
   form.appendChild(summaryForm);
   form.appendChild(bodyForm);
   form.appendChild(tagsForm);
-  form.appendChild(errors);
 
   let content = createElement("div", "_page-note-content");
   content.appendChild(form);
