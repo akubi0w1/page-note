@@ -184,6 +184,13 @@ document.getElementById("add-note-btn").onclick = function () {
   window.close();
 };
 
+/**
+ * note管理画面へ遷移
+ */
+document.getElementById("open-manage-page-btn").onclick = function () {
+  chrome.tabs.create({ url: "src/notelist/index.html" });
+};
+
 
 /**
  * fontawesomeで使うアイコンを作る
