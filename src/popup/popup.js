@@ -30,7 +30,6 @@ const ORANGE_CODE = "#ff9b38";
  * @return {HTMLLIElement}
  */
 function createNoteItemElement(note) {
-  console.log("create note");
   let noteItemElement = document.createElement("li");
   noteItemElement.className = "note-item";
 
@@ -175,10 +174,11 @@ document.getElementById("close-btn").onclick = function() {
  * AddNoteのイベントを追加
  */
 document.getElementById("add-note-btn").onclick = function () {
+  // TODO: send message: open content script.
   chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-    chrome.tabs.executeScript(
+    chrome.tabs.sendMessage(
       tabs[0].id,
-      { code: "document.getElementById(\"_page-note-wrapper\").style.display = \"block\";" }
+      { type: "OPEN_NEW_NOTE_WINDOW", payload: {}}
     );
   });
   window.close();

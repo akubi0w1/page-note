@@ -14,14 +14,27 @@ const LABEL_COLOR = {
 };
 
 
-let pageNoteWrapper = document.createElement("div");
-pageNoteWrapper.className = "_page-note-wrapper";
-pageNoteWrapper.id = "_page-note-wrapper";
 // pageNoteWrapper.addEventListener("mousedown", mouseDown, false);
 // 座標
 // var x;
 // var y;
 (function() {
+  chrome.runtime.onMessage.addListener(function (msg, sender, sendResponse) {
+    switch(msg.type) {
+      case "OPEN_NEW_NOTE_WINDOW":
+        renderNewNoteWindow();
+        break;
+    }
+  });
+})();
+
+/**
+ * new note windowの描画
+ */
+function renderNewNoteWindow() {
+  let pageNoteWrapper = document.createElement("div");
+  pageNoteWrapper.className = "_page-note-wrapper";
+  pageNoteWrapper.id = "_page-note-wrapper";
 
   let pageNote = document.createElement("div");
   pageNote.className = "_page-note";
@@ -32,8 +45,14 @@ pageNoteWrapper.id = "_page-note-wrapper";
   pageNoteWrapper.appendChild(pageNote);
 
   document.body.appendChild(pageNoteWrapper);
-})();
+}
 
+/**
+ * new note windowの削除
+ */
+function removeNewNoteWindow() {
+  document.getElementById("_page-note-wrapper").remove();
+}
 
 /**
  * 
@@ -52,7 +71,8 @@ function createHeader() {
   closeButton.innerHTML = "X";
   // closeButton.appendChild(createIconElement("fas fa-times"));
   closeButton.onclick = function() {
-    pageNoteWrapper.style = "display: none";
+    // pageNoteWrapper.style = "display: none";
+    removeNewNoteWindow();
   };
 
   headerTools.appendChild(closeButton);
@@ -65,6 +85,10 @@ function createHeader() {
 
 // TODO: 改良...
 function createContent() {
+  // TODO: inline_dom, inline_textの取得
+  const tabTitle = document.title;
+  const tabUrl = document.URL;
+
   let form = createElement("form", "_page-note-content-form");
 
   // submitButton
@@ -76,10 +100,6 @@ function createContent() {
     evt.preventDefault();
 
     var errorStack = [];
-
-    // TODO: inline_dom, inline_textの取得
-    const tabTitle = document.title;
-    const tabUrl = document.URL;
 
     const summaryValue = form.summary.value;
     if (validSummary(summaryValue) !== "") { errorStack.push(validSummary(summaryValue)); }
@@ -117,8 +137,7 @@ function createContent() {
         label: labelValue
       }
     });
-    // TODO: 値のリセット
-    pageNoteWrapper.style = "display: none";
+    removeNewNoteWindow();
   };
   // NOTE: end on click
   submitButtonInput.appendChild(submitButton);

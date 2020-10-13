@@ -13,7 +13,7 @@ const LABEL_COLOR = {
     chrome.tabs.getCurrent(function(tab) {
       chrome.tabs.update(tab.id, { url: "src/notelist/index.html" });
     });
-  }
+  };
 
   const idQuery = divideQuery(location.search.substr(1))
     .find(query => query.key === "id");
