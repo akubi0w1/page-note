@@ -38,12 +38,14 @@ const LABEL_COLOR = {
   // save note
   document.getElementById("edit-note-save").onclick = function (event) {
     event.preventDefault();
+    let errorStack = [];
+
     const form = document.getElementById("edit-note");
     const summaryValue = form.summary.value;
-    if (validSummary(summaryValue) !== "") { console.log("error"); return; }
+    if (validSummary(summaryValue) !== "") { errorStack.push(validSummary(summaryValue)); }
 
     const bodyValue = form.body.value;
-    if (validBody(bodyValue) !== "") { console.log("error"); return; }
+    if (validBody(bodyValue) !== "") { errorStack.push(validBody(bodyValue)); }
 
     const tagsList = form.tags.value
       .split(",")
@@ -52,9 +54,24 @@ const LABEL_COLOR = {
       .filter(tag => validTag(tag));
 
     const labelValue = form.labelColor.value;
-    if (validLabel(labelValue) !== "") { console.log("error"); return; }
+    if (validLabel(labelValue) !== "") { errorStack.push(validLabel(labelValue)); }
 
-    // TODO: エラーを表示
+    // handle error
+    if(errorStack.length > 0) {
+      // TODO: funcにきり出せそう
+      clearNotify();
+      let errorBarElem = document.createElement("div");
+      errorBarElem.className = "notify-bar notify-bar-wide notify-bar-error";
+      let ulElem = document.createElement("ul");
+      errorStack.forEach(err => {
+        let liElem = document.createElement("li");
+        liElem.innerText = err;
+        ulElem.appendChild(liElem);
+      });
+      errorBarElem.appendChild(ulElem);
+      document.getElementById("notify").appendChild(errorBarElem);
+      return;
+    }
 
     chrome.extension.getBackgroundPage().updateNoteById(
       id,
@@ -68,10 +85,25 @@ const LABEL_COLOR = {
       labelValue
     );
 
-    // TODO: statusメッセージの表示
-
+    // TODO: funcにきり出せそう
+    clearNotify();
+    let infoBarElem = document.createElement("div");
+    infoBarElem.className = "notify-bar notify-bar-wide notify-bar-success";
+    let ulElem = document.createElement("ul");
+    let liElem = document.createElement("li");
+    liElem.innerText = "success to send request";
+    ulElem.appendChild(liElem);
+    infoBarElem.appendChild(ulElem);
+    document.getElementById("notify").appendChild(infoBarElem);
   };
 }());
+
+function clearNotify() {
+  let targetElem = document.getElementById("notify");
+  if (typeof targetElem === "undefined") { return; }
+  let clone = targetElem.cloneNode(false);
+  targetElem.parentNode.replaceChild(clone, targetElem);
+}
 
 
 /**
@@ -177,7 +209,7 @@ function divideQuery(queryString) {
  */
 function validSummary(summary) {
   if (summary === "") {
-    return "summary is empty";
+    return "error: summary is empty";
   }
   return "";
 }
@@ -213,7 +245,7 @@ function validTag(tag) {
  */
 function validLabel(label) {
   if (label != LABEL_COLOR.RED && label != LABEL_COLOR.PURPLE && label != LABEL_COLOR.BLUE && label != LABEL_COLOR.GREEN && label != LABEL_COLOR.ORANGE) {
-    return "label is invalid";
+    return "error: label is invalid";
   }
   return "";
 }
