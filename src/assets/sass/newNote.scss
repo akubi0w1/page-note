@@ -3,6 +3,9 @@ $base-color: #E8F1F2;
 $accent-color: #005271;
 $accent-hover-color: #5996ac;
 $sub-color: #aaaaaa;
+$danger-color: #dc3545;
+$danger-hover-color: #e6717c;
+$danger-sub-color: #f8d8db;
 
 $label-color: #00C0CC;
 
@@ -24,7 +27,6 @@ $window-width: 300px;
   top: 0;
   left: 0;
   z-index: 20000;
-  display: none;
   .al-right {
     text-align: right;
   }
@@ -89,6 +91,27 @@ $window-width: 300px;
     padding: 10px 10px 20px;
     box-sizing: border-box;
     position: relative;
+  }
+  &-error-bar {
+    background-color: $danger-sub-color;
+    color: $danger-color;
+    border-radius: 5px;
+    ul {
+      margin: 0;
+      padding: 5px 10px;
+      list-style: none;
+    }
+  }
+}
+
+._page-note-content-info {
+  font-size: 15px;
+  display: block;
+  a {
+    color: $accent-color;
+    &:hover {
+      opacity: .7;
+    }
   }
 }
 

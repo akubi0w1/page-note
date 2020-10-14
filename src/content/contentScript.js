@@ -14,14 +14,27 @@ const LABEL_COLOR = {
 };
 
 
-let pageNoteWrapper = document.createElement("div");
-pageNoteWrapper.className = "_page-note-wrapper";
-pageNoteWrapper.id = "_page-note-wrapper";
 // pageNoteWrapper.addEventListener("mousedown", mouseDown, false);
 // 座標
 // var x;
 // var y;
 (function() {
+  chrome.runtime.onMessage.addListener(function (msg, sender, sendResponse) {
+    switch(msg.type) {
+      case "OPEN_NEW_NOTE_WINDOW":
+        renderNewNoteWindow();
+        break;
+    }
+  });
+})();
+
+/**
+ * new note windowの描画
+ */
+function renderNewNoteWindow() {
+  let pageNoteWrapper = document.createElement("div");
+  pageNoteWrapper.className = "_page-note-wrapper";
+  pageNoteWrapper.id = "_page-note-wrapper";
 
   let pageNote = document.createElement("div");
   pageNote.className = "_page-note";
@@ -32,8 +45,14 @@ pageNoteWrapper.id = "_page-note-wrapper";
   pageNoteWrapper.appendChild(pageNote);
 
   document.body.appendChild(pageNoteWrapper);
-})();
+}
 
+/**
+ * new note windowの削除
+ */
+function removeNewNoteWindow() {
+  document.getElementById("_page-note-wrapper").remove();
+}
 
 /**
  * 
@@ -52,7 +71,8 @@ function createHeader() {
   closeButton.innerHTML = "X";
   // closeButton.appendChild(createIconElement("fas fa-times"));
   closeButton.onclick = function() {
-    pageNoteWrapper.style = "display: none";
+    // pageNoteWrapper.style = "display: none";
+    removeNewNoteWindow();
   };
 
   headerTools.appendChild(closeButton);
@@ -65,6 +85,12 @@ function createHeader() {
 
 // TODO: 改良...
 function createContent() {
+  // TODO: inline_domの取得
+  const selectedText = document.getSelection().toString();
+  // console.log(document.getSelection().anchorNode.parentNode.previousSibling);
+  const tabTitle = document.title;
+  const tabUrl = document.URL;
+
   let form = createElement("form", "_page-note-content-form");
 
   // submitButton
@@ -77,10 +103,6 @@ function createContent() {
 
     var errorStack = [];
 
-    // TODO: inline_dom, inline_textの取得
-    const tabTitle = document.title;
-    const tabUrl = document.URL;
-
     const summaryValue = form.summary.value;
     if (validSummary(summaryValue) !== "") { errorStack.push(validSummary(summaryValue)); }
 
@@ -88,27 +110,33 @@ function createContent() {
     if (validBody(bodyValue) !== "") { errorStack.push(validBody(bodyValue)); }
     
     const tagsList = form.tags.value
-      .split(" ")
+      .split(",")
+      .map(tag => tag.replace(/^\s+|\s+$/g, ""))
+      .filter((v, i, a) => a.indexOf(v) === i)
       .filter(tag => validTag(tag));
     
     const labelValue = form.labelColor.value;
     if (validLabel(labelValue) !== "") { errorStack.push(validLabel(labelValue)); }
 
     if (errorStack.length > 0) {
-      // TODO: きしょい
+      let errorBarElem = createElement("div", "_page-note-error-bar");
+      let ulElem = document.createElement("ul");
       errorStack.forEach(err => {
-        document.getElementById("errorList").innerHTML += err + "\n";
+        let liElem = document.createElement("li");
+        liElem.innerText = err;
+        ulElem.appendChild(liElem);
       });
+      errorBarElem.appendChild(ulElem);
+      document.getElementById("errorList").appendChild(errorBarElem);
       return;
     }
-
     // NOTE: 登録したくなければ、ここ以前に弾いてください
     chrome.runtime.sendMessage({
       type: "ADD_NOTE", // TODO: constantsに切り出し
       payload: {
         url: tabUrl,
         inlineDom: "",
-        inlineText: "",
+        inlineText: selectedText,
         title: tabTitle,
         summary: summaryValue,
         body: bodyValue,
@@ -116,7 +144,7 @@ function createContent() {
         label: labelValue
       }
     });
-    pageNoteWrapper.style = "display: none";
+    removeNewNoteWindow();
   };
   // NOTE: end on click
   submitButtonInput.appendChild(submitButton);
@@ -141,6 +169,22 @@ function createContent() {
   });
   labelInput.appendChild(labelFrame);
 
+  // selected text info
+  let selectedTextInfo = createElement("div", "_page-note-content-form-item");
+  selectedTextInfo.innerHTML = `
+  <label class="_page-note-content-form-input-label">selected text</label>
+  <label class="_page-note-content-info">${selectedText}</label>
+  `;
+  
+  // selected origin page info
+  let originInfo = createElement("div", "_page-note-content-form-item");
+  originInfo.innerHTML = `
+  <label class="_page-note-content-form-input-label">origin page</label>
+  <label class="_page-note-content-info">
+    <a href="${tabUrl}" target="_blank">${tabTitle}</a>
+  </label>
+  `;
+
   // summary
   let summaryForm = createElement("div", "_page-note-content-form-item");
   let summaryLabel = createElement("label", "_page-note-content-form-input-label");
@@ -164,7 +208,7 @@ function createContent() {
   // tags
   let tagsForm = createElement("div", "_page-note-content-form-item");
   let tagsLabel = createElement("label", "_page-note-content-form-input-label");
-  tagsLabel.innerText = "tags (divide space)";
+  tagsLabel.innerText = "tags (divide comma)";
   let tagsInput = createElement("input", "_page-note-content-form-input-text");
   tagsInput.name = "tags";
   tagsInput.type = "text";
@@ -172,16 +216,17 @@ function createContent() {
   tagsForm.appendChild(tagsInput);
 
   // errorList
-  let errors = document.createElement("div");
-  errors.id = "errorList";
-  errors.style = "color: red;";
+  let errorBar = createElement("div", "_page-note-content-form-item");
+  errorBar.id = "errorList";
 
   form.appendChild(submitButtonInput);
   form.appendChild(labelInput);
+  form.appendChild(errorBar);
+  form.appendChild(selectedTextInfo);
+  form.appendChild(originInfo);
   form.appendChild(summaryForm);
   form.appendChild(bodyForm);
   form.appendChild(tagsForm);
-  form.appendChild(errors);
 
   let content = createElement("div", "_page-note-content");
   content.appendChild(form);

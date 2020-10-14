@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="../assets/css/all.min.css">
+  <link rel="stylesheet" href="../assets/css/manage.css">
+  <title>manage note</title>
+</head>
+
+<body>
+  <div class="header">
+    <label class="logo" id="header-logo">Manage Note</label>
+  </div>
+  <div class="container">
+    <div class="search-bar">
+      <form id="search-bar-form">
+        <label class="form-label">Filter: </label>
+        <input type="text" name="keyword">
+        <button class="btn btn-accent" id="search-bar-form-submit">Apply</button>
+      </form>
+    </div>
+
+    <div class="table note-list">
+      <table class="table-wide">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Label</th>
+            <th>Page</th>
+            <th>Summary</th>
+            <th>Body...</th>
+            <th>Tags</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="note-list">
+          
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="footer"></div>
+  <script src="./notelist.js"></script>
+</body>
+
+</html>

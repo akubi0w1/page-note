@@ -6,7 +6,6 @@
   top: 0;
   left: 0;
   z-index: 20000;
-  display: none;
 }
 
 #_page-note-wrapper .al-right {
@@ -80,6 +79,31 @@
   padding: 10px 10px 20px;
   box-sizing: border-box;
   position: relative;
+}
+
+._page-note-error-bar {
+  background-color: #f8d8db;
+  color: #dc3545;
+  border-radius: 5px;
+}
+
+._page-note-error-bar ul {
+  margin: 0;
+  padding: 5px 10px;
+  list-style: none;
+}
+
+._page-note-content-info {
+  font-size: 15px;
+  display: block;
+}
+
+._page-note-content-info a {
+  color: #005271;
+}
+
+._page-note-content-info a:hover {
+  opacity: .7;
 }
 
 ._page-note-content-form-item {

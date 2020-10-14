@@ -12,9 +12,9 @@ chrome.runtime.onInstalled.addListener(function () {
     "contexts": ["all"],
     "onclick": chrome.contextMenus.onClicked.addListener(function(info, tab) {
       chrome.tabs.get(tab.id, function(tab) {
-        chrome.tabs.executeScript(
+        chrome.tabs.sendMessage(
           tab.id,
-          { code: "document.getElementById(\"_page-note-wrapper\").style.display = \"block\";" }
+          { type: "OPEN_NEW_NOTE_WINDOW", payload: {} }
         );
       });
     })
@@ -28,6 +28,10 @@ chrome.runtime.onInstalled.addListener(function () {
   }
   createDB();
   getAllNotes();
+
+  // TODO: デバッグ用
+  chrome.tabs.create({ url: "src/notelist/index.html" });
+  chrome.tabs.create({ url: "src/editnote/index.html" });
 });
 
 /**
@@ -44,7 +48,7 @@ function createDB() {
   // create table
   openReq.onupgradeneeded = (event) => {
     var db = event.target.result;
-    var objStore = db.createObjectStore("notes", { autoIncrement: true });
+    var objStore = db.createObjectStore("notes", { keyPath: "id", autoIncrement: true });
     objStore.createIndex("url", "url", { unique: false });
     objStore.createIndex("inline_dom", "inline_dom", { unique: false });
     objStore.createIndex("inline_text", "inline_text", { unique: false });
@@ -89,6 +93,41 @@ function insertNote(url, inlineDom, inlineText, title, summary, body, tags, labe
   };
 }
 
+/**
+ * 
+ * @param {Number} id 
+ * @param {String} url
+ * @param {String} inlineDom
+ * @param {String} inlineText
+ * @param {String} title
+ * @param {String} summary
+ * @param {String} body
+ * @param {Array} tags
+ * @param {String} label
+ */
+function updateNoteById(id, url, inlineDom, inlineText, title, summary, body, tags, label) {
+  var openReq = window.indexedDB.open(DB_NAME, DB_VERSION);
+  openReq.onerror = function (event) {
+    console.log("failed to open db");
+  };
+  openReq.onsuccess = function (event) {
+    var db = event.target.result;
+    var trans = db.transaction(["notes"], "readwrite");
+    var store = trans.objectStore("notes");
+    var updateRequest = store.put({ id, url, inlineDom, inlineText, title, summary, body, tags, label });
+    updateRequest.onsuccess = function (event) {
+      console.log("success update data");
+      getAllNotes();
+    };
+    trans.oncomplete = function (event) {
+      console.log("complete transaction");
+    };
+  };
+}
+
+/**
+ * データの全取得
+ */
 function getAllNotes() {
   var openReq = window.indexedDB.open(DB_NAME, DB_VERSION);
   openReq.onerror = function (event) {
@@ -109,6 +148,31 @@ function getAllNotes() {
   };
 }
 
+/**
+ * idを指定してデータを削除
+ * 
+ * @param {Number} id 
+ */
+function deleteNoteById(id) {
+  var openReq = window.indexedDB.open(DB_NAME, DB_VERSION);
+  openReq.onerror = function (event) {
+    console.log("failed to open db");
+  };
+  openReq.onsuccess = function (event) {
+    var db = event.target.result;
+    var trans = db.transaction(["notes"], "readwrite");
+    var store = trans.objectStore("notes");
+    var deleteRequest = store.delete(id);
+    deleteRequest.onsuccess = function (event) {
+      getAllNotes();
+      console.log("success delete data");
+    };
+    trans.oncomplete = function (event) {
+      console.log("complete transaction");
+    };
+  };
+}
+
 // TODO: constantsに移動？
 const LABEL_COLOR = {
   RED: "red",
@@ -118,6 +182,9 @@ const LABEL_COLOR = {
   ORANGE: "orange"
 };
 
+/**
+ * イベントリスナーの追加
+ */
 // contentから送られるてくるmessageのハンドリング
 chrome.runtime.onMessage.addListener(function (msg, sender) {
   switch(msg.type) {

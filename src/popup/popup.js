@@ -30,12 +30,11 @@ const ORANGE_CODE = "#ff9b38";
  * @return {HTMLLIElement}
  */
 function createNoteItemElement(note) {
-  console.log("create note");
   let noteItemElement = document.createElement("li");
   noteItemElement.className = "note-item";
 
   let noteContent = createNoteContentElement(note.summary, note.body, note.tags);
-  let noteLabel = createNoteLabelElement(note.labelColor);
+  let noteLabel = createNoteLabelElement(note.label);
 
   noteItemElement.appendChild(noteContent);
   noteItemElement.appendChild(noteLabel);
@@ -176,12 +175,19 @@ document.getElementById("close-btn").onclick = function() {
  */
 document.getElementById("add-note-btn").onclick = function () {
   chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-    chrome.tabs.executeScript(
+    chrome.tabs.sendMessage(
       tabs[0].id,
-      { code: "document.getElementById(\"_page-note-wrapper\").style.display = \"block\";" }
+      { type: "OPEN_NEW_NOTE_WINDOW", payload: {}}
     );
   });
   window.close();
+};
+
+/**
+ * note管理画面へ遷移
+ */
+document.getElementById("open-manage-page-btn").onclick = function () {
+  chrome.tabs.create({ url: "src/notelist/index.html" });
 };
 
 

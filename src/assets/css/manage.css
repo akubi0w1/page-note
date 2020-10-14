@@ -1,0 +1,237 @@
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #fff;
+  font-size: 16px;
+  color: #000000;
+}
+
+a {
+  color: #005271;
+}
+
+a:hover {
+  opacity: .7;
+}
+
+.mt-10 {
+  margin-top: 10px;
+}
+
+.mt-20 {
+  margin-top: 20px;
+}
+
+.ml-10 {
+  margin-left: 10px;
+}
+
+.ml-20 {
+  margin-left: 20px;
+}
+
+.btn {
+  padding: 2px 8px;
+  font-size: 1em;
+  border-radius: 5px;
+  border: 2px solid transparent;
+}
+
+.btn:focus {
+  outline: none;
+}
+
+.btn-accent {
+  color: #E8F1F2;
+  border-color: #005271;
+  background-color: #005271;
+}
+
+.btn-accent:hover {
+  opacity: .7;
+}
+
+.btn-accent-outline {
+  background-color: #fff;
+  color: #005271;
+  border: 0;
+}
+
+.btn-accent-outline:hover {
+  color: #5996ac;
+}
+
+.btn-danger-outline {
+  background-color: #fff;
+  color: #dc3545;
+  border: 0;
+}
+
+.btn-danger-outline:hover {
+  color: #e6717c;
+}
+
+.notify-bar {
+  border-radius: 5px;
+}
+
+.notify-bar-wide {
+  border-radius: 0;
+}
+
+.notify-bar ul {
+  margin: 0;
+  padding: 5px 10px;
+  list-style: none;
+}
+
+.notify-bar-error {
+  background-color: #f8d8db;
+  color: #dc3545;
+}
+
+.notify-bar-success {
+  background-color: #d4edd9;
+  color: #24963e;
+}
+
+.header {
+  background-color: #005271;
+  padding: 7px 20px;
+}
+
+.header .logo {
+  font-size: 1.2em;
+  color: #E8F1F2;
+}
+
+.search-bar {
+  padding: 10px 20px;
+}
+
+.search-bar input[type=text] {
+  border: 0;
+  border-bottom: 1px solid #aaaaaa;
+  padding: 3px 5px;
+  font-size: 1em;
+  min-width: 300px;
+}
+
+.search-bar input[type=text]:focus {
+  outline: none;
+}
+
+.search-bar .form-label {
+  font-weight: 600;
+}
+
+.note-list .label {
+  border-radius: 5px;
+  height: .7em;
+  width: 40px;
+  background-color: #000000;
+}
+
+.note-list .page-link {
+  color: #005271;
+  text-decoration: none;
+}
+
+.note-list .page-link:hover {
+  color: #5996ac;
+}
+
+.note-list td {
+  font-size: 14px;
+}
+
+.table-wide {
+  width: 100%;
+}
+
+.table table {
+  border-spacing: 0;
+}
+
+.table tr {
+  border: 1px solid #aaaaaa;
+}
+
+.table th {
+  background-color: #f0f0f0;
+  border-right: 1px solid #aaaaaa;
+  border-top: 1px solid #aaaaaa;
+  border-bottom: 2px solid #aaaaaa;
+  padding: 5px 10px;
+}
+
+.table th:last-child {
+  border-right: 0px solid #aaaaaa;
+}
+
+.table td {
+  border-right: 1px solid #aaaaaa;
+  border-bottom: 1px solid #aaaaaa;
+  padding: 5px 10px;
+  word-break: break-word;
+}
+
+.table td:last-child {
+  border-right: 0px solid #aaaaaa;
+}
+
+.form .form-item {
+  display: block;
+  margin-bottom: 20px;
+}
+
+.form .form-label {
+  display: block;
+  color: #005271;
+  font-size: smaller;
+}
+
+.form .form-color-label {
+  display: inline-flex;
+  width: 50px;
+  height: 24px;
+  justify-content: center;
+  align-items: center;
+  margin-right: 7px;
+  border-radius: 5px;
+}
+
+.form .input-text, .form .input-textarea {
+  font-size: .9em;
+  width: 400px;
+}
+
+.form .input-text {
+  border: 0;
+  border-bottom: 1px solid #aaaaaa;
+}
+
+.form .input-text:focus {
+  outline: none;
+}
+
+.form .input-textarea {
+  border: 1px solid #aaaaaa;
+  resize: vertical;
+  min-height: 160px;
+}
+
+.form .input-textarea:focus {
+  outline: none;
+}
+
+.form .input-radio {
+  display: none;
+}
+
+.form .input-radio:checked + .form-color-label::before {
+  color: #fff;
+  font-family: "Font Awesome 5 Free";
+  font-weight: 900;
+  content: "\f00c";
+}

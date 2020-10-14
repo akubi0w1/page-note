@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="../src/assets/css/all.min.css">
+  <link rel="stylesheet" href="../src/assets/css/manage.css">
+  <title>manage note</title>
+</head>
+
+<body>
+  <div class="header">
+    <label class="logo">Manage Note</label>
+  </div>
+
+  <div class="container">
+    <div id="notify" class="mt-10">
+      <div class="notify-bar notify-bar-wide notify-bar-error">
+        <ul>
+          <li>aaaaaa</li>
+          <li>aaaaaa</li>
+        </ul>
+      </div>
+      <div class="notify-bar notify-bar-wide notify-bar-success">
+        <ul>
+          <li>aaaaaa</li>
+          <li>aaaaaa</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="table mt-10">
+      <table style="font-size: smaller; min-width: 400px;">
+        <thead>
+          <tr>
+            <th style="min-width: 70px;">key</th>
+            <th>value</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>ID</td>
+            <td>xxx</td>
+          </tr>
+          <tr>
+            <td>Origin</td>
+            <td>
+              <a href="http://example.com" target="_blank">Title</a>
+            </td>
+          </tr>
+          <tr>
+            <td>InnerText</td>
+            <td>hogehogehogehogehogehogehoge</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <!-- END infomation -->
+
+    <div class="ml-10 mt-10">
+      <form class="form">
+        
+        <div class="form-item">
+          <label class="form-label">Label(required)</label>
+          <div style="display: flex; align-items: center;" class="mt-10">
+            <input id="label-color-red" type="radio" name="label" value="red" checked class="input-radio" />
+            <label for="label-color-red" class="form-color-label" style="background-color: #ff389b;"></label>
+
+            <input id="label-color-purple" type="radio" name="label" value="purple" class="input-radio" />
+            <label for="label-color-purple" class="form-color-label" style="background-color: #9b38ff;"></label>
+
+            <input id="label-color-blue" type="radio" name="label" value="blue" class="input-radio" />
+            <label for="label-color-blue" class="form-color-label" style="background-color: #389bff;"></label>
+
+            <input id="label-color-green" type="radio" name="label" value="green" class="input-radio" />
+            <label for="label-color-green" class="form-color-label" style="background-color: #00cc33;"></label>
+
+            <input id="label-color-orange" type="radio" name="label" value="orange" class="input-radio" />
+            <label for="label-color-orange" class="form-color-label" style="background-color: #ff9b38;"></label>
+          </div>
+        </div>
+
+        <div class="form-item">
+          <label class="form-label">Summary(required)</label>
+          <input type="text" class="input-text" name="summary">
+        </div>
+
+        <div class="form-item">
+          <label class="form-label">Body</label>
+          <textarea name="body" class="input-textarea"></textarea>
+        </div>
+
+        <div class="form-item">
+          <label class="form-label">Tags(devide space)</label>
+          <input type="text" class="input-text" name="tags">
+        </div>
+
+        <div class="form-item">
+          <button type="submit" class="btn btn-accent">save</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  <!-- END container -->
+  <div class="footer"></div>
+</body>
+
+</html>
