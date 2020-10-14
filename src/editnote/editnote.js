@@ -19,19 +19,31 @@ const LABEL_COLOR = {
     .find(query => query.key === "id");
 
   if(typeof idQuery === "undefined") {
-    // TODO: なんとかして
-    console.log("new note");
+    alert("can't find id in query");
+    chrome.tabs.getCurrent(function (tab) {
+      chrome.tabs.update(tab.id, { url: "src/notelist/index.html" });
+    });
     return;
   };
 
   const id = parseInt(idQuery.value, 10);
   if (isNaN(id)) {
-    console.log("id is Nan");
+    alert("id is invalid");
+    chrome.tabs.getCurrent(function (tab) {
+      chrome.tabs.update(tab.id, { url: "src/notelist/index.html" });
+    });
     return;
   }
 
-  // TODO: noteの探索
   const oldNote = chrome.extension.getBackgroundPage().NOTE_LIST.find(note => note.id === id);
+  if (typeof oldNote === "undefined") {
+    alert("can't find note");
+    chrome.tabs.getCurrent(function (tab) {
+      chrome.tabs.update(tab.id, { url: "src/notelist/index.html" });
+    });
+    return;
+  }
+
   renderInfomation(oldNote);
   injectValue(oldNote);
 
@@ -58,21 +70,12 @@ const LABEL_COLOR = {
 
     // handle error
     if(errorStack.length > 0) {
-      // TODO: funcにきり出せそう
-      clearNotify();
-      let errorBarElem = document.createElement("div");
-      errorBarElem.className = "notify-bar notify-bar-wide notify-bar-error";
-      let ulElem = document.createElement("ul");
-      errorStack.forEach(err => {
-        let liElem = document.createElement("li");
-        liElem.innerText = err;
-        ulElem.appendChild(liElem);
-      });
-      errorBarElem.appendChild(ulElem);
-      document.getElementById("notify").appendChild(errorBarElem);
+      clearNotify("notify");
+      document.getElementById("notify").appendChild(createNotifyBarElement(errorStack, "error"));
       return;
     }
 
+    // send update request to background
     chrome.extension.getBackgroundPage().updateNoteById(
       id,
       oldNote.url,
@@ -85,29 +88,44 @@ const LABEL_COLOR = {
       labelValue
     );
 
-    // TODO: funcにきり出せそう
-    clearNotify();
-    let infoBarElem = document.createElement("div");
-    infoBarElem.className = "notify-bar notify-bar-wide notify-bar-success";
-    let ulElem = document.createElement("ul");
-    let liElem = document.createElement("li");
-    liElem.innerText = "success to send request";
-    ulElem.appendChild(liElem);
-    infoBarElem.appendChild(ulElem);
-    document.getElementById("notify").appendChild(infoBarElem);
+    // notify success to send request
+    clearNotify("notify");
+    document.getElementById("notify").appendChild(createNotifyBarElement(["success: send request"], "success"));
   };
 }());
 
-function clearNotify() {
-  let targetElem = document.getElementById("notify");
+/**
+ * 通知欄を初期化
+ * @param {String} targetElemId 
+ */
+function clearNotify(targetElemId) {
+  let targetElem = document.getElementById(targetElemId);
   if (typeof targetElem === "undefined") { return; }
   let clone = targetElem.cloneNode(false);
   targetElem.parentNode.replaceChild(clone, targetElem);
 }
 
+/**
+ * 通知欄に通知を差し込む
+ * @param {Array<String>} notifyList stringの配列
+ * @param {String} type error | success
+ */
+function createNotifyBarElement(notifyList, type) {
+  let barElem = document.createElement("div");
+  barElem.className = "notify-bar notify-bar-wide notify-bar-" + type;
+  let ulElem = document.createElement("ul");
+  notifyList.forEach(err => {
+    let liElem = document.createElement("li");
+    liElem.innerText = err;
+    ulElem.appendChild(liElem);
+  });
+  barElem.appendChild(ulElem);
+  return barElem;
+}
+
 
 /**
- *
+ * infomation部分の描画
  * @param {Object} note
  * @param {Object} note.id
  * @param {String} note.url
