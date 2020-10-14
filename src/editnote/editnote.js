@@ -35,10 +35,9 @@ const LABEL_COLOR = {
   renderInfomation(oldNote);
   injectValue(oldNote);
 
-  // TODO: イベントリスナーの追加
+  // save note
   document.getElementById("edit-note-save").onclick = function (event) {
     event.preventDefault();
-    // TODO: valueの検証
     const form = document.getElementById("edit-note");
     const summaryValue = form.summary.value;
     if (validSummary(summaryValue) !== "") { console.log("error"); return; }
@@ -46,9 +45,10 @@ const LABEL_COLOR = {
     const bodyValue = form.body.value;
     if (validBody(bodyValue) !== "") { console.log("error"); return; }
 
-    // TODO: 重複削除
     const tagsList = form.tags.value
       .split(",")
+      .map(tag => tag.replace(/^\s+|\s+$/g, ""))
+      .filter((v, i, a) => a.indexOf(v) === i)
       .filter(tag => validTag(tag));
 
     const labelValue = form.labelColor.value;
@@ -69,7 +69,7 @@ const LABEL_COLOR = {
     );
 
     // TODO: statusメッセージの表示
-    console.log("cllll");
+
   };
 }());
 

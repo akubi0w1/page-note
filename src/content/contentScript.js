@@ -109,9 +109,10 @@ function createContent() {
     const bodyValue = form.body.value;
     if (validBody(bodyValue) !== "") { errorStack.push(validBody(bodyValue)); }
     
-    // TODO: 重複削除
     const tagsList = form.tags.value
       .split(",")
+      .map(tag => tag.replace(/^\s+|\s+$/g, ""))
+      .filter((v, i, a) => a.indexOf(v) === i)
       .filter(tag => validTag(tag));
     
     const labelValue = form.labelColor.value;
