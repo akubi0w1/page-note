@@ -71,6 +71,30 @@ a:hover {
   color: #e6717c;
 }
 
+.notify-bar {
+  border-radius: 5px;
+}
+
+.notify-bar-wide {
+  border-radius: 0;
+}
+
+.notify-bar ul {
+  margin: 0;
+  padding: 5px 10px;
+  list-style: none;
+}
+
+.notify-bar-error {
+  background-color: #f8d8db;
+  color: #dc3545;
+}
+
+.notify-bar-success {
+  background-color: #d4edd9;
+  color: #24963e;
+}
+
 .header {
   background-color: #005271;
   padding: 7px 20px;

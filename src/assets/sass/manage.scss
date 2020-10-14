@@ -5,6 +5,9 @@ $accent-hover-color: #5996ac;
 $sub-color: #aaaaaa;
 $danger-color: #dc3545;
 $danger-hover-color: #e6717c;
+$danger-sub-color: #f8d8db;
+$success-color: #24963e;
+$success-sub-color: #d4edd9;
 
 
 $label-color: #00C0CC;
@@ -77,6 +80,27 @@ a {
     }
   }
 }
+
+.notify-bar {
+  border-radius: 5px;
+  &-wide {
+    border-radius: 0;
+  }
+  ul {
+    margin: 0;
+    padding: 5px 10px;
+    list-style: none;
+  }
+  &-error {
+    background-color: $danger-sub-color;
+    color: $danger-color;
+  }
+  &-success {
+    background-color: $success-sub-color;
+    color: $success-color;
+  }
+}
+
 
 .header {
   background-color: $accent-color;
