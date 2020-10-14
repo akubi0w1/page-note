@@ -130,7 +130,6 @@ function createContent() {
       document.getElementById("errorList").appendChild(errorBarElem);
       return;
     }
-
     // NOTE: 登録したくなければ、ここ以前に弾いてください
     chrome.runtime.sendMessage({
       type: "ADD_NOTE", // TODO: constantsに切り出し

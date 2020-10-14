@@ -8,18 +8,98 @@ const ORANGE_CODE = "#ff9b38";
 // TODO: note-listをtargetに取得したものを突っ込む
 // TODO: background scriptから全値を取得
 
-var noteListElem = document.getElementById("note-list");
-
 (function(){
+  // 検索バーのイベントリスナーを追加
+  let applyBtn = document.getElementById("search-bar-form-submit");
+  applyBtn.addEventListener("click", event => {
+    event.preventDefault();
+    let form = document.getElementById("search-bar-form");
+    let keyword = form.keyword.value;
+    if (keyword === "") {
+      clearNoteList();
+      renderNoteList(chrome.extension.getBackgroundPage().NOTE_LIST);
+      return;
+    }
+
+    // TODO: summaryだけfilterかかってるので、それをなんとかする
+    let noteList = chrome.extension.getBackgroundPage().NOTE_LIST
+      .filter(note => isHitToSearch(note, keyword));
+    clearNoteList();
+    renderNoteList(noteList);
+    return;
+  });
+
+  // 初回描画
   renderNoteList(chrome.extension.getBackgroundPage().NOTE_LIST);
 })();
 
 /**
+ * 検索でヒットするか
+ * @param {Object} note 
+ * @param {String} keyword 
+ * @param {Object} option 
+ * @param {Boolean} option.summary
+ * @param {Boolean} option.body
+ * @param {Boolean} option.tags
+ * @param {Boolean} option.selectedText
+ * @param {Boolean} option.url
+ * @param {Boolean} option.title
+ * @return {Boolean}
+ */
+function isHitToSearch(note, keyword, option={}) {
+  const _option = {
+    summary: typeof option.summary === "boolean" ? option.summary : true,
+    body: typeof option.body === "boolean" ? option.body : true,
+    tags: typeof option.tags === "boolean" ? option.tags : true,
+    selectedText: typeof option.selectedText === "boolean" ? option.selectedText : true,
+    url: typeof option.url === "boolean" ? option.url : true,
+    title: typeof option.title === "boolean" ? option.title : true
+  };
+
+  // summary
+  if (_option.summary) {
+    if (note.summary.indexOf(keyword) > -1) return true;
+  }
+
+  // body
+  if (_option.body) {
+    if (note.body.indexOf(keyword) > -1) return true;
+  }
+
+  // tags
+  if (_option.tags) {
+    if (typeof note.tags.find(tag => tag === keyword) !== "undefined") return true;
+  }
+
+  // selected text
+  if (_option.selectedText) {
+    if (note.inlineText.indexOf(keyword) > -1) return true;
+  }
+
+  // page url
+  if (_option.url) {
+    if (note.url.indexOf(keyword) > -1) return true;
+  }
+
+  // page title
+  if (_option.title) {
+    if (note.title.indexOf(keyword) > -1) return true;
+  }
+
+  // TODO: label?
+
+
+  return false;
+
+}
+
+/**
  * リストを作成する
  * 
- * @param {Array} noteList 
+ * @param {Array<Object>} noteList 
  */
 function renderNoteList(noteList) {
+  let noteListElem = document.getElementById("note-list");
   noteList.forEach(note => {
     noteListElem.appendChild(createNoteListRow(note));
   });
@@ -29,6 +109,7 @@ function renderNoteList(noteList) {
  * リストを吹き飛ばす
  */
 function clearNoteList() {
+  let noteListElem = document.getElementById("note-list");
   var clone = noteListElem.cloneNode(false);
   noteListElem.parentNode.replaceChild(clone, noteListElem);
 }
