@@ -1,8 +1,5 @@
 import Dexie from "dexie";
-import { MESSAGE_TYPE } from "../common/constant";
-
-const DB_VERSION = 1;
-const DB_NAME = "pageNote";
+import { MESSAGE_TYPE, DB_INFO } from "../common/constant";
 
 chrome.runtime.onInstalled.addListener(function () {
   // create contextMenu
@@ -49,7 +46,7 @@ chrome.runtime.onInstalled.addListener(function () {
           msg.payload.label
         )
         chrome.runtime.sendMessage({
-          type: "GET_ALL_NOTE_RESPONSE",
+          type: MESSAGE_TYPE.GET_ALL_NOTE_RESPONSE,
           payload: await noteRepo.getAll()
         });
         break;
@@ -66,26 +63,26 @@ chrome.runtime.onInstalled.addListener(function () {
           msg.payload.label
         );
         chrome.runtime.sendMessage({
-          type: "GET_ALL_NOTE_RESPONSE",
+          type: MESSAGE_TYPE.GET_ALL_NOTE_RESPONSE,
           payload: await noteRepo.getAll()
         });
         break;
       case MESSAGE_TYPE.DELETE_NOTE_BY_ID:
         noteRepo.delete(msg.payload.id);
         chrome.runtime.sendMessage({
-          type: "GET_ALL_NOTE_RESPONSE",
+          type: MESSAGE_TYPE.GET_ALL_NOTE_RESPONSE,
           payload: await noteRepo.getAll()
         });
         break;
       case MESSAGE_TYPE.GET_ALL_NOTE:
         chrome.runtime.sendMessage({
-          type: "GET_ALL_NOTE_RESPONSE",
+          type: MESSAGE_TYPE.GET_ALL_NOTE_RESPONSE,
           payload: await noteRepo.getAll()
         });
         break;
       case MESSAGE_TYPE.GET_NOTE_BY_ID:
         chrome.runtime.sendMessage({
-          type: "GET_NOTE_BY_ID_RESPONSE",
+          type: MESSAGE_TYPE.GET_NOTE_BY_ID_RESPONSE,
           payload: await noteRepo.getById(msg.payload.id)
         });
         break;
@@ -105,10 +102,10 @@ chrome.runtime.onInstalled.addListener(function () {
  * DBの定義
  */
 function createDB() {
-  let conn = new Dexie(DB_NAME);
+  let conn = new Dexie(DB_INFO.NAME);
   // TODO: できるならtagsとlabelを外部キーで管理したい欲
   // REF: definition scheme: https://dexie.org/docs/Version/Version.stores()
-  conn.version(DB_VERSION).stores({
+  conn.version(DB_INFO.VERSION).stores({
     notes: "++id,url,title,selector,selectedText,summary,body,tags,label"
   });
   return conn;

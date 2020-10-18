@@ -38,7 +38,7 @@ export const MESSAGE_TYPE = {
 /**
  * db
  */
-export const DB = {
+export const DB_INFO = {
   VERSION: 1,
   NAME: "pageNote",
 }
