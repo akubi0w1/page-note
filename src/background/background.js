@@ -1,3 +1,5 @@
+import Dexie from "dexie";
+
 const DB_VERSION = 1;
 const DB_NAME = "pageNote";
 
@@ -26,39 +28,24 @@ chrome.runtime.onInstalled.addListener(function () {
   if (!window.indexedDB) {
     window.alert("このブラウザーは安定版の IndexedDB をサポートしていません。IndexedDB の機能は利用できません。");
   }
-  createDB();
-  getAllNotes();
 
   // TODO: デバッグ用
-  chrome.tabs.create({ url: "src/notelist/index.html" });
-  chrome.tabs.create({ url: "src/editnote/index.html" });
+  // chrome.tabs.create({ url: "src/notelist/index.html" });
+  // chrome.tabs.create({ url: "src/editnote/index.html" });
 });
+
 
 /**
  * DBの定義
  */
 function createDB() {
-  var openReq = window.indexedDB.open(DB_NAME, DB_VERSION);
-  openReq.onerror = (event) => {
-    console.log("failed to create database");
-  };
-  openReq.onsuccess = (event) => {
-    console.log("success to create database");
-  };
-  // create table
-  openReq.onupgradeneeded = (event) => {
-    var db = event.target.result;
-    var objStore = db.createObjectStore("notes", { keyPath: "id", autoIncrement: true });
-    objStore.createIndex("url", "url", { unique: false });
-    objStore.createIndex("inline_dom", "inline_dom", { unique: false });
-    objStore.createIndex("inline_text", "inline_text", { unique: false });
-    objStore.createIndex("title", "title", { unique: false });
-    objStore.createIndex("summary", "summary", { unique: false });
-    objStore.createIndex("body", "body", { unique: false });
-    objStore.createIndex("tags", "tags", { unique: false });
-    // red / purple / blue / green / orange
-    objStore.createIndex("label", "label", { unique: false });
-  };
+  let conn = new Dexie(DB_NAME);
+  // TODO: できるならtagsとlabelを外部キーで管理したい欲
+  // REF: definition scheme: https://dexie.org/docs/Version/Version.stores()
+  conn.version(DB_VERSION).stores({
+    notes: "++id,url,title,selector,selectedText,summary,body,tags,label"
+  });
+  return conn;
 }
 
 /**
@@ -186,7 +173,7 @@ const LABEL_COLOR = {
  * イベントリスナーの追加
  */
 // contentから送られるてくるmessageのハンドリング
-chrome.runtime.onMessage.addListener(function (msg, sender) {
+chrome.runtime.onMessage.addListener(async function(msg, sender) {
   switch(msg.type) {
     case "ADD_NOTE":
       insertNote(
@@ -200,5 +187,91 @@ chrome.runtime.onMessage.addListener(function (msg, sender) {
         msg.payload.label
       );
       break;
+    case "GET_ALL_NOTE":
+      chrome.runtime.sendMessage({
+        type: "GET_ALL_NOTE_RESPONSE",
+        payload: await noteRepo.getAll()
+      });
+      break;
   }
 });
+
+/**
+ * DB Class
+ */
+class NoteRepository {
+  /**
+   * 
+   * @param {Dexie} db 
+   */
+  constructor(db) {
+    this.db = db;
+  }
+
+  async getAll() {
+    const all = await this.db.notes.toArray();
+    return all;
+  }
+
+  /**
+   * 作成
+   * @param {String} url 
+   * @param {String} title 
+   * @param {String} selectedText 
+   * @param {String} summary 
+   * @param {String} body 
+   * @param {Array<String>} tags 
+   * @param {String} label 
+   */
+  async insert(url, title, selectedText, summary, body, tags, label) {
+    const id = await this.db.notes.add({
+      url,
+      title,
+      selectedText,
+      summary,
+      body,
+      tags,
+      label
+    });
+    return id;
+  }
+
+  /**
+   * 更新
+   * @param {Number} id 
+   * @param {String} url
+   * @param {String} title
+   * @param {String} selectedText
+   * @param {String} summary
+   * @param {String} body
+   * @param {Array<String>} tags
+   * @param {String} label
+   */
+  async update(id, url="", title="", selectedText="", summary="", body="", tags=[], label="red") {
+    const result = await this.db.notes.update(id, {
+      url: url,
+      title: title,
+      selectedText: selectedText,
+      summary: summary,
+      body: body,
+      tags: tags,
+      label: label
+    });
+  }
+
+  /**
+   * 削除
+   * @param {Number} id 
+   */
+  async delete(id) {
+    const result = await this.db.notes.delete(id);
+  }
+}
+
+
+/**
+ * DB作成
+ */
+var db = createDB();
+var noteRepo = new NoteRepository(db);
+noteRepo.getAll()

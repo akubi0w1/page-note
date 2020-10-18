@@ -10,9 +10,22 @@ const ORANGE_CODE = "#ff9b38";
  */
 (function() {
   let noteListElement = document.getElementsByClassName("note-list")[0];
-  chrome.extension.getBackgroundPage().NOTE_LIST.forEach(note => {
-    noteListElement.appendChild(createNoteItemElement(note));
+
+  chrome.runtime.onMessage.addListener(function (msg, sender, sendResponse) {
+    switch (msg.type) {
+      case "GET_ALL_NOTE_RESPONSE":
+        msg.payload.forEach(note => {
+          noteListElement.appendChild(createNoteItemElement(note));
+        });
+        break;
+    }
   });
+
+  chrome.runtime.sendMessage({
+    type: "GET_ALL_NOTE", // TODO: constantsに切り出し
+    payload: {}
+  });
+
 })();
 
 /**
