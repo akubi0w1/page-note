@@ -1,4 +1,4 @@
-import { RED_CODE, PURPLE_CODE, BLUE_CODE, GREEN_CODE, ORANGE_CODE } from "../common/constant";
+import { RED_CODE, PURPLE_CODE, BLUE_CODE, GREEN_CODE, ORANGE_CODE, MESSAGE_TYPE } from "../common/constant";
 
 /**
  * 初期処理
@@ -8,7 +8,7 @@ import { RED_CODE, PURPLE_CODE, BLUE_CODE, GREEN_CODE, ORANGE_CODE } from "../co
 
   chrome.runtime.onMessage.addListener(function (msg, sender, sendResponse) {
     switch (msg.type) {
-      case "GET_ALL_NOTE_RESPONSE":
+      case MESSAGE_TYPE.GET_ALL_NOTE_RESPONSE:
         msg.payload.forEach(note => {
           noteListElement.appendChild(createNoteItemElement(note));
         });
@@ -17,7 +17,7 @@ import { RED_CODE, PURPLE_CODE, BLUE_CODE, GREEN_CODE, ORANGE_CODE } from "../co
   });
 
   chrome.runtime.sendMessage({
-    type: "GET_ALL_NOTE", // TODO: constantsに切り出し
+    type: MESSAGE_TYPE.GET_ALL_NOTE, // TODO: constantsに切り出し
     payload: {}
   });
 
@@ -185,7 +185,7 @@ document.getElementById("add-note-btn").onclick = function () {
   chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
     chrome.tabs.sendMessage(
       tabs[0].id,
-      { type: "OPEN_NEW_NOTE_WINDOW", payload: {}}
+      { type: MESSAGE_TYPE.OPEN_ADD_NOTE_WINDOW, payload: {}}
     );
   });
   window.close();

@@ -1,9 +1,9 @@
-import { LABEL_COLOR } from "../common/constant";
+import { LABEL_COLOR, MESSAGE_TYPE } from "../common/constant";
 
 (function(){
   chrome.runtime.onMessage.addListener(function (msg, sender, sendResponse) {
     switch (msg.type) {
-      case "GET_NOTE_BY_ID_RESPONSE":
+      case MESSAGE_TYPE.GET_NOTE_BY_ID_RESPONSE:
         const oldNote = msg.payload;
         if (typeof oldNote === "undefined") {
           alert("id is invalid");
@@ -43,7 +43,7 @@ import { LABEL_COLOR } from "../common/constant";
 
           // send update request to background
           chrome.runtime.sendMessage({
-            type: "UPDATE_NOTE",
+            type: MESSAGE_TYPE.UPDATE_NOTE_BY_ID,
             payload: {
               id: id,
               url: oldNote.url,

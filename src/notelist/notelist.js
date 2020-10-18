@@ -1,12 +1,9 @@
-import { RED_CODE, PURPLE_CODE, BLUE_CODE, GREEN_CODE, ORANGE_CODE } from "../common/constant";
-
-// TODO: note-listをtargetに取得したものを突っ込む
-// TODO: background scriptから全値を取得
+import { RED_CODE, PURPLE_CODE, BLUE_CODE, GREEN_CODE, ORANGE_CODE, MESSAGE_TYPE } from "../common/constant";
 
 (function(){
   chrome.runtime.onMessage.addListener(function (msg, sender, sendResponse) {
     switch (msg.type) {
-      case "GET_ALL_NOTE_RESPONSE":
+      case MESSAGE_TYPE.GET_ALL_NOTE_RESPONSE:
         clearNoteList();
         const noteList = msg.payload;
         // 検索バーのイベントリスナーを追加
@@ -34,7 +31,7 @@ import { RED_CODE, PURPLE_CODE, BLUE_CODE, GREEN_CODE, ORANGE_CODE } from "../co
   });
 
   chrome.runtime.sendMessage({
-    type: "GET_ALL_NOTE",
+    type: MESSAGE_TYPE.GET_ALL_NOTE,
     payload: {}
   });
 
@@ -201,7 +198,7 @@ function createNoteListRow(note) {
   deleteBtn.appendChild(createIconElement("fas fa-trash"));
   deleteBtn.addEventListener("click", () => {
     chrome.runtime.sendMessage({
-      type: "DELETE_NOTE_BY_ID",
+      type: MESSAGE_TYPE.DELETE_NOTE_BY_ID,
       payload: { id: note.id }
     });
   });

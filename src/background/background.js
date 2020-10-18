@@ -1,4 +1,5 @@
 import Dexie from "dexie";
+import { MESSAGE_TYPE } from "../common/constant";
 
 const DB_VERSION = 1;
 const DB_NAME = "pageNote";
@@ -13,7 +14,7 @@ chrome.runtime.onInstalled.addListener(function () {
       chrome.tabs.get(tab.id, function(tab) {
         chrome.tabs.sendMessage(
           tab.id,
-          { type: "OPEN_NEW_NOTE_WINDOW", payload: {} }
+          { type: MESSAGE_TYPE.OPEN_ADD_NOTE_WINDOW, payload: {} }
         );
       });
     })
@@ -36,7 +37,7 @@ chrome.runtime.onInstalled.addListener(function () {
   */
   chrome.runtime.onMessage.addListener(async function (msg, sender) {
     switch (msg.type) {
-      case "ADD_NOTE":
+      case MESSAGE_TYPE.ADD_NOTE:
         noteRepo.insert(
           msg.payload.url,
           msg.payload.title,
@@ -47,8 +48,12 @@ chrome.runtime.onInstalled.addListener(function () {
           msg.payload.tags,
           msg.payload.label
         )
+        chrome.runtime.sendMessage({
+          type: "GET_ALL_NOTE_RESPONSE",
+          payload: await noteRepo.getAll()
+        });
         break;
-      case "UPDATE_NOTE":
+      case MESSAGE_TYPE.UPDATE_NOTE_BY_ID:
         noteRepo.update(
           msg.payload.id,
           msg.payload.url,
@@ -60,21 +65,25 @@ chrome.runtime.onInstalled.addListener(function () {
           msg.payload.tags,
           msg.payload.label
         );
+        chrome.runtime.sendMessage({
+          type: "GET_ALL_NOTE_RESPONSE",
+          payload: await noteRepo.getAll()
+        });
         break;
-      case "DELETE_NOTE_BY_ID":
+      case MESSAGE_TYPE.DELETE_NOTE_BY_ID:
         noteRepo.delete(msg.payload.id);
         chrome.runtime.sendMessage({
           type: "GET_ALL_NOTE_RESPONSE",
           payload: await noteRepo.getAll()
         });
         break;
-      case "GET_ALL_NOTE":
+      case MESSAGE_TYPE.GET_ALL_NOTE:
         chrome.runtime.sendMessage({
           type: "GET_ALL_NOTE_RESPONSE",
           payload: await noteRepo.getAll()
         });
         break;
-      case "GET_NOTE_BY_ID":
+      case MESSAGE_TYPE.GET_NOTE_BY_ID:
         chrome.runtime.sendMessage({
           type: "GET_NOTE_BY_ID_RESPONSE",
           payload: await noteRepo.getById(msg.payload.id)
@@ -85,10 +94,10 @@ chrome.runtime.onInstalled.addListener(function () {
 
   // TODO: デバッグ用
   chrome.tabs.create({ url: "src/notelist/index.html" });
-  chrome.tabs.create({ url: "src/editnote/index.html?id=2" });
-  noteRepo.insert("example.URL", "title", "se", "selected text", "summary", "boyd", ["tag", "tag1"], "red");
-  noteRepo.insert("example.URL", "title", "se", "selected text", "summary", "boyd", ["tag", "tag1"], "purple");
-  noteRepo.insert("example.URL", "title", "se", "selected text", "summary", "boyd", ["tag", "tag1"], "blue");
+  // chrome.tabs.create({ url: "src/editnote/index.html?id=2" });
+  // noteRepo.insert("example.URL", "title", "se", "selected text", "summary", "boyd", ["tag", "tag1"], "red");
+  // noteRepo.insert("example.URL", "title", "se", "selected text", "summary", "boyd", ["tag", "tag1"], "purple");
+  // noteRepo.insert("example.URL", "title", "se", "selected text", "summary", "boyd", ["tag", "tag1"], "blue");
 });
 
 

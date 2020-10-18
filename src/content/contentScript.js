@@ -1,4 +1,4 @@
-import { LABEL_COLOR, RED_CODE, PURPLE_CODE, BLUE_CODE, GREEN_CODE, ORANGE_CODE } from "../common/constant";
+import { LABEL_COLOR, RED_CODE, PURPLE_CODE, BLUE_CODE, GREEN_CODE, ORANGE_CODE, MESSAGE_TYPE } from "../common/constant";
 
 // pageNoteWrapper.addEventListener("mousedown", mouseDown, false);
 // 座標
@@ -7,7 +7,7 @@ import { LABEL_COLOR, RED_CODE, PURPLE_CODE, BLUE_CODE, GREEN_CODE, ORANGE_CODE 
 (function() {
   chrome.runtime.onMessage.addListener(function (msg, sender, sendResponse) {
     switch(msg.type) {
-      case "OPEN_NEW_NOTE_WINDOW":
+      case MESSAGE_TYPE.OPEN_ADD_NOTE_WINDOW:
         renderNewNoteWindow();
         break;
     }
@@ -118,7 +118,7 @@ function createContent() {
     }
     // NOTE: 登録したくなければ、ここ以前に弾いてください
     chrome.runtime.sendMessage({
-      type: "ADD_NOTE", // TODO: constantsに切り出し
+      type: MESSAGE_TYPE.ADD_NOTE, // TODO: constantsに切り出し
       payload: {
         url: tabUrl,
         selector: "",

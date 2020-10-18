@@ -12,3 +12,29 @@ export const LABEL_COLOR = {
   GREEN: "green",
   ORANGE: "orange"
 };
+
+/**
+ * message passing
+ */
+export const MESSAGE_TYPE = {
+  OPEN_ADD_NOTE_WINDOW: "OPEN_ADD_NOTE_WINDOW",
+
+
+  // note
+  ADD_NOTE: "ADD_NOTE",
+  UPDATE_NOTE_BY_ID: "UPDATE_NOTE_BY_ID",
+  DELETE_NOTE_BY_ID: "DELETE_NOTE_BY_ID",
+  GET_ALL_NOTE: "GET_ALL_NOTE",
+  GET_ALL_NOTE_RESPONSE: "GET_ALL_NOTE_RESPONSE",
+  GET_NOTE_BY_ID: "GET_NOTE_BY_ID",
+  GET_NOTE_BY_ID_RESPONSE: "GET_NOTE_BY_ID_RESPONSE",
+
+};
+
+/**
+ * db
+ */
+export const DB = {
+  VERSION: 1,
+  NAME: "pageNote",
+}
