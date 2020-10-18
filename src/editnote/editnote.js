@@ -54,7 +54,7 @@ const LABEL_COLOR = {
             payload: {
               id: id,
               url: oldNote.url,
-              dom: oldNote.dom,
+              selector: oldNote.selector,
               title: oldNote.title,
               selectedText: oldNote.selectedText,
               summary: summaryValue,

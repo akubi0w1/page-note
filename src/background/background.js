@@ -48,118 +48,6 @@ function createDB() {
   return conn;
 }
 
-/**
- * データの追加
- * 
- * @param {String} url 
- * @param {String} inlineDom 
- * @param {String} inlineText 
- * @param {String} title 
- * @param {String} summary 
- * @param {String} body 
- * @param {Array} tags 
- * @param {String} label 
- */
-function insertNote(url, inlineDom, inlineText, title, summary, body, tags, label) {
-  var openReq = window.indexedDB.open(DB_NAME, DB_VERSION);
-  openReq.onerror = function(event) {
-    console.log("failed to open db");
-  };
-  openReq.onsuccess = function(event) {
-    var db = event.target.result;
-    var trans = db.transaction(["notes"], "readwrite");
-    var store = trans.objectStore("notes");
-    var addRequest = store.add({url, inlineDom, inlineText, title, summary, body, tags, label});
-    addRequest.onsuccess = function(event) {
-      console.log("success add data");
-      getAllNotes();
-    };
-    trans.oncomplete = function(event) {
-      console.log("complete transaction");
-    };
-  };
-}
-
-/**
- * 
- * @param {Number} id 
- * @param {String} url
- * @param {String} inlineDom
- * @param {String} inlineText
- * @param {String} title
- * @param {String} summary
- * @param {String} body
- * @param {Array} tags
- * @param {String} label
- */
-function updateNoteById(id, url, inlineDom, inlineText, title, summary, body, tags, label) {
-  var openReq = window.indexedDB.open(DB_NAME, DB_VERSION);
-  openReq.onerror = function (event) {
-    console.log("failed to open db");
-  };
-  openReq.onsuccess = function (event) {
-    var db = event.target.result;
-    var trans = db.transaction(["notes"], "readwrite");
-    var store = trans.objectStore("notes");
-    var updateRequest = store.put({ id, url, inlineDom, inlineText, title, summary, body, tags, label });
-    updateRequest.onsuccess = function (event) {
-      console.log("success update data");
-      getAllNotes();
-    };
-    trans.oncomplete = function (event) {
-      console.log("complete transaction");
-    };
-  };
-}
-
-/**
- * データの全取得
- */
-function getAllNotes() {
-  var openReq = window.indexedDB.open(DB_NAME, DB_VERSION);
-  openReq.onerror = function (event) {
-    console.log("failed to open db");
-  };
-  openReq.onsuccess = function (event) {
-    var db = event.target.result;
-    var trans = db.transaction(["notes"], "readwrite");
-    var store = trans.objectStore("notes");
-    var getRequest = store.getAll();
-    getRequest.onsuccess = function (event) {
-      NOTE_LIST = event.target.result;
-      console.log("success get data");
-    };
-    trans.oncomplete = function (event) {
-      console.log("complete transaction");
-    };
-  };
-}
-
-/**
- * idを指定してデータを削除
- * 
- * @param {Number} id 
- */
-function deleteNoteById(id) {
-  var openReq = window.indexedDB.open(DB_NAME, DB_VERSION);
-  openReq.onerror = function (event) {
-    console.log("failed to open db");
-  };
-  openReq.onsuccess = function (event) {
-    var db = event.target.result;
-    var trans = db.transaction(["notes"], "readwrite");
-    var store = trans.objectStore("notes");
-    var deleteRequest = store.delete(id);
-    deleteRequest.onsuccess = function (event) {
-      getAllNotes();
-      console.log("success delete data");
-    };
-    trans.oncomplete = function (event) {
-      console.log("complete transaction");
-    };
-  };
-}
-
 // TODO: constantsに移動？
 const LABEL_COLOR = {
   RED: "red",
@@ -176,22 +64,23 @@ const LABEL_COLOR = {
 chrome.runtime.onMessage.addListener(async function(msg, sender) {
   switch(msg.type) {
     case "ADD_NOTE":
-      insertNote(
+      noteRepo.insert(
         msg.payload.url,
-        msg.payload.inlineDom,
-        msg.payload.inlineText,
         msg.payload.title,
+        msg.payload.selector,
+        msg.payload.selectedText,
         msg.payload.summary,
         msg.payload.body,
         msg.payload.tags,
         msg.payload.label
-      );
+      )
       break;
     case "UPDATE_NOTE":
       noteRepo.update(
         msg.payload.id,
         msg.payload.url,
         msg.payload.title,
+        msg.payload.selector,
         msg.payload.selectedText,
         msg.payload.summary,
         msg.payload.body,
@@ -246,10 +135,11 @@ class NoteRepository {
    * @param {Array<String>} tags 
    * @param {String} label 
    */
-  async insert(url, title, selectedText, summary, body, tags, label) {
+  async insert(url, title, selector, selectedText, summary, body, tags, label) {
     const id = await this.db.notes.add({
       url,
       title,
+      selector,
       selectedText,
       summary,
       body,
@@ -270,10 +160,11 @@ class NoteRepository {
    * @param {Array<String>} tags
    * @param {String} label
    */
-  async update(id, url="", title="", selectedText="", summary="", body="", tags=[], label="red") {
+  async update(id, url = "", title = "", selector="",selectedText="", summary="", body="", tags=[], label="red") {
     const result = await this.db.notes.update(id, {
       url: url,
       title: title,
+      selector: selector,
       selectedText: selectedText,
       summary: summary,
       body: body,
@@ -297,4 +188,3 @@ class NoteRepository {
  */
 var db = createDB();
 var noteRepo = new NoteRepository(db);
-noteRepo.getAll()
