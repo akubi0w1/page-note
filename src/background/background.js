@@ -30,8 +30,8 @@ chrome.runtime.onInstalled.addListener(function () {
   }
 
   // TODO: デバッグ用
-  // chrome.tabs.create({ url: "src/notelist/index.html" });
-  // chrome.tabs.create({ url: "src/editnote/index.html" });
+  chrome.tabs.create({ url: "src/notelist/index.html" });
+  chrome.tabs.create({ url: "src/editnote/index.html?id=2" });
 });
 
 
@@ -187,10 +187,28 @@ chrome.runtime.onMessage.addListener(async function(msg, sender) {
         msg.payload.label
       );
       break;
+    case "UPDATE_NOTE":
+      noteRepo.update(
+        msg.payload.id,
+        msg.payload.url,
+        msg.payload.title,
+        msg.payload.selectedText,
+        msg.payload.summary,
+        msg.payload.body,
+        msg.payload.tags,
+        msg.payload.label
+      );
+      break;
     case "GET_ALL_NOTE":
       chrome.runtime.sendMessage({
         type: "GET_ALL_NOTE_RESPONSE",
         payload: await noteRepo.getAll()
+      });
+      break;
+    case "GET_NOTE_BY_ID":
+      chrome.runtime.sendMessage({
+        type: "GET_NOTE_BY_ID_RESPONSE",
+        payload: await noteRepo.getById(msg.payload.id)
       });
       break;
   }
@@ -211,6 +229,11 @@ class NoteRepository {
   async getAll() {
     const all = await this.db.notes.toArray();
     return all;
+  }
+
+  async getById(id) {
+    const result = await this.db.notes.get(id);
+    return result;
   }
 
   /**
