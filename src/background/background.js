@@ -3,9 +3,6 @@ import Dexie from "dexie";
 const DB_VERSION = 1;
 const DB_NAME = "pageNote";
 
-// TODO: popup <-> backgroundのmessage passing実装して、ここの部分をなくしたい
-var NOTE_LIST = [];
-
 chrome.runtime.onInstalled.addListener(function () {
   // create contextMenu
   chrome.contextMenus.create({
@@ -28,6 +25,56 @@ chrome.runtime.onInstalled.addListener(function () {
   if (!window.indexedDB) {
     window.alert("このブラウザーは安定版の IndexedDB をサポートしていません。IndexedDB の機能は利用できません。");
   }
+  /**
+  * DB作成
+  */
+  var db = createDB();
+  var noteRepo = new NoteRepository(db);
+
+  /**
+  * イベントリスナーの追加
+  */
+  chrome.runtime.onMessage.addListener(async function (msg, sender) {
+    switch (msg.type) {
+      case "ADD_NOTE":
+        noteRepo.insert(
+          msg.payload.url,
+          msg.payload.title,
+          msg.payload.selector,
+          msg.payload.selectedText,
+          msg.payload.summary,
+          msg.payload.body,
+          msg.payload.tags,
+          msg.payload.label
+        )
+        break;
+      case "UPDATE_NOTE":
+        noteRepo.update(
+          msg.payload.id,
+          msg.payload.url,
+          msg.payload.title,
+          msg.payload.selector,
+          msg.payload.selectedText,
+          msg.payload.summary,
+          msg.payload.body,
+          msg.payload.tags,
+          msg.payload.label
+        );
+        break;
+      case "GET_ALL_NOTE":
+        chrome.runtime.sendMessage({
+          type: "GET_ALL_NOTE_RESPONSE",
+          payload: await noteRepo.getAll()
+        });
+        break;
+      case "GET_NOTE_BY_ID":
+        chrome.runtime.sendMessage({
+          type: "GET_NOTE_BY_ID_RESPONSE",
+          payload: await noteRepo.getById(msg.payload.id)
+        });
+        break;
+    }
+  });
 
   // TODO: デバッグ用
   chrome.tabs.create({ url: "src/notelist/index.html" });
@@ -48,64 +95,6 @@ function createDB() {
   return conn;
 }
 
-// TODO: constantsに移動？
-const LABEL_COLOR = {
-  RED: "red",
-  PURPLE: "purple",
-  BLUE: "blue",
-  GREEN: "green",
-  ORANGE: "orange"
-};
-
-/**
- * イベントリスナーの追加
- */
-// contentから送られるてくるmessageのハンドリング
-chrome.runtime.onMessage.addListener(async function(msg, sender) {
-  switch(msg.type) {
-    case "ADD_NOTE":
-      noteRepo.insert(
-        msg.payload.url,
-        msg.payload.title,
-        msg.payload.selector,
-        msg.payload.selectedText,
-        msg.payload.summary,
-        msg.payload.body,
-        msg.payload.tags,
-        msg.payload.label
-      )
-      break;
-    case "UPDATE_NOTE":
-      noteRepo.update(
-        msg.payload.id,
-        msg.payload.url,
-        msg.payload.title,
-        msg.payload.selector,
-        msg.payload.selectedText,
-        msg.payload.summary,
-        msg.payload.body,
-        msg.payload.tags,
-        msg.payload.label
-      );
-      break;
-    case "GET_ALL_NOTE":
-      chrome.runtime.sendMessage({
-        type: "GET_ALL_NOTE_RESPONSE",
-        payload: await noteRepo.getAll()
-      });
-      break;
-    case "GET_NOTE_BY_ID":
-      chrome.runtime.sendMessage({
-        type: "GET_NOTE_BY_ID_RESPONSE",
-        payload: await noteRepo.getById(msg.payload.id)
-      });
-      break;
-  }
-});
-
-/**
- * DB Class
- */
 class NoteRepository {
   /**
    * 
@@ -182,9 +171,3 @@ class NoteRepository {
   }
 }
 
-
-/**
- * DB作成
- */
-var db = createDB();
-var noteRepo = new NoteRepository(db);
