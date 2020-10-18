@@ -1,4 +1,4 @@
-import { RED_CODE, PURPLE_CODE, BLUE_CODE, GREEN_CODE, ORANGE_CODE, MESSAGE_TYPE } from "../common/constant";
+import { LABEL_COLOR_CODE, MESSAGE_TYPE } from "../common/constant";
 
 /**
  * 初期処理
@@ -17,7 +17,7 @@ import { RED_CODE, PURPLE_CODE, BLUE_CODE, GREEN_CODE, ORANGE_CODE, MESSAGE_TYPE
   });
 
   chrome.runtime.sendMessage({
-    type: MESSAGE_TYPE.GET_ALL_NOTE, // TODO: constantsに切り出し
+    type: MESSAGE_TYPE.GET_ALL_NOTE,
     payload: {}
   });
 
@@ -150,22 +150,22 @@ function createNoteLabelElement(color) {
   labelElement.className = "note-label";
   switch(color) {
     case "red":
-      labelElement.style = "background-color: " + RED_CODE;
+      labelElement.style = "background-color: " + LABEL_COLOR_CODE.RED;
       break;
     case "purple":
-      labelElement.style = "background-color: " + PURPLE_CODE;
+      labelElement.style = "background-color: " + LABEL_COLOR_CODE.PURPLE;
       break;
     case "blue":
-      labelElement.style = "background-color: " + BLUE_CODE;
+      labelElement.style = "background-color: " + LABEL_COLOR_CODE.BLUE;
       break;
     case "green":
-      labelElement.style = "background-color: " + GREEN_CODE;
+      labelElement.style = "background-color: " + LABEL_COLOR_CODE.GREEN;
       break;
     case "orange":
-      labelElement.style = "background-color: " + ORANGE_CODE;
+      labelElement.style = "background-color: " + LABEL_COLOR_CODE.ORANGE;
       break;
     default:
-      labelElement.style = "background-color: " + RED_CODE;
+      labelElement.style = "background-color: " + LABEL_COLOR_CODE.DEFALULT;
       break;
   }
   return labelElement;

@@ -1,4 +1,4 @@
-import { RED_CODE, PURPLE_CODE, BLUE_CODE, GREEN_CODE, ORANGE_CODE, MESSAGE_TYPE } from "../common/constant";
+import { LABEL_COLOR_CODE, MESSAGE_TYPE } from "../common/constant";
 
 (function(){
   chrome.runtime.onMessage.addListener(function (msg, sender, sendResponse) {
@@ -146,19 +146,19 @@ function createNoteListRow(note) {
   labelBar.className = "label";
   switch (note.label) {
     case "red":
-      labelBar.style = "background-color: " + RED_CODE;
+      labelBar.style = "background-color: " + LABEL_COLOR_CODE.RED;
       break;
     case "blue":
-      labelBar.style = "background-color: " + BLUE_CODE;
+      labelBar.style = "background-color: " + LABEL_COLOR_CODE.BLUE;
       break;
     case "green":
-      labelBar.style = "background-color: " + GREEN_CODE;
+      labelBar.style = "background-color: " + LABEL_COLOR_CODE.GREEN;
       break;
     case "purple":
-      labelBar.style = "background-color: " + PURPLE_CODE;
+      labelBar.style = "background-color: " + LABEL_COLOR_CODE.PURPLE;
       break;
     case "orange":
-      labelBar.style = "background-color: " + ORANGE_CODE;
+      labelBar.style = "background-color: " + LABEL_COLOR_CODE.ORANGE;
       break;
   }
   labelCol.appendChild(labelBar);

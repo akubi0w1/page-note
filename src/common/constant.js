@@ -1,9 +1,14 @@
-// color code of label
-export const RED_CODE = "#ff389b";
-export const PURPLE_CODE = "#9b38ff";
-export const BLUE_CODE = "#389bff";
-export const GREEN_CODE = "#00cc33";
-export const ORANGE_CODE = "#ff9b38";
+/**
+ * LABEL
+ */
+export const LABEL_COLOR_CODE = {
+  RED: "#ff389b",
+  PURPLE: "#9b38ff",
+  BLUE: "#389bff",
+  GREEN: "#00cc33",
+  ORANGE: "#ff9b38",
+  DEFALULT: "#ff389b"
+};
 
 export const LABEL_COLOR = {
   RED: "red",
@@ -18,7 +23,6 @@ export const LABEL_COLOR = {
  */
 export const MESSAGE_TYPE = {
   OPEN_ADD_NOTE_WINDOW: "OPEN_ADD_NOTE_WINDOW",
-
 
   // note
   ADD_NOTE: "ADD_NOTE",

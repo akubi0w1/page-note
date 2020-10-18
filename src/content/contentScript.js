@@ -1,4 +1,4 @@
-import { LABEL_COLOR, RED_CODE, PURPLE_CODE, BLUE_CODE, GREEN_CODE, ORANGE_CODE, MESSAGE_TYPE } from "../common/constant";
+import { LABEL_COLOR, LABEL_COLOR_CODE, MESSAGE_TYPE } from "../common/constant";
 
 // pageNoteWrapper.addEventListener("mousedown", mouseDown, false);
 // 座標
@@ -71,7 +71,6 @@ function createHeader() {
 
 // TODO: 改良...
 function createContent() {
-  // TODO: inline_domの取得
   const selectedText = document.getSelection().toString();
   // console.log(document.getSelection().anchorNode.parentNode.previousSibling);
   const tabTitle = document.title;
@@ -118,7 +117,7 @@ function createContent() {
     }
     // NOTE: 登録したくなければ、ここ以前に弾いてください
     chrome.runtime.sendMessage({
-      type: MESSAGE_TYPE.ADD_NOTE, // TODO: constantsに切り出し
+      type: MESSAGE_TYPE.ADD_NOTE,
       payload: {
         url: tabUrl,
         selector: "",
@@ -136,7 +135,7 @@ function createContent() {
   submitButtonInput.appendChild(submitButton);
 
   // labelColor
-  let colorList = [{ label: "red", code: RED_CODE, checked: true }, { label: "purple", code: PURPLE_CODE, checked: false }, { label: "blue", code: BLUE_CODE, checked: false }, { label: "green", code: GREEN_CODE, checked: false }, { label: "orange", code: ORANGE_CODE, checked: false }];
+  let colorList = [{ label: "red", code: LABEL_COLOR_CODE.RED, checked: true }, { label: "purple", code: LABEL_COLOR_CODE.PURPLE, checked: false }, { label: "blue", code: LABEL_COLOR_CODE.BLUE, checked: false }, { label: "green", code: LABEL_COLOR_CODE.GREEN, checked: false }, { label: "orange", code: LABEL_COLOR_CODE.ORANGE, checked: false }];
   let labelInput = createElement("div", "_page-note-content-form-item");
   let labelFrame = document.createElement("div");
   labelFrame.style = "display: flex; align-items: center;";
