@@ -1,8 +1,7 @@
+import Dexie from "dexie";
+
 const DB_VERSION = 1;
 const DB_NAME = "pageNote";
-
-// TODO: popup <-> backgroundのmessage passing実装して、ここの部分をなくしたい
-var NOTE_LIST = [];
 
 chrome.runtime.onInstalled.addListener(function () {
   // create contextMenu
@@ -26,179 +25,149 @@ chrome.runtime.onInstalled.addListener(function () {
   if (!window.indexedDB) {
     window.alert("このブラウザーは安定版の IndexedDB をサポートしていません。IndexedDB の機能は利用できません。");
   }
-  createDB();
-  getAllNotes();
+  /**
+  * DB作成
+  */
+  var db = createDB();
+  var noteRepo = new NoteRepository(db);
+
+  /**
+  * イベントリスナーの追加
+  */
+  chrome.runtime.onMessage.addListener(async function (msg, sender) {
+    switch (msg.type) {
+      case "ADD_NOTE":
+        noteRepo.insert(
+          msg.payload.url,
+          msg.payload.title,
+          msg.payload.selector,
+          msg.payload.selectedText,
+          msg.payload.summary,
+          msg.payload.body,
+          msg.payload.tags,
+          msg.payload.label
+        )
+        break;
+      case "UPDATE_NOTE":
+        noteRepo.update(
+          msg.payload.id,
+          msg.payload.url,
+          msg.payload.title,
+          msg.payload.selector,
+          msg.payload.selectedText,
+          msg.payload.summary,
+          msg.payload.body,
+          msg.payload.tags,
+          msg.payload.label
+        );
+        break;
+      case "GET_ALL_NOTE":
+        chrome.runtime.sendMessage({
+          type: "GET_ALL_NOTE_RESPONSE",
+          payload: await noteRepo.getAll()
+        });
+        break;
+      case "GET_NOTE_BY_ID":
+        chrome.runtime.sendMessage({
+          type: "GET_NOTE_BY_ID_RESPONSE",
+          payload: await noteRepo.getById(msg.payload.id)
+        });
+        break;
+    }
+  });
 
   // TODO: デバッグ用
   chrome.tabs.create({ url: "src/notelist/index.html" });
-  chrome.tabs.create({ url: "src/editnote/index.html" });
+  chrome.tabs.create({ url: "src/editnote/index.html?id=2" });
 });
+
 
 /**
  * DBの定義
  */
 function createDB() {
-  var openReq = window.indexedDB.open(DB_NAME, DB_VERSION);
-  openReq.onerror = (event) => {
-    console.log("failed to create database");
-  };
-  openReq.onsuccess = (event) => {
-    console.log("success to create database");
-  };
-  // create table
-  openReq.onupgradeneeded = (event) => {
-    var db = event.target.result;
-    var objStore = db.createObjectStore("notes", { keyPath: "id", autoIncrement: true });
-    objStore.createIndex("url", "url", { unique: false });
-    objStore.createIndex("inline_dom", "inline_dom", { unique: false });
-    objStore.createIndex("inline_text", "inline_text", { unique: false });
-    objStore.createIndex("title", "title", { unique: false });
-    objStore.createIndex("summary", "summary", { unique: false });
-    objStore.createIndex("body", "body", { unique: false });
-    objStore.createIndex("tags", "tags", { unique: false });
-    // red / purple / blue / green / orange
-    objStore.createIndex("label", "label", { unique: false });
-  };
+  let conn = new Dexie(DB_NAME);
+  // TODO: できるならtagsとlabelを外部キーで管理したい欲
+  // REF: definition scheme: https://dexie.org/docs/Version/Version.stores()
+  conn.version(DB_VERSION).stores({
+    notes: "++id,url,title,selector,selectedText,summary,body,tags,label"
+  });
+  return conn;
 }
 
-/**
- * データの追加
- * 
- * @param {String} url 
- * @param {String} inlineDom 
- * @param {String} inlineText 
- * @param {String} title 
- * @param {String} summary 
- * @param {String} body 
- * @param {Array} tags 
- * @param {String} label 
- */
-function insertNote(url, inlineDom, inlineText, title, summary, body, tags, label) {
-  var openReq = window.indexedDB.open(DB_NAME, DB_VERSION);
-  openReq.onerror = function(event) {
-    console.log("failed to open db");
-  };
-  openReq.onsuccess = function(event) {
-    var db = event.target.result;
-    var trans = db.transaction(["notes"], "readwrite");
-    var store = trans.objectStore("notes");
-    var addRequest = store.add({url, inlineDom, inlineText, title, summary, body, tags, label});
-    addRequest.onsuccess = function(event) {
-      console.log("success add data");
-      getAllNotes();
-    };
-    trans.oncomplete = function(event) {
-      console.log("complete transaction");
-    };
-  };
-}
-
-/**
- * 
- * @param {Number} id 
- * @param {String} url
- * @param {String} inlineDom
- * @param {String} inlineText
- * @param {String} title
- * @param {String} summary
- * @param {String} body
- * @param {Array} tags
- * @param {String} label
- */
-function updateNoteById(id, url, inlineDom, inlineText, title, summary, body, tags, label) {
-  var openReq = window.indexedDB.open(DB_NAME, DB_VERSION);
-  openReq.onerror = function (event) {
-    console.log("failed to open db");
-  };
-  openReq.onsuccess = function (event) {
-    var db = event.target.result;
-    var trans = db.transaction(["notes"], "readwrite");
-    var store = trans.objectStore("notes");
-    var updateRequest = store.put({ id, url, inlineDom, inlineText, title, summary, body, tags, label });
-    updateRequest.onsuccess = function (event) {
-      console.log("success update data");
-      getAllNotes();
-    };
-    trans.oncomplete = function (event) {
-      console.log("complete transaction");
-    };
-  };
-}
-
-/**
- * データの全取得
- */
-function getAllNotes() {
-  var openReq = window.indexedDB.open(DB_NAME, DB_VERSION);
-  openReq.onerror = function (event) {
-    console.log("failed to open db");
-  };
-  openReq.onsuccess = function (event) {
-    var db = event.target.result;
-    var trans = db.transaction(["notes"], "readwrite");
-    var store = trans.objectStore("notes");
-    var getRequest = store.getAll();
-    getRequest.onsuccess = function (event) {
-      NOTE_LIST = event.target.result;
-      console.log("success get data");
-    };
-    trans.oncomplete = function (event) {
-      console.log("complete transaction");
-    };
-  };
-}
-
-/**
- * idを指定してデータを削除
- * 
- * @param {Number} id 
- */
-function deleteNoteById(id) {
-  var openReq = window.indexedDB.open(DB_NAME, DB_VERSION);
-  openReq.onerror = function (event) {
-    console.log("failed to open db");
-  };
-  openReq.onsuccess = function (event) {
-    var db = event.target.result;
-    var trans = db.transaction(["notes"], "readwrite");
-    var store = trans.objectStore("notes");
-    var deleteRequest = store.delete(id);
-    deleteRequest.onsuccess = function (event) {
-      getAllNotes();
-      console.log("success delete data");
-    };
-    trans.oncomplete = function (event) {
-      console.log("complete transaction");
-    };
-  };
-}
-
-// TODO: constantsに移動？
-const LABEL_COLOR = {
-  RED: "red",
-  PURPLE: "purple",
-  BLUE: "blue",
-  GREEN: "green",
-  ORANGE: "orange"
-};
-
-/**
- * イベントリスナーの追加
- */
-// contentから送られるてくるmessageのハンドリング
-chrome.runtime.onMessage.addListener(function (msg, sender) {
-  switch(msg.type) {
-    case "ADD_NOTE":
-      insertNote(
-        msg.payload.url,
-        msg.payload.inlineDom,
-        msg.payload.inlineText,
-        msg.payload.title,
-        msg.payload.summary,
-        msg.payload.body,
-        msg.payload.tags,
-        msg.payload.label
-      );
-      break;
+class NoteRepository {
+  /**
+   * 
+   * @param {Dexie} db 
+   */
+  constructor(db) {
+    this.db = db;
   }
-});
+
+  async getAll() {
+    const all = await this.db.notes.toArray();
+    return all;
+  }
+
+  async getById(id) {
+    const result = await this.db.notes.get(id);
+    return result;
+  }
+
+  /**
+   * 作成
+   * @param {String} url 
+   * @param {String} title 
+   * @param {String} selectedText 
+   * @param {String} summary 
+   * @param {String} body 
+   * @param {Array<String>} tags 
+   * @param {String} label 
+   */
+  async insert(url, title, selector, selectedText, summary, body, tags, label) {
+    const id = await this.db.notes.add({
+      url,
+      title,
+      selector,
+      selectedText,
+      summary,
+      body,
+      tags,
+      label
+    });
+    return id;
+  }
+
+  /**
+   * 更新
+   * @param {Number} id 
+   * @param {String} url
+   * @param {String} title
+   * @param {String} selectedText
+   * @param {String} summary
+   * @param {String} body
+   * @param {Array<String>} tags
+   * @param {String} label
+   */
+  async update(id, url = "", title = "", selector="",selectedText="", summary="", body="", tags=[], label="red") {
+    const result = await this.db.notes.update(id, {
+      url: url,
+      title: title,
+      selector: selector,
+      selectedText: selectedText,
+      summary: summary,
+      body: body,
+      tags: tags,
+      label: label
+    });
+  }
+
+  /**
+   * 削除
+   * @param {Number} id 
+   */
+  async delete(id) {
+    const result = await this.db.notes.delete(id);
+  }
+}
+

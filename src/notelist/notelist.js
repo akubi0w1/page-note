@@ -9,28 +9,39 @@ const ORANGE_CODE = "#ff9b38";
 // TODO: background scriptから全値を取得
 
 (function(){
-  // 検索バーのイベントリスナーを追加
-  let applyBtn = document.getElementById("search-bar-form-submit");
-  applyBtn.addEventListener("click", event => {
-    event.preventDefault();
-    let form = document.getElementById("search-bar-form");
-    let keyword = form.keyword.value;
-    if (keyword === "") {
-      clearNoteList();
-      renderNoteList(chrome.extension.getBackgroundPage().NOTE_LIST);
-      return;
-    }
+  chrome.runtime.onMessage.addListener(function (msg, sender, sendResponse) {
+    switch (msg.type) {
+      case "GET_ALL_NOTE_RESPONSE":
+        const noteList = msg.payload;
+        // 検索バーのイベントリスナーを追加
+        let applyBtn = document.getElementById("search-bar-form-submit");
+        applyBtn.addEventListener("click", event => {
+          event.preventDefault();
+          let form = document.getElementById("search-bar-form");
+          let keyword = form.keyword.value;
+          if (keyword === "") {
+            clearNoteList();
+            renderNoteList(noteList);
+            return;
+          }
 
-    // TODO: summaryだけfilterかかってるので、それをなんとかする
-    let noteList = chrome.extension.getBackgroundPage().NOTE_LIST
-      .filter(note => isHitToSearch(note, keyword));
-    clearNoteList();
-    renderNoteList(noteList);
-    return;
+          noteList.filter(note => isHitToSearch(note, keyword));
+          clearNoteList();
+          renderNoteList(noteList);
+          return;
+        });
+
+        // 初回描画
+        renderNoteList(noteList);
+        break;
+    }
   });
 
-  // 初回描画
-  renderNoteList(chrome.extension.getBackgroundPage().NOTE_LIST);
+  chrome.runtime.sendMessage({
+    type: "GET_ALL_NOTE",
+    payload: {}
+  });
+
 })();
 
 /**

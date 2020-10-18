@@ -135,8 +135,8 @@ function createContent() {
       type: "ADD_NOTE", // TODO: constantsに切り出し
       payload: {
         url: tabUrl,
-        inlineDom: "",
-        inlineText: selectedText,
+        selector: "",
+        selectedText: selectedText,
         title: tabTitle,
         summary: summaryValue,
         body: bodyValue,

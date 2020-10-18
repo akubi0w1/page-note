@@ -8,9 +8,73 @@ const LABEL_COLOR = {
 
 
 (function(){
+  chrome.runtime.onMessage.addListener(function (msg, sender, sendResponse) {
+    switch (msg.type) {
+      case "GET_NOTE_BY_ID_RESPONSE":
+        const oldNote = msg.payload;
+        if (typeof oldNote === "undefined") {
+          alert("id is invalid");
+          chrome.tabs.getCurrent(function (tab) {
+            chrome.tabs.update(tab.id, { url: "src/notelist/index.html" });
+          });
+        }
+        renderInfomation(oldNote);
+        injectValue(oldNote);
+
+        document.getElementById("edit-note-save").onclick = function (event) {
+          event.preventDefault();
+          let errorStack = [];
+
+          const form = document.getElementById("edit-note");
+          const summaryValue = form.summary.value;
+          if (validSummary(summaryValue) !== "") { errorStack.push(validSummary(summaryValue)); }
+
+          const bodyValue = form.body.value;
+          if (validBody(bodyValue) !== "") { errorStack.push(validBody(bodyValue)); }
+
+          const tagsList = form.tags.value
+            .split(",")
+            .map(tag => tag.replace(/^\s+|\s+$/g, ""))
+            .filter((v, i, a) => a.indexOf(v) === i)
+            .filter(tag => validTag(tag));
+
+          const labelValue = form.labelColor.value;
+          if (validLabel(labelValue) !== "") { errorStack.push(validLabel(labelValue)); }
+
+          // handle error
+          if (errorStack.length > 0) {
+            clearNotify("notify");
+            document.getElementById("notify").appendChild(createNotifyBarElement(errorStack, "error"));
+            return;
+          }
+
+          // send update request to background
+          chrome.runtime.sendMessage({
+            type: "UPDATE_NOTE",
+            payload: {
+              id: id,
+              url: oldNote.url,
+              selector: oldNote.selector,
+              title: oldNote.title,
+              selectedText: oldNote.selectedText,
+              summary: summaryValue,
+              body: bodyValue,
+              tags: tagsList,
+              label: labelValue
+            }
+          });
+
+          // notify success to send request
+          clearNotify("notify");
+          document.getElementById("notify").appendChild(createNotifyBarElement(["success: send request"], "success"));
+        };
+        break;
+    }
+  });
+
   // TODO: manage系で共通化したい
-  document.getElementById("header-logo").onclick = function() {
-    chrome.tabs.getCurrent(function(tab) {
+  document.getElementById("header-logo").onclick = function () {
+    chrome.tabs.getCurrent(function (tab) {
       chrome.tabs.update(tab.id, { url: "src/notelist/index.html" });
     });
   };
@@ -18,7 +82,7 @@ const LABEL_COLOR = {
   const idQuery = divideQuery(location.search.substr(1))
     .find(query => query.key === "id");
 
-  if(typeof idQuery === "undefined") {
+  if (typeof idQuery === "undefined") {
     alert("can't find id in query");
     chrome.tabs.getCurrent(function (tab) {
       chrome.tabs.update(tab.id, { url: "src/notelist/index.html" });
@@ -35,63 +99,11 @@ const LABEL_COLOR = {
     return;
   }
 
-  const oldNote = chrome.extension.getBackgroundPage().NOTE_LIST.find(note => note.id === id);
-  if (typeof oldNote === "undefined") {
-    alert("can't find note");
-    chrome.tabs.getCurrent(function (tab) {
-      chrome.tabs.update(tab.id, { url: "src/notelist/index.html" });
-    });
-    return;
-  }
-
-  renderInfomation(oldNote);
-  injectValue(oldNote);
-
-  // save note
-  document.getElementById("edit-note-save").onclick = function (event) {
-    event.preventDefault();
-    let errorStack = [];
-
-    const form = document.getElementById("edit-note");
-    const summaryValue = form.summary.value;
-    if (validSummary(summaryValue) !== "") { errorStack.push(validSummary(summaryValue)); }
-
-    const bodyValue = form.body.value;
-    if (validBody(bodyValue) !== "") { errorStack.push(validBody(bodyValue)); }
-
-    const tagsList = form.tags.value
-      .split(",")
-      .map(tag => tag.replace(/^\s+|\s+$/g, ""))
-      .filter((v, i, a) => a.indexOf(v) === i)
-      .filter(tag => validTag(tag));
-
-    const labelValue = form.labelColor.value;
-    if (validLabel(labelValue) !== "") { errorStack.push(validLabel(labelValue)); }
-
-    // handle error
-    if(errorStack.length > 0) {
-      clearNotify("notify");
-      document.getElementById("notify").appendChild(createNotifyBarElement(errorStack, "error"));
-      return;
-    }
-
-    // send update request to background
-    chrome.extension.getBackgroundPage().updateNoteById(
-      id,
-      oldNote.url,
-      oldNote.inlineDom,
-      oldNote.innerText,
-      oldNote.title,
-      summaryValue,
-      bodyValue,
-      tagsList,
-      labelValue
-    );
-
-    // notify success to send request
-    clearNotify("notify");
-    document.getElementById("notify").appendChild(createNotifyBarElement(["success: send request"], "success"));
-  };
+  // get data request
+  chrome.runtime.sendMessage({
+    type: "GET_NOTE_BY_ID",
+    payload: { id }
+  });
 }());
 
 /**
@@ -133,7 +145,7 @@ function createNotifyBarElement(notifyList, type) {
  * @param {String} note.label
  * @param {String} note.summary
  * @param {String} note.body
- * @param {String} note.inlineText
+ * @param {String} note.selectedText
  * @param {String} note.inlineDom
  * @param {Array} note.tags
  */
@@ -158,17 +170,17 @@ function renderInfomation(note) {
   originRow.appendChild(originValue);
 
   // innertext
-  var innerTextRow = document.createElement("tr");
-  var innerTextKey = document.createElement("td");
-  innerTextKey.innerText = "innerText";
-  var innerTextValue = document.createElement("td");
-  innerTextValue.innerText = note.innerText;
-  innerTextRow.appendChild(innerTextKey);
-  innerTextRow.appendChild(innerTextValue);
+  var selectedTextRow = document.createElement("tr");
+  var selectedTextKey = document.createElement("td");
+  selectedTextKey.innerText = "selected text";
+  var selectedTextValue = document.createElement("td");
+  selectedTextValue.innerText = note.selectedText;
+  selectedTextRow.appendChild(selectedTextKey);
+  selectedTextRow.appendChild(selectedTextValue);
 
   targetElem.appendChild(idRow);
   targetElem.appendChild(originRow);
-  targetElem.appendChild(innerTextRow);
+  targetElem.appendChild(selectedTextRow);
 }
 
 /**
@@ -181,7 +193,7 @@ function renderInfomation(note) {
  * @param {String} note.label
  * @param {String} note.summary
  * @param {String} note.body
- * @param {String} note.inlineText
+ * @param {String} note.selectedText
  * @param {String} note.inlineDom
  * @param {Array} note.tags
  */
