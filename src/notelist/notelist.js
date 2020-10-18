@@ -7,6 +7,7 @@ import { RED_CODE, PURPLE_CODE, BLUE_CODE, GREEN_CODE, ORANGE_CODE } from "../co
   chrome.runtime.onMessage.addListener(function (msg, sender, sendResponse) {
     switch (msg.type) {
       case "GET_ALL_NOTE_RESPONSE":
+        clearNoteList();
         const noteList = msg.payload;
         // 検索バーのイベントリスナーを追加
         let applyBtn = document.getElementById("search-bar-form-submit");
@@ -199,12 +200,10 @@ function createNoteListRow(note) {
   deleteBtn.className = "btn btn-danger-outline";
   deleteBtn.appendChild(createIconElement("fas fa-trash"));
   deleteBtn.addEventListener("click", () => {
-    // TODO: message passing
-    chrome.extension.getBackgroundPage().deleteNoteById(note.id);
-    // TODO: clear table
-    // clearNoteList();
-    // TODO: rerender
-    
+    chrome.runtime.sendMessage({
+      type: "DELETE_NOTE_BY_ID",
+      payload: { id: note.id }
+    });
   });
   buttonCol.appendChild(editBtn);
   buttonCol.appendChild(deleteBtn);

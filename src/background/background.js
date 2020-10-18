@@ -61,6 +61,13 @@ chrome.runtime.onInstalled.addListener(function () {
           msg.payload.label
         );
         break;
+      case "DELETE_NOTE_BY_ID":
+        noteRepo.delete(msg.payload.id);
+        chrome.runtime.sendMessage({
+          type: "GET_ALL_NOTE_RESPONSE",
+          payload: await noteRepo.getAll()
+        });
+        break;
       case "GET_ALL_NOTE":
         chrome.runtime.sendMessage({
           type: "GET_ALL_NOTE_RESPONSE",
@@ -79,6 +86,9 @@ chrome.runtime.onInstalled.addListener(function () {
   // TODO: デバッグ用
   chrome.tabs.create({ url: "src/notelist/index.html" });
   chrome.tabs.create({ url: "src/editnote/index.html?id=2" });
+  noteRepo.insert("example.URL", "title", "se", "selected text", "summary", "boyd", ["tag", "tag1"], "red");
+  noteRepo.insert("example.URL", "title", "se", "selected text", "summary", "boyd", ["tag", "tag1"], "purple");
+  noteRepo.insert("example.URL", "title", "se", "selected text", "summary", "boyd", ["tag", "tag1"], "blue");
 });
 
 
