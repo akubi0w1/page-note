@@ -1,9 +1,4 @@
-const RED_CODE = "#ff389b";
-const PURPLE_CODE = "#9b38ff";
-const BLUE_CODE = "#389bff";
-const GREEN_CODE = "#00cc33";
-const ORANGE_CODE = "#ff9b38";
-
+import { RED_CODE, PURPLE_CODE, BLUE_CODE, GREEN_CODE, ORANGE_CODE } from "../common/constant";
 
 // TODO: note-listをtargetに取得したものを突っ込む
 // TODO: background scriptから全値を取得
@@ -204,6 +199,7 @@ function createNoteListRow(note) {
   deleteBtn.className = "btn btn-danger-outline";
   deleteBtn.appendChild(createIconElement("fas fa-trash"));
   deleteBtn.addEventListener("click", () => {
+    // TODO: message passing
     chrome.extension.getBackgroundPage().deleteNoteById(note.id);
     // TODO: clear table
     // clearNoteList();

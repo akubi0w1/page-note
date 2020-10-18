@@ -1,9 +1,4 @@
-// TODO: DBとかにしまえれば良いか？
-const RED_CODE = "#ff389b";
-const PURPLE_CODE = "#9b38ff";
-const BLUE_CODE = "#389bff";
-const GREEN_CODE = "#00cc33";
-const ORANGE_CODE = "#ff9b38";
+import { RED_CODE, PURPLE_CODE, BLUE_CODE, GREEN_CODE, ORANGE_CODE } from "../common/constant";
 
 /**
  * 初期処理

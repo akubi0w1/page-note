@@ -1,11 +1,4 @@
-const LABEL_COLOR = {
-  RED: "red",
-  PURPLE: "purple",
-  BLUE: "blue",
-  GREEN: "green",
-  ORANGE: "orange"
-};
-
+import { LABEL_COLOR } from "../common/constant";
 
 (function(){
   chrome.runtime.onMessage.addListener(function (msg, sender, sendResponse) {

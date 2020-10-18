@@ -1,18 +1,20 @@
-// TODO: DBから値取得 or constantsをつかう
-const RED_CODE = "#ff389b";
-const PURPLE_CODE = "#9b38ff";
-const BLUE_CODE = "#389bff";
-const GREEN_CODE = "#00cc33";
-const ORANGE_CODE = "#ff9b38";
+// // TODO: DBから値取得 or constantsをつかう
+// const RED_CODE = "#ff389b";
+// const PURPLE_CODE = "#9b38ff";
+// const BLUE_CODE = "#389bff";
+// const GREEN_CODE = "#00cc33";
+// const ORANGE_CODE = "#ff9b38";
 
-const LABEL_COLOR = {
-  RED: "red",
-  PURPLE: "purple",
-  BLUE: "blue",
-  GREEN: "green",
-  ORANGE: "orange"
-};
+// const LABEL_COLOR = {
+//   RED: "red",
+//   PURPLE: "purple",
+//   BLUE: "blue",
+//   GREEN: "green",
+//   ORANGE: "orange"
+// };
 
+
+import { LABEL_COLOR, RED_CODE, PURPLE_CODE, BLUE_CODE, GREEN_CODE, ORANGE_CODE } from "../common/constant";
 
 // pageNoteWrapper.addEventListener("mousedown", mouseDown, false);
 // 座標
@@ -201,7 +203,6 @@ function createContent() {
   bodyLabel.innerText = "body";
   let bodyInput = createElement("textarea", "_page-note-content-form-input-textarea");
   bodyInput.name = "body";
-  bodyInput.type = "textarea";
   bodyForm.appendChild(bodyLabel);
   bodyForm.appendChild(bodyInput);
 
