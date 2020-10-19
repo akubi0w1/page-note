@@ -1,5 +1,6 @@
 import { LABEL_COLOR, MESSAGE_TYPE } from "../common/constant";
 import { validateNoteSummary, validateNoteBody, validateTag, validateLabel } from "../common/validation";
+import { chromeSendMessage } from "../common/utility";
 
 (function(){
   chrome.runtime.onMessage.addListener(function (msg, sender, sendResponse) {
@@ -62,9 +63,9 @@ import { validateNoteSummary, validateNoteBody, validateTag, validateLabel } fro
           }
 
           // send update request to background
-          chrome.runtime.sendMessage({
-            type: MESSAGE_TYPE.UPDATE_NOTE_BY_ID,
-            payload: {
+          chromeSendMessage(
+            MESSAGE_TYPE.UPDATE_NOTE_BY_ID,
+            {
               id: id,
               url: oldNote.url,
               selector: oldNote.selector,
@@ -75,7 +76,7 @@ import { validateNoteSummary, validateNoteBody, validateTag, validateLabel } fro
               tags: tagsList,
               label: labelValue
             }
-          });
+          );
 
           // notify success to send request
           clearNotify("notify");
@@ -113,10 +114,7 @@ import { validateNoteSummary, validateNoteBody, validateTag, validateLabel } fro
   }
 
   // get data request
-  chrome.runtime.sendMessage({
-    type: "GET_NOTE_BY_ID",
-    payload: { id }
-  });
+  chromeSendMessage(MESSAGE_TYPE.GET_NOTE_BY_ID, { id });
 }());
 
 /**

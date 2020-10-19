@@ -1,5 +1,6 @@
 import { LABEL_COLOR_CODE, MESSAGE_TYPE } from "../common/constant";
 import { createIconElement } from "../common/element";
+import { chromeSendMessage } from "../common/utility";
 
 (function(){
   chrome.runtime.onMessage.addListener(function (msg, sender, sendResponse) {
@@ -31,10 +32,7 @@ import { createIconElement } from "../common/element";
     }
   });
 
-  chrome.runtime.sendMessage({
-    type: MESSAGE_TYPE.GET_ALL_NOTE,
-    payload: {}
-  });
+  chromeSendMessage(MESSAGE_TYPE.GET_ALL_NOTE);
 
 })();
 
@@ -198,10 +196,10 @@ function createNoteListRow(note) {
   deleteBtn.className = "btn btn-danger-outline";
   deleteBtn.appendChild(createIconElement("fas fa-trash"));
   deleteBtn.addEventListener("click", () => {
-    chrome.runtime.sendMessage({
-      type: MESSAGE_TYPE.DELETE_NOTE_BY_ID,
-      payload: { id: note.id }
-    });
+    chromeSendMessage(
+      MESSAGE_TYPE.DELETE_NOTE_BY_ID,
+      { id: note.id }
+    );
   });
   buttonCol.appendChild(editBtn);
   buttonCol.appendChild(deleteBtn);

@@ -1,5 +1,6 @@
 import { LABEL_COLOR_CODE, MESSAGE_TYPE } from "../common/constant";
 import { createIconElement } from "../common/element";
+import { chromeSendMessage } from "../common/utility";
 
 /**
  * 初期処理
@@ -17,11 +18,7 @@ import { createIconElement } from "../common/element";
     }
   });
 
-  chrome.runtime.sendMessage({
-    type: MESSAGE_TYPE.GET_ALL_NOTE,
-    payload: {}
-  });
-
+  chromeSendMessage(MESSAGE_TYPE.GET_ALL_NOTE);
 })();
 
 /**

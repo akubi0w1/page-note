@@ -1,6 +1,7 @@
 import { LABEL_COLOR, LABEL_COLOR_CODE, MESSAGE_TYPE } from "../common/constant";
 import { validateNoteSummary, validateNoteBody, validateTag, validateLabel } from "../common/validation";
 import { createIconElement } from "../common/element";
+import { chromeSendMessage } from "../common/utility";
 
 // pageNoteWrapper.addEventListener("mousedown", mouseDown, false);
 // 座標
@@ -136,9 +137,9 @@ function createContent() {
       return;
     }
     // NOTE: 登録したくなければ、ここ以前に弾いてください
-    chrome.runtime.sendMessage({
-      type: MESSAGE_TYPE.ADD_NOTE,
-      payload: {
+    chromeSendMessage(
+      MESSAGE_TYPE.ADD_NOTE,
+      {
         url: tabUrl,
         selector: "",
         selectedText: selectedText,
@@ -148,7 +149,7 @@ function createContent() {
         tags: tagsList,
         label: labelValue
       }
-    });
+    );
     removeNewNoteWindow();
   };
   // NOTE: end on click

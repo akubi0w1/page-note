@@ -1,5 +1,6 @@
 import Dexie from "dexie";
 import { MESSAGE_TYPE, DB_INFO } from "../common/constant";
+import { chromeSendMessage } from "../common/utility";
 
 chrome.runtime.onInstalled.addListener(function () {
   // create contextMenu
@@ -45,10 +46,7 @@ chrome.runtime.onInstalled.addListener(function () {
           msg.payload.tags,
           msg.payload.label
         )
-        chrome.runtime.sendMessage({
-          type: MESSAGE_TYPE.GET_ALL_NOTE_RESPONSE,
-          payload: await noteRepo.getAll()
-        });
+        chromeSendMessage(MESSAGE_TYPE.GET_ALL_NOTE_RESPONSE, await noteRepo.getAll());
         break;
       case MESSAGE_TYPE.UPDATE_NOTE_BY_ID:
         noteRepo.update(
@@ -62,29 +60,17 @@ chrome.runtime.onInstalled.addListener(function () {
           msg.payload.tags,
           msg.payload.label
         );
-        chrome.runtime.sendMessage({
-          type: MESSAGE_TYPE.GET_ALL_NOTE_RESPONSE,
-          payload: await noteRepo.getAll()
-        });
+        chromeSendMessage(MESSAGE_TYPE.GET_ALL_NOTE_RESPONSE, await noteRepo.getAll());
         break;
       case MESSAGE_TYPE.DELETE_NOTE_BY_ID:
         noteRepo.delete(msg.payload.id);
-        chrome.runtime.sendMessage({
-          type: MESSAGE_TYPE.GET_ALL_NOTE_RESPONSE,
-          payload: await noteRepo.getAll()
-        });
+        chromeSendMessage(MESSAGE_TYPE.GET_ALL_NOTE_RESPONSE, await noteRepo.getAll());
         break;
       case MESSAGE_TYPE.GET_ALL_NOTE:
-        chrome.runtime.sendMessage({
-          type: MESSAGE_TYPE.GET_ALL_NOTE_RESPONSE,
-          payload: await noteRepo.getAll()
-        });
+        chromeSendMessage(MESSAGE_TYPE.GET_ALL_NOTE_RESPONSE, await noteRepo.getAll());
         break;
       case MESSAGE_TYPE.GET_NOTE_BY_ID:
-        chrome.runtime.sendMessage({
-          type: MESSAGE_TYPE.GET_NOTE_BY_ID_RESPONSE,
-          payload: await noteRepo.getById(msg.payload.id)
-        });
+        chromeSendMessage(MESSAGE_TYPE.GET_NOTE_BY_ID_RESPONSE, await noteRepo.getById(msg.payload.id));
         break;
     }
   });
