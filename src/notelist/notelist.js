@@ -7,9 +7,22 @@ import { chromeSendMessage } from "../common/utility";
    * header機能のリスナーを作成
    */
   document.getElementById("export-button").addEventListener("click", function(evt) {
-    // TODO: 文言がひでえ
-    if(confirm("export indexedDB data. download file.")) {
+    if(confirm("export indexedDB data. Are you sure download data file?")) {
       chromeSendMessage(MESSAGE_TYPE.EXPORT_INDEXEDDB);
+    }
+  });
+  document.getElementById("import-button").addEventListener("change", function(evt) {
+    const importFile = this.files[0];
+    if (importFile.type !== "application/json") {
+      alert("type of file isn't json.")
+      return;
+    }
+    if (confirm(`import indexedDB data. The original data will be deleted.\nfile name is ${importFile.name}.`)) {
+      const reader = new FileReader();
+      reader.readAsText(importFile);
+      reader.onload = function (evt) {
+        chromeSendMessage(MESSAGE_TYPE.IMPORT_INDEXEDDB, JSON.parse(reader.result));
+      };
     }
   });
 

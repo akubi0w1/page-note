@@ -80,6 +80,11 @@ chrome.runtime.onInstalled.addListener(function () {
           `page-note-export-${Date.now()}.json`,
           exportData);
         break;
+      case MESSAGE_TYPE.IMPORT_INDEXEDDB:
+        noteRepo.clear();
+        noteRepo.bulkInsert(msg.payload.notes);
+        chromeSendMessage(MESSAGE_TYPE.GET_ALL_NOTE_RESPONSE, await noteRepo.getAll());
+        break;
     }
   });
 
@@ -149,6 +154,14 @@ class NoteRepository {
   }
 
   /**
+   * 一気に登録する
+   * @param {Array<{url, title, selector, selectedText, summary, body, tags, label}>} notes 
+   */
+  async bulkInsert(notes) {
+    const result = await this.db.notes.bulkAdd(notes);
+  }
+
+  /**
    * 更新
    * @param {Number} id 
    * @param {String} url
@@ -178,6 +191,13 @@ class NoteRepository {
    */
   async delete(id) {
     const result = await this.db.notes.delete(id);
+  }
+
+  /**
+   * 全件削除
+   */
+  async clear() {
+    const result = await this.db.notes.clear();
   }
 }
 
