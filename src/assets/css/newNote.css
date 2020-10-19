@@ -173,6 +173,7 @@
 }
 
 #_page-note-quick-button-wrapper button {
+  background-color: transparent;
   background-size: cover;
   height: 32px;
   width: 32px;

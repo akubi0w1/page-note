@@ -71,6 +71,16 @@ a:hover {
   color: #e6717c;
 }
 
+.btn-base {
+  background-color: #E8F1F2;
+  color: #005271;
+  border: 0;
+}
+
+.btn-base:hover {
+  opacity: .7;
+}
+
 .notify-bar {
   border-radius: 5px;
 }
@@ -98,6 +108,8 @@ a:hover {
 .header {
   background-color: #005271;
   padding: 7px 20px;
+  display: flex;
+  justify-content: space-between;
 }
 
 .header .logo {
