@@ -1,4 +1,5 @@
 import { LABEL_COLOR, LABEL_COLOR_CODE, MESSAGE_TYPE } from "../common/constant";
+import { validateNoteSummary, validateNoteBody, validateTag, validateLabel } from "../common/validation";
 
 // pageNoteWrapper.addEventListener("mousedown", mouseDown, false);
 // 座標
@@ -89,19 +90,38 @@ function createContent() {
     var errorStack = [];
 
     const summaryValue = form.summary.value;
-    if (validSummary(summaryValue) !== "") { errorStack.push(validSummary(summaryValue)); }
+    try {
+      validateNoteSummary(summaryValue);
+    } catch (err) {
+      errorStack.push(err.message);
+    }
 
     const bodyValue = form.body.value;
-    if (validBody(bodyValue) !== "") { errorStack.push(validBody(bodyValue)); }
+    try {
+      validateNoteBody(bodyValue);
+    } catch(err) {
+      errorStack.push(err.message);
+    }
     
     const tagsList = form.tags.value
       .split(",")
       .map(tag => tag.replace(/^\s+|\s+$/g, ""))
       .filter((v, i, a) => a.indexOf(v) === i)
-      .filter(tag => validTag(tag));
+      .filter(tag => {
+        try {
+          validateTag(tag);
+          return true;
+        } catch(err) {
+          return false;
+        }
+      });
     
     const labelValue = form.labelColor.value;
-    if (validLabel(labelValue) !== "") { errorStack.push(validLabel(labelValue)); }
+    try {
+      validateLabel(labelValue);
+    } catch(err) {
+      errorStack.push(err.message);
+    }
 
     if (errorStack.length > 0) {
       let errorBarElem = createElement("div", "_page-note-error-bar");
@@ -216,56 +236,6 @@ function createContent() {
   content.appendChild(form);
   return content;
 
-}
-
-// NOTE: validation
-/**
- * summaryに対してバリデーションを行う
- * 
- * @param {String} summary 
- * @return {String}
- */
-function validSummary(summary) {
-  if (summary === "") {
-    return "summary is empty";
-  }
-  return "";
-}
-
-/**
- * bodyに対してバリデーションを行う
- * 
- * @param {String} body 
- * @return {String}
- */
-function validBody(body) {
-  return "";
-}
-
-/**
- * tagに対してバリデーションを行う
- * 
- * @param {String} tag 
- * @return {Boolean}
- */
-function validTag(tag) {
-  if (tag === "") {
-    return false;
-  }
-  return true;
-}
-
-/**
- * labelに対してバリデーションを行う
- * 
- * @param {String} label 
- * @return {Boolean}
- */
-function validLabel(label) {
-  if (label != LABEL_COLOR.RED && label != LABEL_COLOR.PURPLE && label != LABEL_COLOR.BLUE && label != LABEL_COLOR.GREEN && label != LABEL_COLOR.ORANGE) {
-    return "label is invalid";
-  }
-  return "";
 }
 
 // // // TODO: dryがあああ

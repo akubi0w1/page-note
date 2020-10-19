@@ -1,4 +1,5 @@
 import { LABEL_COLOR, MESSAGE_TYPE } from "../common/constant";
+import { validateNoteSummary, validateNoteBody, validateTag, validateLabel } from "../common/validation";
 
 (function(){
   chrome.runtime.onMessage.addListener(function (msg, sender, sendResponse) {
@@ -20,19 +21,38 @@ import { LABEL_COLOR, MESSAGE_TYPE } from "../common/constant";
 
           const form = document.getElementById("edit-note");
           const summaryValue = form.summary.value;
-          if (validSummary(summaryValue) !== "") { errorStack.push(validSummary(summaryValue)); }
+          try {
+            validateNoteSummary(summaryValue);
+          } catch (err) {
+            errorStack.push(err.message);
+          }
 
           const bodyValue = form.body.value;
-          if (validBody(bodyValue) !== "") { errorStack.push(validBody(bodyValue)); }
+          try {
+            validateNoteBody(bodyValue);
+          } catch (err) {
+            errorStack.push(err.message);
+          }
 
           const tagsList = form.tags.value
             .split(",")
             .map(tag => tag.replace(/^\s+|\s+$/g, ""))
             .filter((v, i, a) => a.indexOf(v) === i)
-            .filter(tag => validTag(tag));
+            .filter(tag => {
+              try {
+                validateTag(tag);
+                return true;
+              } catch (err) {
+                return false;
+              }
+            });
 
           const labelValue = form.labelColor.value;
-          if (validLabel(labelValue) !== "") { errorStack.push(validLabel(labelValue)); }
+          try {
+            validateLabel(labelValue);
+          } catch (err) {
+            errorStack.push(err.message);
+          }
 
           // handle error
           if (errorStack.length > 0) {

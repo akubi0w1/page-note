@@ -31,8 +31,7 @@ export const MESSAGE_TYPE = {
   GET_ALL_NOTE: "GET_ALL_NOTE",
   GET_ALL_NOTE_RESPONSE: "GET_ALL_NOTE_RESPONSE",
   GET_NOTE_BY_ID: "GET_NOTE_BY_ID",
-  GET_NOTE_BY_ID_RESPONSE: "GET_NOTE_BY_ID_RESPONSE",
-
+  GET_NOTE_BY_ID_RESPONSE: "GET_NOTE_BY_ID_RESPONSE"
 };
 
 /**
@@ -40,5 +39,5 @@ export const MESSAGE_TYPE = {
  */
 export const DB_INFO = {
   VERSION: 1,
-  NAME: "pageNote",
-}
+  NAME: "pageNote"
+};
