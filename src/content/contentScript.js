@@ -20,7 +20,7 @@ import { chromeSendMessage } from "../common/utility";
    * テキストを選択した時のイベント
    */
   document.body.addEventListener("mouseup", function(evt) {
-    const oldButton = document.getElementById("_page-note-quick-button-wrapper")
+    const oldButton = document.getElementById("_page-note-quick-button-wrapper");
     if (oldButton) {
       oldButton.remove();
       if (evt.target.id === "_page-note-quick-button") {
@@ -229,6 +229,7 @@ function createContent() {
   let summaryInput = createElement("input", "_page-note-content-form-input-text");
   summaryInput.name = "summary";
   summaryInput.type = "text";
+  summaryInput.value = selectedText;
   summaryForm.appendChild(summaryLabel);
   summaryForm.appendChild(summaryInput);
 
