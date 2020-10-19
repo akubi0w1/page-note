@@ -1,7 +1,6 @@
 import Dexie from "dexie";
-
-const DB_VERSION = 1;
-const DB_NAME = "pageNote";
+import { MESSAGE_TYPE, DB_INFO } from "../common/constant";
+import { chromeSendMessage } from "../common/utility";
 
 chrome.runtime.onInstalled.addListener(function () {
   // create contextMenu
@@ -13,7 +12,7 @@ chrome.runtime.onInstalled.addListener(function () {
       chrome.tabs.get(tab.id, function(tab) {
         chrome.tabs.sendMessage(
           tab.id,
-          { type: "OPEN_NEW_NOTE_WINDOW", payload: {} }
+          { type: MESSAGE_TYPE.OPEN_ADD_NOTE_WINDOW, payload: {} }
         );
       });
     })
@@ -36,7 +35,7 @@ chrome.runtime.onInstalled.addListener(function () {
   */
   chrome.runtime.onMessage.addListener(async function (msg, sender) {
     switch (msg.type) {
-      case "ADD_NOTE":
+      case MESSAGE_TYPE.ADD_NOTE:
         noteRepo.insert(
           msg.payload.url,
           msg.payload.title,
@@ -47,8 +46,9 @@ chrome.runtime.onInstalled.addListener(function () {
           msg.payload.tags,
           msg.payload.label
         )
+        chromeSendMessage(MESSAGE_TYPE.GET_ALL_NOTE_RESPONSE, await noteRepo.getAll());
         break;
-      case "UPDATE_NOTE":
+      case MESSAGE_TYPE.UPDATE_NOTE_BY_ID:
         noteRepo.update(
           msg.payload.id,
           msg.payload.url,
@@ -60,25 +60,27 @@ chrome.runtime.onInstalled.addListener(function () {
           msg.payload.tags,
           msg.payload.label
         );
+        chromeSendMessage(MESSAGE_TYPE.GET_ALL_NOTE_RESPONSE, await noteRepo.getAll());
         break;
-      case "GET_ALL_NOTE":
-        chrome.runtime.sendMessage({
-          type: "GET_ALL_NOTE_RESPONSE",
-          payload: await noteRepo.getAll()
-        });
+      case MESSAGE_TYPE.DELETE_NOTE_BY_ID:
+        noteRepo.delete(msg.payload.id);
+        chromeSendMessage(MESSAGE_TYPE.GET_ALL_NOTE_RESPONSE, await noteRepo.getAll());
         break;
-      case "GET_NOTE_BY_ID":
-        chrome.runtime.sendMessage({
-          type: "GET_NOTE_BY_ID_RESPONSE",
-          payload: await noteRepo.getById(msg.payload.id)
-        });
+      case MESSAGE_TYPE.GET_ALL_NOTE:
+        chromeSendMessage(MESSAGE_TYPE.GET_ALL_NOTE_RESPONSE, await noteRepo.getAll());
+        break;
+      case MESSAGE_TYPE.GET_NOTE_BY_ID:
+        chromeSendMessage(MESSAGE_TYPE.GET_NOTE_BY_ID_RESPONSE, await noteRepo.getById(msg.payload.id));
         break;
     }
   });
 
   // TODO: デバッグ用
   chrome.tabs.create({ url: "src/notelist/index.html" });
-  chrome.tabs.create({ url: "src/editnote/index.html?id=2" });
+  // chrome.tabs.create({ url: "src/editnote/index.html?id=2" });
+  // noteRepo.insert("example.URL", "title", "se", "selected text", "summary", "boyd", ["tag", "tag1"], "red");
+  // noteRepo.insert("example.URL", "title", "se", "selected text", "summary", "boyd", ["tag", "tag1"], "purple");
+  // noteRepo.insert("example.URL", "title", "se", "selected text", "summary", "boyd", ["tag", "tag1"], "blue");
 });
 
 
@@ -86,10 +88,10 @@ chrome.runtime.onInstalled.addListener(function () {
  * DBの定義
  */
 function createDB() {
-  let conn = new Dexie(DB_NAME);
+  let conn = new Dexie(DB_INFO.NAME);
   // TODO: できるならtagsとlabelを外部キーで管理したい欲
   // REF: definition scheme: https://dexie.org/docs/Version/Version.stores()
-  conn.version(DB_VERSION).stores({
+  conn.version(DB_INFO.VERSION).stores({
     notes: "++id,url,title,selector,selectedText,summary,body,tags,label"
   });
   return conn;

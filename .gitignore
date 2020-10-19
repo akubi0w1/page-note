@@ -1,5 +1,8 @@
 .DS_Store
 
+# file
+*.bak
+
 # node
 node_modules
 package-lock.json

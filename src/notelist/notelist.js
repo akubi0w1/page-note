@@ -1,17 +1,12 @@
-const RED_CODE = "#ff389b";
-const PURPLE_CODE = "#9b38ff";
-const BLUE_CODE = "#389bff";
-const GREEN_CODE = "#00cc33";
-const ORANGE_CODE = "#ff9b38";
-
-
-// TODO: note-listをtargetに取得したものを突っ込む
-// TODO: background scriptから全値を取得
+import { LABEL_COLOR_CODE, MESSAGE_TYPE } from "../common/constant";
+import { createIconElement } from "../common/element";
+import { chromeSendMessage } from "../common/utility";
 
 (function(){
   chrome.runtime.onMessage.addListener(function (msg, sender, sendResponse) {
     switch (msg.type) {
-      case "GET_ALL_NOTE_RESPONSE":
+      case MESSAGE_TYPE.GET_ALL_NOTE_RESPONSE:
+        clearNoteList();
         const noteList = msg.payload;
         // 検索バーのイベントリスナーを追加
         let applyBtn = document.getElementById("search-bar-form-submit");
@@ -37,10 +32,7 @@ const ORANGE_CODE = "#ff9b38";
     }
   });
 
-  chrome.runtime.sendMessage({
-    type: "GET_ALL_NOTE",
-    payload: {}
-  });
+  chromeSendMessage(MESSAGE_TYPE.GET_ALL_NOTE);
 
 })();
 
@@ -153,19 +145,19 @@ function createNoteListRow(note) {
   labelBar.className = "label";
   switch (note.label) {
     case "red":
-      labelBar.style = "background-color: " + RED_CODE;
+      labelBar.style = "background-color: " + LABEL_COLOR_CODE.RED;
       break;
     case "blue":
-      labelBar.style = "background-color: " + BLUE_CODE;
+      labelBar.style = "background-color: " + LABEL_COLOR_CODE.BLUE;
       break;
     case "green":
-      labelBar.style = "background-color: " + GREEN_CODE;
+      labelBar.style = "background-color: " + LABEL_COLOR_CODE.GREEN;
       break;
     case "purple":
-      labelBar.style = "background-color: " + PURPLE_CODE;
+      labelBar.style = "background-color: " + LABEL_COLOR_CODE.PURPLE;
       break;
     case "orange":
-      labelBar.style = "background-color: " + ORANGE_CODE;
+      labelBar.style = "background-color: " + LABEL_COLOR_CODE.ORANGE;
       break;
   }
   labelCol.appendChild(labelBar);
@@ -204,11 +196,10 @@ function createNoteListRow(note) {
   deleteBtn.className = "btn btn-danger-outline";
   deleteBtn.appendChild(createIconElement("fas fa-trash"));
   deleteBtn.addEventListener("click", () => {
-    chrome.extension.getBackgroundPage().deleteNoteById(note.id);
-    // TODO: clear table
-    // clearNoteList();
-    // TODO: rerender
-    
+    chromeSendMessage(
+      MESSAGE_TYPE.DELETE_NOTE_BY_ID,
+      { id: note.id }
+    );
   });
   buttonCol.appendChild(editBtn);
   buttonCol.appendChild(deleteBtn);
@@ -223,15 +214,3 @@ function createNoteListRow(note) {
 
   return row;
 }
-
-// TODO: dryがあああ
-/**
- * fontawesomeで使うアイコンを作る
- * @param {String} className 
- * @return {HTMLElement}
- */
-function createIconElement(className) {
-  let elem = document.createElement("i");
-  elem.className = className;
-  return elem;
-};

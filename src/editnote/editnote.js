@@ -1,16 +1,11 @@
-const LABEL_COLOR = {
-  RED: "red",
-  PURPLE: "purple",
-  BLUE: "blue",
-  GREEN: "green",
-  ORANGE: "orange"
-};
-
+import { LABEL_COLOR, MESSAGE_TYPE } from "../common/constant";
+import { validateNoteSummary, validateNoteBody, validateTag, validateLabel } from "../common/validation";
+import { chromeSendMessage } from "../common/utility";
 
 (function(){
   chrome.runtime.onMessage.addListener(function (msg, sender, sendResponse) {
     switch (msg.type) {
-      case "GET_NOTE_BY_ID_RESPONSE":
+      case MESSAGE_TYPE.GET_NOTE_BY_ID_RESPONSE:
         const oldNote = msg.payload;
         if (typeof oldNote === "undefined") {
           alert("id is invalid");
@@ -27,19 +22,38 @@ const LABEL_COLOR = {
 
           const form = document.getElementById("edit-note");
           const summaryValue = form.summary.value;
-          if (validSummary(summaryValue) !== "") { errorStack.push(validSummary(summaryValue)); }
+          try {
+            validateNoteSummary(summaryValue);
+          } catch (err) {
+            errorStack.push(err.message);
+          }
 
           const bodyValue = form.body.value;
-          if (validBody(bodyValue) !== "") { errorStack.push(validBody(bodyValue)); }
+          try {
+            validateNoteBody(bodyValue);
+          } catch (err) {
+            errorStack.push(err.message);
+          }
 
           const tagsList = form.tags.value
             .split(",")
             .map(tag => tag.replace(/^\s+|\s+$/g, ""))
             .filter((v, i, a) => a.indexOf(v) === i)
-            .filter(tag => validTag(tag));
+            .filter(tag => {
+              try {
+                validateTag(tag);
+                return true;
+              } catch (err) {
+                return false;
+              }
+            });
 
           const labelValue = form.labelColor.value;
-          if (validLabel(labelValue) !== "") { errorStack.push(validLabel(labelValue)); }
+          try {
+            validateLabel(labelValue);
+          } catch (err) {
+            errorStack.push(err.message);
+          }
 
           // handle error
           if (errorStack.length > 0) {
@@ -49,9 +63,9 @@ const LABEL_COLOR = {
           }
 
           // send update request to background
-          chrome.runtime.sendMessage({
-            type: "UPDATE_NOTE",
-            payload: {
+          chromeSendMessage(
+            MESSAGE_TYPE.UPDATE_NOTE_BY_ID,
+            {
               id: id,
               url: oldNote.url,
               selector: oldNote.selector,
@@ -62,7 +76,7 @@ const LABEL_COLOR = {
               tags: tagsList,
               label: labelValue
             }
-          });
+          );
 
           // notify success to send request
           clearNotify("notify");
@@ -100,10 +114,7 @@ const LABEL_COLOR = {
   }
 
   // get data request
-  chrome.runtime.sendMessage({
-    type: "GET_NOTE_BY_ID",
-    payload: { id }
-  });
+  chromeSendMessage(MESSAGE_TYPE.GET_NOTE_BY_ID, { id });
 }());
 
 /**
@@ -228,54 +239,4 @@ function divideQuery(queryString) {
       value: pair[1]
     };
   });
-}
-
-// NOTE: validation
-/**
- * summaryに対してバリデーションを行う
- * 
- * @param {String} summary 
- * @return {String}
- */
-function validSummary(summary) {
-  if (summary === "") {
-    return "error: summary is empty";
-  }
-  return "";
-}
-
-/**
- * bodyに対してバリデーションを行う
- * 
- * @param {String} body 
- * @return {String}
- */
-function validBody(body) {
-  return "";
-}
-
-/**
- * tagに対してバリデーションを行う
- * 
- * @param {String} tag 
- * @return {Boolean}
- */
-function validTag(tag) {
-  if (tag === "") {
-    return false;
-  }
-  return true;
-}
-
-/**
- * labelに対してバリデーションを行う
- * 
- * @param {String} label 
- * @return {Boolean}
- */
-function validLabel(label) {
-  if (label != LABEL_COLOR.RED && label != LABEL_COLOR.PURPLE && label != LABEL_COLOR.BLUE && label != LABEL_COLOR.GREEN && label != LABEL_COLOR.ORANGE) {
-    return "error: label is invalid";
-  }
-  return "";
 }

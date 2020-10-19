@@ -1,9 +1,6 @@
-// TODO: DBとかにしまえれば良いか？
-const RED_CODE = "#ff389b";
-const PURPLE_CODE = "#9b38ff";
-const BLUE_CODE = "#389bff";
-const GREEN_CODE = "#00cc33";
-const ORANGE_CODE = "#ff9b38";
+import { LABEL_COLOR_CODE, MESSAGE_TYPE } from "../common/constant";
+import { createIconElement } from "../common/element";
+import { chromeSendMessage } from "../common/utility";
 
 /**
  * 初期処理
@@ -13,7 +10,7 @@ const ORANGE_CODE = "#ff9b38";
 
   chrome.runtime.onMessage.addListener(function (msg, sender, sendResponse) {
     switch (msg.type) {
-      case "GET_ALL_NOTE_RESPONSE":
+      case MESSAGE_TYPE.GET_ALL_NOTE_RESPONSE:
         msg.payload.forEach(note => {
           noteListElement.appendChild(createNoteItemElement(note));
         });
@@ -21,11 +18,7 @@ const ORANGE_CODE = "#ff9b38";
     }
   });
 
-  chrome.runtime.sendMessage({
-    type: "GET_ALL_NOTE", // TODO: constantsに切り出し
-    payload: {}
-  });
-
+  chromeSendMessage(MESSAGE_TYPE.GET_ALL_NOTE);
 })();
 
 /**
@@ -155,22 +148,22 @@ function createNoteLabelElement(color) {
   labelElement.className = "note-label";
   switch(color) {
     case "red":
-      labelElement.style = "background-color: " + RED_CODE;
+      labelElement.style = "background-color: " + LABEL_COLOR_CODE.RED;
       break;
     case "purple":
-      labelElement.style = "background-color: " + PURPLE_CODE;
+      labelElement.style = "background-color: " + LABEL_COLOR_CODE.PURPLE;
       break;
     case "blue":
-      labelElement.style = "background-color: " + BLUE_CODE;
+      labelElement.style = "background-color: " + LABEL_COLOR_CODE.BLUE;
       break;
     case "green":
-      labelElement.style = "background-color: " + GREEN_CODE;
+      labelElement.style = "background-color: " + LABEL_COLOR_CODE.GREEN;
       break;
     case "orange":
-      labelElement.style = "background-color: " + ORANGE_CODE;
+      labelElement.style = "background-color: " + LABEL_COLOR_CODE.ORANGE;
       break;
     default:
-      labelElement.style = "background-color: " + RED_CODE;
+      labelElement.style = "background-color: " + LABEL_COLOR_CODE.DEFALULT;
       break;
   }
   return labelElement;
@@ -190,7 +183,7 @@ document.getElementById("add-note-btn").onclick = function () {
   chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
     chrome.tabs.sendMessage(
       tabs[0].id,
-      { type: "OPEN_NEW_NOTE_WINDOW", payload: {}}
+      { type: MESSAGE_TYPE.OPEN_ADD_NOTE_WINDOW, payload: {}}
     );
   });
   window.close();
@@ -201,17 +194,4 @@ document.getElementById("add-note-btn").onclick = function () {
  */
 document.getElementById("open-manage-page-btn").onclick = function () {
   chrome.tabs.create({ url: "src/notelist/index.html" });
-};
-
-
-/**
- * fontawesomeで使うアイコンを作る
- * @param {string} className 
- * @return {HTMLElement}
- */
-// TODO: dry
-function createIconElement(className) {
-  let elem = document.createElement("i");
-  elem.className = className;
-  return elem;
 };

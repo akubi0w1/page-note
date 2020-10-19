@@ -1,18 +1,7 @@
-// TODO: DBから値取得 or constantsをつかう
-const RED_CODE = "#ff389b";
-const PURPLE_CODE = "#9b38ff";
-const BLUE_CODE = "#389bff";
-const GREEN_CODE = "#00cc33";
-const ORANGE_CODE = "#ff9b38";
-
-const LABEL_COLOR = {
-  RED: "red",
-  PURPLE: "purple",
-  BLUE: "blue",
-  GREEN: "green",
-  ORANGE: "orange"
-};
-
+import { LABEL_COLOR, LABEL_COLOR_CODE, MESSAGE_TYPE } from "../common/constant";
+import { validateNoteSummary, validateNoteBody, validateTag, validateLabel } from "../common/validation";
+import { createIconElement } from "../common/element";
+import { chromeSendMessage } from "../common/utility";
 
 // pageNoteWrapper.addEventListener("mousedown", mouseDown, false);
 // 座標
@@ -21,7 +10,7 @@ const LABEL_COLOR = {
 (function() {
   chrome.runtime.onMessage.addListener(function (msg, sender, sendResponse) {
     switch(msg.type) {
-      case "OPEN_NEW_NOTE_WINDOW":
+      case MESSAGE_TYPE.OPEN_ADD_NOTE_WINDOW:
         renderNewNoteWindow();
         break;
     }
@@ -71,7 +60,6 @@ function createHeader() {
   closeButton.innerHTML = "X";
   // closeButton.appendChild(createIconElement("fas fa-times"));
   closeButton.onclick = function() {
-    // pageNoteWrapper.style = "display: none";
     removeNewNoteWindow();
   };
 
@@ -85,7 +73,6 @@ function createHeader() {
 
 // TODO: 改良...
 function createContent() {
-  // TODO: inline_domの取得
   const selectedText = document.getSelection().toString();
   // console.log(document.getSelection().anchorNode.parentNode.previousSibling);
   const tabTitle = document.title;
@@ -104,19 +91,38 @@ function createContent() {
     var errorStack = [];
 
     const summaryValue = form.summary.value;
-    if (validSummary(summaryValue) !== "") { errorStack.push(validSummary(summaryValue)); }
+    try {
+      validateNoteSummary(summaryValue);
+    } catch (err) {
+      errorStack.push(err.message);
+    }
 
     const bodyValue = form.body.value;
-    if (validBody(bodyValue) !== "") { errorStack.push(validBody(bodyValue)); }
+    try {
+      validateNoteBody(bodyValue);
+    } catch(err) {
+      errorStack.push(err.message);
+    }
     
     const tagsList = form.tags.value
       .split(",")
       .map(tag => tag.replace(/^\s+|\s+$/g, ""))
       .filter((v, i, a) => a.indexOf(v) === i)
-      .filter(tag => validTag(tag));
+      .filter(tag => {
+        try {
+          validateTag(tag);
+          return true;
+        } catch(err) {
+          return false;
+        }
+      });
     
     const labelValue = form.labelColor.value;
-    if (validLabel(labelValue) !== "") { errorStack.push(validLabel(labelValue)); }
+    try {
+      validateLabel(labelValue);
+    } catch(err) {
+      errorStack.push(err.message);
+    }
 
     if (errorStack.length > 0) {
       let errorBarElem = createElement("div", "_page-note-error-bar");
@@ -131,9 +137,9 @@ function createContent() {
       return;
     }
     // NOTE: 登録したくなければ、ここ以前に弾いてください
-    chrome.runtime.sendMessage({
-      type: "ADD_NOTE", // TODO: constantsに切り出し
-      payload: {
+    chromeSendMessage(
+      MESSAGE_TYPE.ADD_NOTE,
+      {
         url: tabUrl,
         selector: "",
         selectedText: selectedText,
@@ -143,14 +149,14 @@ function createContent() {
         tags: tagsList,
         label: labelValue
       }
-    });
+    );
     removeNewNoteWindow();
   };
   // NOTE: end on click
   submitButtonInput.appendChild(submitButton);
 
   // labelColor
-  let colorList = [{ label: "red", code: RED_CODE, checked: true }, { label: "purple", code: PURPLE_CODE, checked: false }, { label: "blue", code: BLUE_CODE, checked: false }, { label: "green", code: GREEN_CODE, checked: false }, { label: "orange", code: ORANGE_CODE, checked: false }];
+  let colorList = [{ label: "red", code: LABEL_COLOR_CODE.RED, checked: true }, { label: "purple", code: LABEL_COLOR_CODE.PURPLE, checked: false }, { label: "blue", code: LABEL_COLOR_CODE.BLUE, checked: false }, { label: "green", code: LABEL_COLOR_CODE.GREEN, checked: false }, { label: "orange", code: LABEL_COLOR_CODE.ORANGE, checked: false }];
   let labelInput = createElement("div", "_page-note-content-form-item");
   let labelFrame = document.createElement("div");
   labelFrame.style = "display: flex; align-items: center;";
@@ -201,7 +207,6 @@ function createContent() {
   bodyLabel.innerText = "body";
   let bodyInput = createElement("textarea", "_page-note-content-form-input-textarea");
   bodyInput.name = "body";
-  bodyInput.type = "textarea";
   bodyForm.appendChild(bodyLabel);
   bodyForm.appendChild(bodyInput);
 
@@ -233,68 +238,6 @@ function createContent() {
   return content;
 
 }
-
-// NOTE: validation
-/**
- * summaryに対してバリデーションを行う
- * 
- * @param {String} summary 
- * @return {String}
- */
-function validSummary(summary) {
-  if (summary === "") {
-    return "summary is empty";
-  }
-  return "";
-}
-
-/**
- * bodyに対してバリデーションを行う
- * 
- * @param {String} body 
- * @return {String}
- */
-function validBody(body) {
-  return "";
-}
-
-/**
- * tagに対してバリデーションを行う
- * 
- * @param {String} tag 
- * @return {Boolean}
- */
-function validTag(tag) {
-  if (tag === "") {
-    return false;
-  }
-  return true;
-}
-
-/**
- * labelに対してバリデーションを行う
- * 
- * @param {String} label 
- * @return {Boolean}
- */
-function validLabel(label) {
-  if (label != LABEL_COLOR.RED && label != LABEL_COLOR.PURPLE && label != LABEL_COLOR.BLUE && label != LABEL_COLOR.GREEN && label != LABEL_COLOR.ORANGE) {
-    return "label is invalid";
-  }
-  return "";
-}
-
-// // // TODO: dryがあああ
-// /**
-//  * fontawesomeで使うアイコンを作る
-//  * @param {string} className 
-//  * @return {HTMLElement}
-//  */
-// function createIconElement(className) {
-//   let elem = document.createElement("i");
-//   elem.className = className;
-//   return elem;
-// };
 
 /**
  * 
