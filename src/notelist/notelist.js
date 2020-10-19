@@ -3,6 +3,29 @@ import { createIconElement } from "../common/element";
 import { chromeSendMessage } from "../common/utility";
 
 (function(){
+  /**
+   * header機能のリスナーを作成
+   */
+  document.getElementById("export-button").addEventListener("click", function(evt) {
+    if(confirm("export indexedDB data. Are you sure download data file?")) {
+      chromeSendMessage(MESSAGE_TYPE.EXPORT_INDEXEDDB);
+    }
+  });
+  document.getElementById("import-button").addEventListener("change", function(evt) {
+    const importFile = this.files[0];
+    if (importFile.type !== "application/json") {
+      alert("type of file isn't json.")
+      return;
+    }
+    if (confirm(`import indexedDB data. The original data will be deleted.\nfile name is ${importFile.name}.`)) {
+      const reader = new FileReader();
+      reader.readAsText(importFile);
+      reader.onload = function (evt) {
+        chromeSendMessage(MESSAGE_TYPE.IMPORT_INDEXEDDB, JSON.parse(reader.result));
+      };
+    }
+  });
+
   chrome.runtime.onMessage.addListener(function (msg, sender, sendResponse) {
     switch (msg.type) {
       case MESSAGE_TYPE.GET_ALL_NOTE_RESPONSE:

@@ -1,6 +1,6 @@
 import Dexie from "dexie";
 import { MESSAGE_TYPE, DB_INFO } from "../common/constant";
-import { chromeSendMessage } from "../common/utility";
+import { chromeSendMessage, downloadFile } from "../common/utility";
 
 chrome.runtime.onInstalled.addListener(function () {
   // create contextMenu
@@ -72,6 +72,19 @@ chrome.runtime.onInstalled.addListener(function () {
       case MESSAGE_TYPE.GET_NOTE_BY_ID:
         chromeSendMessage(MESSAGE_TYPE.GET_NOTE_BY_ID_RESPONSE, await noteRepo.getById(msg.payload.id));
         break;
+      case MESSAGE_TYPE.EXPORT_INDEXEDDB:
+        let exportData = {
+          notes: await noteRepo.getAll(),
+        };
+        downloadFile(
+          `page-note-export-${Date.now()}.json`,
+          exportData);
+        break;
+      case MESSAGE_TYPE.IMPORT_INDEXEDDB:
+        noteRepo.clear();
+        noteRepo.bulkInsert(msg.payload.notes);
+        chromeSendMessage(MESSAGE_TYPE.GET_ALL_NOTE_RESPONSE, await noteRepo.getAll());
+        break;
     }
   });
 
@@ -141,6 +154,14 @@ class NoteRepository {
   }
 
   /**
+   * 一気に登録する
+   * @param {Array<{url, title, selector, selectedText, summary, body, tags, label}>} notes 
+   */
+  async bulkInsert(notes) {
+    const result = await this.db.notes.bulkAdd(notes);
+  }
+
+  /**
    * 更新
    * @param {Number} id 
    * @param {String} url
@@ -170,6 +191,13 @@ class NoteRepository {
    */
   async delete(id) {
     const result = await this.db.notes.delete(id);
+  }
+
+  /**
+   * 全件削除
+   */
+  async clear() {
+    const result = await this.db.notes.clear();
   }
 }
 

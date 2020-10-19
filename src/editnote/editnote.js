@@ -3,6 +3,15 @@ import { validateNoteSummary, validateNoteBody, validateTag, validateLabel } fro
 import { chromeSendMessage } from "../common/utility";
 
 (function(){
+  /**
+   * headerのリスナーを登録
+   */
+  document.getElementById("header-logo").onclick = function () {
+    chrome.tabs.getCurrent(function (tab) {
+      chrome.tabs.update(tab.id, { url: "src/notelist/index.html" });
+    });
+  };
+
   chrome.runtime.onMessage.addListener(function (msg, sender, sendResponse) {
     switch (msg.type) {
       case MESSAGE_TYPE.GET_NOTE_BY_ID_RESPONSE:
@@ -86,13 +95,9 @@ import { chromeSendMessage } from "../common/utility";
     }
   });
 
-  // TODO: manage系で共通化したい
-  document.getElementById("header-logo").onclick = function () {
-    chrome.tabs.getCurrent(function (tab) {
-      chrome.tabs.update(tab.id, { url: "src/notelist/index.html" });
-    });
-  };
-
+  /**
+   * 最新の値を取得
+   */
   const idQuery = divideQuery(location.search.substr(1))
     .find(query => query.key === "id");
 
