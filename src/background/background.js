@@ -1,6 +1,6 @@
 import Dexie from "dexie";
 import { MESSAGE_TYPE, DB_INFO } from "../common/constant";
-import { chromeSendMessage } from "../common/utility";
+import { chromeSendMessage, downloadFile } from "../common/utility";
 
 chrome.runtime.onInstalled.addListener(function () {
   // create contextMenu
@@ -71,6 +71,14 @@ chrome.runtime.onInstalled.addListener(function () {
         break;
       case MESSAGE_TYPE.GET_NOTE_BY_ID:
         chromeSendMessage(MESSAGE_TYPE.GET_NOTE_BY_ID_RESPONSE, await noteRepo.getById(msg.payload.id));
+        break;
+      case MESSAGE_TYPE.EXPORT_INDEXEDDB:
+        let exportData = {
+          notes: await noteRepo.getAll(),
+        };
+        downloadFile(
+          `page-note-export-${Date.now()}.json`,
+          exportData);
         break;
     }
   });

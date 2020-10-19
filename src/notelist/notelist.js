@@ -3,6 +3,16 @@ import { createIconElement } from "../common/element";
 import { chromeSendMessage } from "../common/utility";
 
 (function(){
+  /**
+   * header機能のリスナーを作成
+   */
+  document.getElementById("export-button").addEventListener("click", function(evt) {
+    // TODO: 文言がひでえ
+    if(confirm("export indexedDB data. download file.")) {
+      chromeSendMessage(MESSAGE_TYPE.EXPORT_INDEXEDDB);
+    }
+  });
+
   chrome.runtime.onMessage.addListener(function (msg, sender, sendResponse) {
     switch (msg.type) {
       case MESSAGE_TYPE.GET_ALL_NOTE_RESPONSE:
