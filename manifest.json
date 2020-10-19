@@ -31,7 +31,8 @@
   ],
   "web_accessible_resources": [
     "src/assets/css/all.min.css",
-    "src/assets/webfonts/*"
+    "src/assets/webfonts/*",
+    "assets/icons/*"
   ],
   "icons": {
     "16": "assets/icons/icon16.png",

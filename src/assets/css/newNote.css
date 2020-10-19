@@ -167,13 +167,18 @@
   content: "v";
 }
 
-#_page-note-quick-button {
+#_page-note-quick-button-wrapper {
   position: absolute;
   z-index: 50000;
-  background: transparent;
-  background-image: url("/assets/icons/icon128.png");
+}
+
+#_page-note-quick-button-wrapper button {
   background-size: cover;
   height: 32px;
   width: 32px;
   border: 0;
+}
+
+#_page-note-quick-button-wrapper button:hover {
+  opacity: .7;
 }

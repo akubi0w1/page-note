@@ -15,6 +15,37 @@ import { chromeSendMessage } from "../common/utility";
         break;
     }
   });
+
+  /**
+   * テキストを選択した時のイベント
+   */
+  document.body.addEventListener("mouseup", function(evt) {
+    const oldButton = document.getElementById("_page-note-quick-button-wrapper")
+    if (oldButton) {
+      oldButton.remove();
+      if (evt.target.id === "_page-note-quick-button") {
+        renderNewNoteWindow();
+        return;
+      }
+    }
+
+    if(window.getSelection().toString() !== "") {
+      const _targetDom = window.getSelection().getRangeAt(0).getClientRects()[0];
+      let wrapperElem = document.createElement("div");
+      wrapperElem.id = "_page-note-quick-button-wrapper";
+      // TODO: 調整で-3rem, -2remしてるとこ、サイトによる違いがめっちゃ激しいから、調整
+      wrapperElem.style = `
+        top: calc(${_targetDom.y}px + ${window.scrollY}px - 3rem);
+        left: calc(${_targetDom.x}px + ${window.scrollX}px + ${_targetDom.width}px - 2rem);
+      `;
+
+      let buttonElem = document.createElement("button");
+      buttonElem.id = "_page-note-quick-button";
+      buttonElem.style = `background-image: url(${chrome.runtime.getURL("assets/icons/icon128.png")});`;
+      wrapperElem.appendChild(buttonElem);
+      document.body.appendChild(wrapperElem);
+    }
+  });
 })();
 
 /**
