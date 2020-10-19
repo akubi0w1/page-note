@@ -1,4 +1,5 @@
 import { LABEL_COLOR_CODE, MESSAGE_TYPE } from "../common/constant";
+import { createIconElement } from "../common/element";
 
 /**
  * 初期処理
@@ -196,17 +197,4 @@ document.getElementById("add-note-btn").onclick = function () {
  */
 document.getElementById("open-manage-page-btn").onclick = function () {
   chrome.tabs.create({ url: "src/notelist/index.html" });
-};
-
-
-/**
- * fontawesomeで使うアイコンを作る
- * @param {string} className 
- * @return {HTMLElement}
- */
-// TODO: dry
-function createIconElement(className) {
-  let elem = document.createElement("i");
-  elem.className = className;
-  return elem;
 };

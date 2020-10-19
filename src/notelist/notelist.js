@@ -1,4 +1,5 @@
 import { LABEL_COLOR_CODE, MESSAGE_TYPE } from "../common/constant";
+import { createIconElement } from "../common/element";
 
 (function(){
   chrome.runtime.onMessage.addListener(function (msg, sender, sendResponse) {
@@ -215,15 +216,3 @@ function createNoteListRow(note) {
 
   return row;
 }
-
-// TODO: dryがあああ
-/**
- * fontawesomeで使うアイコンを作る
- * @param {String} className 
- * @return {HTMLElement}
- */
-function createIconElement(className) {
-  let elem = document.createElement("i");
-  elem.className = className;
-  return elem;
-};

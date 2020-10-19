@@ -1,5 +1,6 @@
 import { LABEL_COLOR, LABEL_COLOR_CODE, MESSAGE_TYPE } from "../common/constant";
 import { validateNoteSummary, validateNoteBody, validateTag, validateLabel } from "../common/validation";
+import { createIconElement } from "../common/element";
 
 // pageNoteWrapper.addEventListener("mousedown", mouseDown, false);
 // 座標
@@ -58,7 +59,6 @@ function createHeader() {
   closeButton.innerHTML = "X";
   // closeButton.appendChild(createIconElement("fas fa-times"));
   closeButton.onclick = function() {
-    // pageNoteWrapper.style = "display: none";
     removeNewNoteWindow();
   };
 
@@ -237,18 +237,6 @@ function createContent() {
   return content;
 
 }
-
-// // // TODO: dryがあああ
-// /**
-//  * fontawesomeで使うアイコンを作る
-//  * @param {string} className 
-//  * @return {HTMLElement}
-//  */
-// function createIconElement(className) {
-//   let elem = document.createElement("i");
-//   elem.className = className;
-//   return elem;
-// };
 
 /**
  * 
