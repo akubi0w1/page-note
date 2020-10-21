@@ -36,16 +36,17 @@ import { chromeSendMessage } from "../common/utility";
         applyBtn.addEventListener("click", event => {
           event.preventDefault();
           let form = document.getElementById("search-bar-form");
+          // TODO: 複数キーワードに対応
           let keyword = form.keyword.value;
           if (keyword === "") {
             clearNoteList();
             renderNoteList(noteList);
             return;
           }
-
-          noteList.filter(note => isHitToSearch(note, keyword));
           clearNoteList();
-          renderNoteList(noteList);
+          renderNoteList(
+            noteList.filter(note => isHitToSearch(note, keyword))
+          );
           return;
         });
 
@@ -99,7 +100,7 @@ function isHitToSearch(note, keyword, option={}) {
 
   // selected text
   if (_option.selectedText) {
-    if (note.inlineText.indexOf(keyword) > -1) return true;
+    if (note.selectedText.indexOf(keyword) > -1) return true;
   }
 
   // page url
