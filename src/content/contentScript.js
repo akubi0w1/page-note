@@ -1,7 +1,7 @@
 import { LABEL_COLOR, LABEL_COLOR_CODE, MESSAGE_TYPE } from "../common/constant";
 import { validateNoteSummary, validateNoteBody, validateTag, validateLabel } from "../common/validation";
 import { createIconElement } from "../common/element";
-import { chromeSendMessage } from "../common/utility";
+import { chromeSendMessage, getSelectorFromElement } from "../common/utility";
 
 // pageNoteWrapper.addEventListener("mousedown", mouseDown, false);
 // 座標
@@ -103,11 +103,17 @@ function createHeader() {
 }
 
 // TODO: 改良...
+/**
+ * 内容部分を作成
+ * 
+ * @return {HTMLElement}
+ */
 function createContent() {
   const selectedText = document.getSelection().toString();
-  // console.log(document.getSelection().anchorNode.parentNode.previousSibling);
+  const selectedSelector = getSelectorFromElement(document.getSelection().anchorNode.parentElement).join(" > ");  
   const tabTitle = document.title;
   const tabUrl = document.URL;
+
 
   let form = createElement("form", "_page-note-content-form");
 
@@ -172,7 +178,7 @@ function createContent() {
       MESSAGE_TYPE.ADD_NOTE,
       {
         url: tabUrl,
-        selector: "",
+        selector: selectedSelector,
         selectedText: selectedText,
         title: tabTitle,
         summary: summaryValue,
