@@ -27,11 +27,11 @@ import { chromeSendMessage } from "../common/utility";
  * @param {Number} note.id
  * @param {string} note.title
  * @param {string} note.url
- * @param {string} note.inlineDom
- * @param {string} note.inlineText
+ * @param {string} note.selector
+ * @param {string} note.selectedText
  * @param {string} note.summary
  * @param {string} note.body
- * @param {string} note.labelColor
+ * @param {string} note.label
  * @param {Array} note.tags
  * @return {HTMLLIElement}
  */
