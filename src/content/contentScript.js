@@ -110,7 +110,7 @@ function createHeader() {
  */
 function createContent() {
   const selectedText = document.getSelection().toString();
-  let selectedSelector = ""
+  let selectedSelector = "";
   if (selectedText) {
     selectedSelector = getSelectorFromElement(document.getSelection().anchorNode.parentElement).join(" > ");
   } 

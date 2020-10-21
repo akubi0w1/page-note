@@ -14,7 +14,7 @@ import { chromeSendMessage } from "../common/utility";
   document.getElementById("import-button").addEventListener("change", function(evt) {
     const importFile = this.files[0];
     if (importFile.type !== "application/json") {
-      alert("type of file isn't json.")
+      alert("type of file isn't json.");
       return;
     }
     if (confirm(`import indexedDB data. The original data will be deleted.\nfile name is ${importFile.name}.`)) {
@@ -36,17 +36,16 @@ import { chromeSendMessage } from "../common/utility";
         applyBtn.addEventListener("click", event => {
           event.preventDefault();
           let form = document.getElementById("search-bar-form");
-          // TODO: 複数キーワードに対応
-          let keyword = form.keyword.value;
-          if (keyword === "") {
+          let keywords = form.keyword.value
+            .split(" ")
+            .filter(keyword => keyword !== "");
+          if(!keywords.length) {
             clearNoteList();
             renderNoteList(noteList);
             return;
           }
           clearNoteList();
-          renderNoteList(
-            noteList.filter(note => isHitToSearch(note, keyword))
-          );
+          renderNoteList(noteList.filter(note => isHitToSearch(note, keywords)));
           return;
         });
 
@@ -63,7 +62,7 @@ import { chromeSendMessage } from "../common/utility";
 /**
  * 検索でヒットするか
  * @param {Object} note 
- * @param {String} keyword 
+ * @param {Array<String>} keywords 
  * @param {Object} option 
  * @param {Boolean} option.summary
  * @param {Boolean} option.body
@@ -73,7 +72,7 @@ import { chromeSendMessage } from "../common/utility";
  * @param {Boolean} option.title
  * @return {Boolean}
  */
-function isHitToSearch(note, keyword, option={}) {
+function isHitToSearch(note, keywords, option={}) {
   const _option = {
     summary: typeof option.summary === "boolean" ? option.summary : true,
     body: typeof option.body === "boolean" ? option.body : true,
@@ -85,32 +84,32 @@ function isHitToSearch(note, keyword, option={}) {
 
   // summary
   if (_option.summary) {
-    if (note.summary.indexOf(keyword) > -1) return true;
+    if(keywords.filter(keyword => note.summary.indexOf(keyword) > -1).length > 0) return true;
   }
 
   // body
   if (_option.body) {
-    if (note.body.indexOf(keyword) > -1) return true;
+    if(keywords.filter(keyword => note.body.indexOf(keyword) > -1).length > 0) return true;
   }
 
   // tags
   if (_option.tags) {
-    if (typeof note.tags.find(tag => tag === keyword) !== "undefined") return true;
+    if(keywords.filter(keyword => typeof note.tags.find(tag => tag === keyword) !== "undefined").length > 0) return true;
   }
 
   // selected text
   if (_option.selectedText) {
-    if (note.selectedText.indexOf(keyword) > -1) return true;
+    if(keywords.filter(keyword => note.selectedText.indexOf(keyword) > -1).length > 0) return true;
   }
 
   // page url
   if (_option.url) {
-    if (note.url.indexOf(keyword) > -1) return true;
+    if (keywords.filter(keyword => note.url.indexOf(keyword) > -1).length > 0) return true;
   }
 
   // page title
   if (_option.title) {
-    if (note.title.indexOf(keyword) > -1) return true;
+    if (keywords.filter(keyword => note.title.indexOf(keyword) > -1).length > 0) return true;
   }
 
   // TODO: label?
