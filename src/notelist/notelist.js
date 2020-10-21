@@ -150,8 +150,8 @@ function clearNoteList() {
  * @param {String} note.label
  * @param {String} note.summary
  * @param {String} note.body
- * @param {String} note.inlineText
- * @param {String} note.inlineDom
+ * @param {String} note.selectedText
+ * @param {String} note.selector
  * @param {Array} note.tags
  * @returns {HTMLElement}
  */
@@ -184,6 +184,10 @@ function createNoteListRow(note) {
       break;
   }
   labelCol.appendChild(labelBar);
+
+  // selectedText
+  let selectedText = document.createElement("td");
+  selectedText.innerText = note.selectedText;
 
   // origin page
   var pageCol = document.createElement("td");
@@ -229,9 +233,10 @@ function createNoteListRow(note) {
 
   row.appendChild(idCol);
   row.appendChild(labelCol);
-  row.appendChild(pageCol);
   row.appendChild(summaryCol);
+  // row.appendChild(selectedText);
   row.appendChild(bodyCol);
+  row.appendChild(pageCol);
   row.appendChild(tagsCol);
   row.appendChild(buttonCol);
 
