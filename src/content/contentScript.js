@@ -110,7 +110,10 @@ function createHeader() {
  */
 function createContent() {
   const selectedText = document.getSelection().toString();
-  const selectedSelector = getSelectorFromElement(document.getSelection().anchorNode.parentElement).join(" > ");  
+  let selectedSelector = ""
+  if (selectedText) {
+    selectedSelector = getSelectorFromElement(document.getSelection().anchorNode.parentElement).join(" > ");
+  } 
   const tabTitle = document.title;
   const tabUrl = document.URL;
 
