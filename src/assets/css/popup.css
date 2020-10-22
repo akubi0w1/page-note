@@ -48,6 +48,16 @@ body {
   opacity: .7;
 }
 
+.btn-transparent {
+  color: #005271;
+  border-color: transparent;
+  background-color: transparent;
+}
+
+.btn-transparent:hover {
+  opacity: .7;
+}
+
 .round {
   border-radius: 50%;
   width: auto;
@@ -84,12 +94,16 @@ body {
   background-color: transparent;
   color: #000000;
   border: 0;
-  font-size: .8em;
+  font-size: 1.1em;
   width: 12em;
 }
 
 .header .search .input-text:focus {
   outline: none;
+}
+
+.header .search button {
+  padding: 1px 2px;
 }
 
 .content {

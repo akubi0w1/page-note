@@ -20,7 +20,7 @@ body {
 
 .h1, .h2, .h3, .h4, .h5, .h6 {
   margin-block-start: .5em;
-    margin-block-end: .5em;
+  margin-block-end: .5em;
   font-weight: normal;
 }
 
@@ -47,6 +47,15 @@ body {
     color: $accent-color;
     border-color: $base-color;
     background-color: $base-color;
+    &:hover {
+      opacity: .7;
+    }
+  }
+
+  &-transparent {
+    color: $accent-color;
+    border-color: transparent;
+    background-color: transparent;
     &:hover {
       opacity: .7;
     }
@@ -91,11 +100,14 @@ body {
       background-color: transparent;
       color: $main-color;
       border: 0;
-      font-size: .8em;
+      font-size: 1.1em;
       width: 12em;
       &:focus {
         outline: none;
       }
+    }
+    button {
+      padding: 1px 2px;
     }
   }
 }

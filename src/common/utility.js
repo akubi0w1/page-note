@@ -74,3 +74,64 @@ export function getSelectorFromElement(elem) {
   }
   return names;
 }
+
+
+/**
+ * 検索でヒットするか(or検索)
+ * @param {Object} note 
+ * @param {Array<String>} keywords 
+ * @param {Object} option 
+ * @param {Boolean} option.summary
+ * @param {Boolean} option.body
+ * @param {Boolean} option.tags
+ * @param {Boolean} option.selectedText
+ * @param {Boolean} option.url
+ * @param {Boolean} option.title
+ * @return {Boolean}
+ */
+export function isHitToSearchNote(note, keywords, option = {}) {
+  const _option = {
+    summary: typeof option.summary === "boolean" ? option.summary : true,
+    body: typeof option.body === "boolean" ? option.body : true,
+    tags: typeof option.tags === "boolean" ? option.tags : true,
+    selectedText: typeof option.selectedText === "boolean" ? option.selectedText : true,
+    url: typeof option.url === "boolean" ? option.url : true,
+    title: typeof option.title === "boolean" ? option.title : true
+  };
+
+  // summary
+  if (_option.summary) {
+    if (keywords.filter(keyword => note.summary.indexOf(keyword) > -1).length > 0) return true;
+  }
+
+  // body
+  if (_option.body) {
+    if (keywords.filter(keyword => note.body.indexOf(keyword) > -1).length > 0) return true;
+  }
+
+  // tags
+  if (_option.tags) {
+    if (keywords.filter(keyword => typeof note.tags.find(tag => tag === keyword) !== "undefined").length > 0) return true;
+  }
+
+  // selected text
+  if (_option.selectedText) {
+    if (keywords.filter(keyword => note.selectedText.indexOf(keyword) > -1).length > 0) return true;
+  }
+
+  // page url
+  if (_option.url) {
+    if (keywords.filter(keyword => note.url.indexOf(keyword) > -1).length > 0) return true;
+  }
+
+  // page title
+  if (_option.title) {
+    if (keywords.filter(keyword => note.title.indexOf(keyword) > -1).length > 0) return true;
+  }
+
+  // TODO: label?
+
+
+  return false;
+
+}
