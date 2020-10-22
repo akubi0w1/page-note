@@ -48,6 +48,16 @@ body {
   opacity: .7;
 }
 
+.btn-transparent {
+  color: #005271;
+  border-color: transparent;
+  background-color: transparent;
+}
+
+.btn-transparent:hover {
+  opacity: .7;
+}
+
 .round {
   border-radius: 50%;
   width: auto;
@@ -84,12 +94,16 @@ body {
   background-color: transparent;
   color: #000000;
   border: 0;
-  font-size: .8rem;
-  width: 12rem;
+  font-size: 1.1em;
+  width: 12em;
 }
 
 .header .search .input-text:focus {
   outline: none;
+}
+
+.header .search button {
+  padding: 1px 2px;
 }
 
 .content {
@@ -127,18 +141,18 @@ body {
 }
 
 .note-title {
-  margin-block-start: 0.5rem;
-  margin-block-end: 0.5rem;
+  margin-block-start: 0.5em;
+  margin-block-end: 0.5em;
   font-weight: normal;
-  font-size: 1.1rem;
+  font-size: 1.3em;
 }
 
 .note-body {
   border-top: 1px solid #5996ac;
   margin-top: 5px;
   padding-top: 5px;
-  font-size: .9rem;
-  line-height: 1.2rem;
+  font-size: 1.2em;
+  line-height: 1.5em;
 }
 
 .note-label {
@@ -159,7 +173,7 @@ body {
 .note-tag-list li {
   display: inline-block;
   margin-left: 5px;
-  font-size: .9rem;
+  font-size: 1em;
   color: #5996ac;
 }
 

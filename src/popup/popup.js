@@ -1,19 +1,37 @@
 import { LABEL_COLOR_CODE, MESSAGE_TYPE } from "../common/constant";
 import { createIconElement } from "../common/element";
-import { chromeSendMessage } from "../common/utility";
+import { chromeSendMessage, isHitToSearchNote } from "../common/utility";
 
 /**
  * 初期処理
  */
-(function() {
-  let noteListElement = document.getElementsByClassName("note-list")[0];
-
+(function() {  
   chrome.runtime.onMessage.addListener(function (msg, sender, sendResponse) {
     switch (msg.type) {
       case MESSAGE_TYPE.GET_ALL_NOTE_RESPONSE:
-        msg.payload.forEach(note => {
-          noteListElement.appendChild(createNoteItemElement(note));
+        clearNoteList();
+        const noteList = msg.payload;
+        /**
+         * 検索のイベントリスナー
+         */
+        const searchButton = document.getElementById("search-bar-submit");
+        searchButton.addEventListener("click", evt => {
+          event.preventDefault();
+          let form = document.getElementById("search-bar-form");
+          let keywords = form.keyword.value
+            .split(" ")
+            .filter(keyword => keyword !== "");
+          console.log(keywords);
+          if (!keywords.length) {
+            clearNoteList();
+            renderNoteList(noteList);
+            return;
+          }
+          clearNoteList();
+          renderNoteList(noteList.filter(note => isHitToSearchNote(note, keywords)));
+          return;
         });
+        renderNoteList(noteList);
         break;
     }
   });
@@ -23,15 +41,36 @@ import { chromeSendMessage } from "../common/utility";
 
 /**
  * 
+ * @param {Array>} notes 
+ */
+function renderNoteList(notes) {
+  let noteListElement = document.getElementsByClassName("note-list")[0];
+  notes.forEach(note => {
+    noteListElement.appendChild(createNoteItemElement(note));
+  });
+}
+
+/**
+ * 
+ */
+function clearNoteList() {
+  let noteListElem = document.getElementsByClassName("note-list")[0];
+  var clone = noteListElem.cloneNode(false);
+  noteListElem.parentNode.replaceChild(clone, noteListElem);
+}
+
+
+/**
+ * 
  * @param {Object} note 
  * @param {Number} note.id
  * @param {string} note.title
  * @param {string} note.url
- * @param {string} note.inlineDom
- * @param {string} note.inlineText
+ * @param {string} note.selector
+ * @param {string} note.selectedText
  * @param {string} note.summary
  * @param {string} note.body
- * @param {string} note.labelColor
+ * @param {string} note.label
  * @param {Array} note.tags
  * @return {HTMLLIElement}
  */
