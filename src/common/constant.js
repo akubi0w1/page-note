@@ -10,6 +10,15 @@ export const LABEL_COLOR_CODE = {
   DEFALULT: "#ff389b"
 };
 
+export const HIGHLIGHT_COLOR_CODE = {
+  RED: "#ff9bcd",
+  PURPLE: "#cd9bff",
+  BLUE: "#9bcdff",
+  GREEN: "#7fe599",
+  ORANGE: "#ffcd9b",
+  DEFALULT: "#ff9bcd"
+};
+
 export const LABEL_COLOR = {
   RED: "red",
   PURPLE: "purple",
@@ -32,6 +41,8 @@ export const MESSAGE_TYPE = {
   GET_ALL_NOTE_RESPONSE: "GET_ALL_NOTE_RESPONSE",
   GET_NOTE_BY_ID: "GET_NOTE_BY_ID",
   GET_NOTE_BY_ID_RESPONSE: "GET_NOTE_BY_ID_RESPONSE",
+  GET_NOTE_BY_URL: "GET_NOTE_BY_URL",
+  GET_NOTE_BY_URL_RESPONSE: "GET_NOTE_BY_URL_RESPONSE",
 
   // db
   EXPORT_INDEXEDDB: "EXPORT_INDEXEDDB",
