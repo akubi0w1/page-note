@@ -200,6 +200,7 @@ function createContent() {
       }
     );
     removeNewNoteWindow();
+    highlightText(selectedSelector, labelValue);
   };
   // NOTE: end on click
   submitButtonInput.appendChild(submitButton);
@@ -307,6 +308,9 @@ function createElement(tag, className) {
  * @param {LABEL_COLOR} color 
  */
 function highlightText(selector, color) {
+  if(selector === "") {
+    return;
+  }
   let markElem = document.createElement("mark");
   markElem.style = `
     background-color: ${getColorCodeForHighlight(color)};
