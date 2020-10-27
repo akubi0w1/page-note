@@ -10,6 +10,7 @@ chrome.runtime.onInstalled.addListener(function () {
     "contexts": ["all"],
     "onclick": chrome.contextMenus.onClicked.addListener(function(info, tab) {
       chrome.tabs.get(tab.id, function(tab) {
+        // TODO: utilに書き出し
         chrome.tabs.sendMessage(
           tab.id,
           { type: MESSAGE_TYPE.OPEN_ADD_NOTE_WINDOW, payload: {} }
@@ -74,6 +75,7 @@ chrome.runtime.onInstalled.addListener(function () {
         break;
       case MESSAGE_TYPE.GET_NOTE_BY_URL:
         const note = await noteRepo.getByURL(msg.payload.url);
+        // TODO: utilに書き出し
         chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
           chrome.tabs.sendMessage(
             tabs[0].id,
