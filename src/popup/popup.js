@@ -21,7 +21,6 @@ import { chromeSendMessage, isHitToSearchNote, getColorCodeForLabel } from "../c
           let keywords = form.keyword.value
             .split(" ")
             .filter(keyword => keyword !== "");
-          console.log(keywords);
           if (!keywords.length) {
             clearNoteList();
             renderNoteList(noteList);
@@ -200,6 +199,7 @@ document.getElementById("close-btn").onclick = function() {
  * AddNoteのイベントを追加
  */
 document.getElementById("add-note-btn").onclick = function () {
+  // TODO: utilに書き出し
   chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
     chrome.tabs.sendMessage(
       tabs[0].id,
