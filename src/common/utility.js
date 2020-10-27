@@ -96,7 +96,8 @@ export function isHitToSearchNote(note, keywords, option = {}) {
     tags: typeof option.tags === "boolean" ? option.tags : true,
     selectedText: typeof option.selectedText === "boolean" ? option.selectedText : true,
     url: typeof option.url === "boolean" ? option.url : true,
-    title: typeof option.title === "boolean" ? option.title : true
+    title: typeof option.title === "boolean" ? option.title : true,
+    label: typeof option.label === "boolean" ? option.label : true
   };
   return keywords.some(keyword => {
     let _keyword = keyword;
@@ -109,6 +110,7 @@ export function isHitToSearchNote(note, keywords, option = {}) {
           _option.selectedText = false;
           _option.url = false;
           _option.title = false;
+          _option.label = false;
           break;
         case "body":
           _option.summary = false;
@@ -116,6 +118,7 @@ export function isHitToSearchNote(note, keywords, option = {}) {
           _option.selectedText = false;
           _option.url = false;
           _option.title = false;
+          _option.label = false;
           break;
         case "tag":
           _option.summary = false;
@@ -123,6 +126,7 @@ export function isHitToSearchNote(note, keywords, option = {}) {
           _option.selectedText = false;
           _option.url = false;
           _option.title = false;
+          _option.label = false;
           break;
         case "selectedText":
           _option.summary = false;
@@ -130,6 +134,7 @@ export function isHitToSearchNote(note, keywords, option = {}) {
           _option.tags = false;
           _option.url = false;
           _option.title = false;
+          _option.label = false;
           break;
         case "url":
           _option.summary = false;
@@ -137,6 +142,7 @@ export function isHitToSearchNote(note, keywords, option = {}) {
           _option.tags = false;
           _option.selectedText = false;
           _option.title = false;
+          _option.label = false;
           break;
         case "title":
           _option.summary = false;
@@ -144,6 +150,15 @@ export function isHitToSearchNote(note, keywords, option = {}) {
           _option.tags = false;
           _option.selectedText = false;
           _option.url = false;
+          _option.label = false;
+          break;
+        case "label":
+          _option.summary = false;
+          _option.body = false;
+          _option.tags = false;
+          _option.selectedText = false;
+          _option.url = false;
+          _option.title = false;
           break;
       }
       _keyword = keyword.substr(0, _optionIdx);
@@ -177,6 +192,11 @@ export function isHitToSearchNote(note, keywords, option = {}) {
     }
     if (_option.title) {
       if (note.title.indexOf(_keyword) > -1) {
+        return true;
+      }
+    }
+    if (_option.label) {
+      if (note.label === _keyword) {
         return true;
       }
     }
