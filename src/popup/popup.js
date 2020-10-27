@@ -40,7 +40,7 @@ import { chromeSendMessage, isHitToSearchNote, getColorCodeForLabel } from "../c
 
 /**
  * 
- * @param {Array>} notes 
+ * @param {Array} notes 
  */
 function renderNoteList(notes) {
   let noteListElement = document.getElementsByClassName("note-list")[0];
@@ -63,13 +63,13 @@ function clearNoteList() {
  * 
  * @param {Object} note 
  * @param {Number} note.id
- * @param {string} note.title
- * @param {string} note.url
- * @param {string} note.selector
- * @param {string} note.selectedText
- * @param {string} note.summary
- * @param {string} note.body
- * @param {string} note.label
+ * @param {String} note.title
+ * @param {String} note.url
+ * @param {String} note.selector
+ * @param {String} note.selectedText
+ * @param {String} note.summary
+ * @param {String} note.body
+ * @param {String} note.label
  * @param {Array} note.tags
  * @return {HTMLLIElement}
  */
@@ -77,7 +77,7 @@ function createNoteItemElement(note) {
   let noteItemElement = document.createElement("li");
   noteItemElement.className = "note-item";
 
-  let noteContent = createNoteContentElement(note.summary, note.body, note.tags);
+  let noteContent = createNoteContentElement(note.summary, note.body, note.url, note.tags);
   let noteLabel = createNoteLabelElement(note.label);
 
   noteItemElement.appendChild(noteContent);
@@ -88,16 +88,17 @@ function createNoteItemElement(note) {
 
 /**
  * 
- * @param {string} summary 
- * @param {string} body 
+ * @param {String} summary 
+ * @param {String} body
+ * @param {String} url
  * @param {Array} tags
  * @return {HTMLDivElement}
  */
-function createNoteContentElement(summary, body, tags) {
+function createNoteContentElement(summary, body, url, tags) {
   let noteContent = document.createElement("div");
   noteContent.className = "note-content";
   
-  let frame = createNoteFrameElement(summary, body, tags);
+  let frame = createNoteFrameElement(summary, body, url, tags);
   let extendSwitch = createExtendSwitchElement();
 
   noteContent.appendChild(frame);
@@ -107,12 +108,13 @@ function createNoteContentElement(summary, body, tags) {
 
 /**
  * 
- * @param {string} summary 
- * @param {string} body 
+ * @param {String} summary 
+ * @param {String} body
+ * @param {String} url
  * @param {Array} tags
  * @return {HTMLDivElement}
  */
-function createNoteFrameElement(summary, body, tags) {
+function createNoteFrameElement(summary, body, url, tags) {
   let frame = document.createElement("div");
   frame.style = "padding: 10px 20px 5px;";
 
@@ -121,20 +123,40 @@ function createNoteFrameElement(summary, body, tags) {
   summaryElement.textContent = summary;
 
   frame.appendChild(summaryElement);
-  frame.appendChild(createNoteBodyElement(body, tags));
+  frame.appendChild(createNoteBodyElement(body, url, tags));
   return frame;
 }
 
 /**
  * 
- * @param {string} body 
- * @param {Array} tags 
+ * @param {String} body
+ * @param {String} url
+ * @param {Array<String>} tags
  * @return {HTMLDivElement}
  */
-function createNoteBodyElement(body, tags) {
+function createNoteBodyElement(body, url, tags) {
 
   let noteBody = document.createElement("div");
   noteBody.innerText = body;
+
+  let bodyElement = document.createElement("div");
+  bodyElement.className = "note-body hidden";
+  
+  bodyElement.appendChild(noteBody);
+  bodyElement.appendChild(createNoteFooterElement(url, tags));
+  
+  return bodyElement;
+}
+
+/**
+ * 
+ * @param {String} url 
+ * @param {Array<String>} tags 
+ * @return {HTMLDivElement}
+ */
+function createNoteFooterElement(url, tags) {
+  let footerElem = document.createElement("div");
+  footerElem.className = "note-footer";
 
   let tagList = document.createElement("ul");
   tagList.className = "note-tag-list al-right";
@@ -144,13 +166,18 @@ function createNoteBodyElement(body, tags) {
     tagList.appendChild(item);
   });
 
-  let bodyElement = document.createElement("div");
-  bodyElement.className = "note-body hidden";
-  
-  bodyElement.appendChild(noteBody);
-  bodyElement.appendChild(tagList);
-  
-  return bodyElement;
+  let control = document.createElement("ul");
+  control.className = "control";
+  control.innerHTML = `
+  <li>
+    <a href="${url}" target="_blank"><i class="fas fa-external-link-alt"></i></a>
+  </li>
+  `;
+
+  footerElem.appendChild(tagList);
+  footerElem.appendChild(control);
+  return footerElem;
+
 }
 
 /**
@@ -178,7 +205,7 @@ function createExtendSwitchElement() {
 
 /**
  * 
- * @param {string} color
+ * @param {String} color
  * @return {HTMLDivElement}
  */
 function createNoteLabelElement(color) {
