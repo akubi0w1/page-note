@@ -90,7 +90,7 @@ export function getSelectorFromElement(elem) {
  * @return {Boolean}
  */
 export function isHitToSearchNote(note, keywords, option = {}) {
-  const _option = {
+  let _option = {
     summary: typeof option.summary === "boolean" ? option.summary : true,
     body: typeof option.body === "boolean" ? option.body : true,
     tags: typeof option.tags === "boolean" ? option.tags : true,
@@ -98,42 +98,90 @@ export function isHitToSearchNote(note, keywords, option = {}) {
     url: typeof option.url === "boolean" ? option.url : true,
     title: typeof option.title === "boolean" ? option.title : true
   };
-
-  // summary
-  if (_option.summary) {
-    if (keywords.filter(keyword => note.summary.indexOf(keyword) > -1).length > 0) return true;
-  }
-
-  // body
-  if (_option.body) {
-    if (keywords.filter(keyword => note.body.indexOf(keyword) > -1).length > 0) return true;
-  }
-
-  // tags
-  if (_option.tags) {
-    if (keywords.filter(keyword => typeof note.tags.find(tag => tag === keyword) !== "undefined").length > 0) return true;
-  }
-
-  // selected text
-  if (_option.selectedText) {
-    if (keywords.filter(keyword => note.selectedText.indexOf(keyword) > -1).length > 0) return true;
-  }
-
-  // page url
-  if (_option.url) {
-    if (keywords.filter(keyword => note.url.indexOf(keyword) > -1).length > 0) return true;
-  }
-
-  // page title
-  if (_option.title) {
-    if (keywords.filter(keyword => note.title.indexOf(keyword) > -1).length > 0) return true;
-  }
-
-  // TODO: label?
-
-
-  return false;
-
+  return keywords.some(keyword => {
+    let _keyword = keyword;
+    let _optionIdx = keyword.lastIndexOf(":");
+    if (_optionIdx > -1) {
+      switch (keyword.substr(_optionIdx + 1)) {
+        case "summary":
+          _option.body = false;
+          _option.tags = false;
+          _option.selectedText = false;
+          _option.url = false;
+          _option.title = false;
+          break;
+        case "body":
+          _option.summary = false;
+          _option.tags = false;
+          _option.selectedText = false;
+          _option.url = false;
+          _option.title = false;
+          break;
+        case "tag":
+          _option.summary = false;
+          _option.body = false;
+          _option.selectedText = false;
+          _option.url = false;
+          _option.title = false;
+          break;
+        case "selectedText":
+          _option.summary = false;
+          _option.body = false;
+          _option.tags = false;
+          _option.url = false;
+          _option.title = false;
+          break;
+        case "url":
+          _option.summary = false;
+          _option.body = false;
+          _option.tags = false;
+          _option.selectedText = false;
+          _option.title = false;
+          break;
+        case "title":
+          _option.summary = false;
+          _option.body = false;
+          _option.tags = false;
+          _option.selectedText = false;
+          _option.url = false;
+          break;
+      }
+      _keyword = keyword.substr(0, _optionIdx);
+    }
+    
+    // search
+    if (_option.summary) {
+      if (note.summary.indexOf(_keyword) > -1) {
+        return true;
+      }
+    }
+    if (_option.body) {
+      if (note.body.indexOf(_keyword) > -1) {
+        return true;
+      }
+    }
+    if (_option.tags) {
+      if (typeof note.tags.find(tag => tag === _keyword) !== "undefined") {
+        return true;
+      }
+    }
+    if (_option.selectedText) {
+      if (note.selectedText.indexOf(_keyword) > -1) {
+        return true;
+      }
+    }
+    if (_option.url) {
+      if (note.url.indexOf(_keyword) > -1) {
+        return true;
+      }
+    }
+    if (_option.title) {
+      if (note.title.indexOf(_keyword) > -1) {
+        return true;
+      }
+    }
+    return false;
+  });
 }
 
 /**
