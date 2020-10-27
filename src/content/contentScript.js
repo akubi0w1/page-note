@@ -1,7 +1,7 @@
 import { LABEL_COLOR, LABEL_COLOR_CODE, MESSAGE_TYPE } from "../common/constant";
 import { validateNoteSummary, validateNoteBody, validateTag, validateLabel } from "../common/validation";
 import { createIconElement } from "../common/element";
-import { chromeSendMessage, getSelectorFromElement } from "../common/utility";
+import { chromeSendMessage, getSelectorFromElement, getColorCodeForHighlight } from "../common/utility";
 
 // pageNoteWrapper.addEventListener("mousedown", mouseDown, false);
 // 座標
@@ -12,6 +12,11 @@ import { chromeSendMessage, getSelectorFromElement } from "../common/utility";
     switch(msg.type) {
       case MESSAGE_TYPE.OPEN_ADD_NOTE_WINDOW:
         renderNewNoteWindow();
+        break;
+      case MESSAGE_TYPE.GET_NOTE_BY_URL_RESPONSE:
+        // ハイライト
+        highlightText(msg.payload.selector, msg.payload.label);
+        // TODO: ノート閲覧のショートカットを作成
         break;
     }
   });
@@ -46,6 +51,10 @@ import { chromeSendMessage, getSelectorFromElement } from "../common/utility";
       document.body.appendChild(wrapperElem);
     }
   });
+
+  // ハイライトに必要なので
+  chromeSendMessage(MESSAGE_TYPE.GET_NOTE_BY_URL, {url: document.URL});
+
 })();
 
 /**
@@ -290,6 +299,22 @@ function createElement(tag, className) {
   let elem = document.createElement(tag);
   elem.className = className;
   return elem;
+}
+
+/**
+ * markタグを差し込む
+ * @param {String} selector 
+ * @param {LABEL_COLOR} color 
+ */
+function highlightText(selector, color) {
+  let markElem = document.createElement("mark");
+  markElem.style = `
+    background-color: ${getColorCodeForHighlight(color)};
+    color: inherit;
+  `;
+  let targetElem = document.querySelector(selector);
+  markElem.innerHTML = targetElem.innerHTML;
+  targetElem.innerHTML = markElem.outerHTML;
 }
 
 // TODO: d & d

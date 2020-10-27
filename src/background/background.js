@@ -33,7 +33,7 @@ chrome.runtime.onInstalled.addListener(function () {
   /**
   * イベントリスナーの追加
   */
-  chrome.runtime.onMessage.addListener(async function (msg, sender) {
+  chrome.runtime.onMessage.addListener(async function (msg, sender, sendResponse) {
     switch (msg.type) {
       case MESSAGE_TYPE.ADD_NOTE:
         noteRepo.insert(
@@ -71,6 +71,15 @@ chrome.runtime.onInstalled.addListener(function () {
         break;
       case MESSAGE_TYPE.GET_NOTE_BY_ID:
         chromeSendMessage(MESSAGE_TYPE.GET_NOTE_BY_ID_RESPONSE, await noteRepo.getById(msg.payload.id));
+        break;
+      case MESSAGE_TYPE.GET_NOTE_BY_URL:
+        const note = await noteRepo.getByURL(msg.payload.url);
+        chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+          chrome.tabs.sendMessage(
+            tabs[0].id,
+            { type: MESSAGE_TYPE.GET_NOTE_BY_URL_RESPONSE, payload: note }
+          );
+        });
         break;
       case MESSAGE_TYPE.EXPORT_INDEXEDDB:
         let exportData = {
@@ -126,6 +135,11 @@ class NoteRepository {
 
   async getById(id) {
     const result = await this.db.notes.get(id);
+    return result;
+  }
+
+  async getByURL(url) {
+    const result = await this.db.notes.get({url: url});
     return result;
   }
 

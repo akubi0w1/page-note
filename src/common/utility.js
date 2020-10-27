@@ -1,4 +1,4 @@
-import { MESSAGE_TYPE } from "./constant";
+import { MESSAGE_TYPE, LABEL_COLOR_CODE, HIGHLIGHT_COLOR_CODE, LABEL_COLOR } from "./constant";
 
 /**
  * runtimeにmessageを送る
@@ -134,4 +134,48 @@ export function isHitToSearchNote(note, keywords, option = {}) {
 
   return false;
 
+}
+
+/**
+ * ラベルのカラーコードを取得
+ * @param {LABEL_COLOR} color 
+ * @return {LABEL_COLOR_CODE}
+ */
+export function getColorCodeForLabel(color) {
+  switch(color) {
+    case "red":
+      return LABEL_COLOR_CODE.RED;
+    case "purple":
+      return LABEL_COLOR_CODE.PURPLE;
+    case "blue":
+      return LABEL_COLOR_CODE.BLUE;
+    case "green":
+      return LABEL_COLOR_CODE.GREEN;
+    case "orange":
+      return LABEL_COLOR_CODE.ORANGE;
+    default:
+      return LABEL_COLOR_CODE.DEFALULT;
+  };
+}
+
+/**
+ * ハイライト用のカラーコードを取得
+ * @param {LABEL_COLOR} color 
+ * @return {HIGHLIGHT_COLOR_CODE}
+ */
+export function getColorCodeForHighlight(color) {
+  switch (color) {
+    case "red":
+      return HIGHLIGHT_COLOR_CODE.RED;
+    case "purple":
+      return HIGHLIGHT_COLOR_CODE.PURPLE;
+    case "blue":
+      return HIGHLIGHT_COLOR_CODE.BLUE;
+    case "green":
+      return HIGHLIGHT_COLOR_CODE.GREEN;
+    case "orange":
+      return HIGHLIGHT_COLOR_CODE.ORANGE;
+    default:
+      return HIGHLIGHT_COLOR_CODE.DEFALULT;
+  };
 }
