@@ -1,6 +1,6 @@
 import { LABEL_COLOR_CODE, MESSAGE_TYPE } from "../common/constant";
 import { createIconElement } from "../common/element";
-import { chromeSendMessage, isHitToSearchNote } from "../common/utility";
+import { chromeSendMessage, isHitToSearchNote, getColorCodeForLabel } from "../common/utility";
 
 (function(){
   /**
@@ -106,23 +106,7 @@ function createNoteListRow(note) {
   var labelCol = document.createElement("td");
   var labelBar = document.createElement("div");
   labelBar.className = "label";
-  switch (note.label) {
-    case "red":
-      labelBar.style = "background-color: " + LABEL_COLOR_CODE.RED;
-      break;
-    case "blue":
-      labelBar.style = "background-color: " + LABEL_COLOR_CODE.BLUE;
-      break;
-    case "green":
-      labelBar.style = "background-color: " + LABEL_COLOR_CODE.GREEN;
-      break;
-    case "purple":
-      labelBar.style = "background-color: " + LABEL_COLOR_CODE.PURPLE;
-      break;
-    case "orange":
-      labelBar.style = "background-color: " + LABEL_COLOR_CODE.ORANGE;
-      break;
-  }
+  labelBar.style = `background-color: ${getColorCodeForLabel(note.label)}`;
   labelCol.appendChild(labelBar);
 
   // selectedText

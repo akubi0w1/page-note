@@ -1,4 +1,4 @@
-import { MESSAGE_TYPE, LABEL_COLOR_CODE, HIGHLIGHT_COLOR_CODE } from "./constant";
+import { MESSAGE_TYPE, LABEL_COLOR_CODE, HIGHLIGHT_COLOR_CODE, LABEL_COLOR } from "./constant";
 
 /**
  * runtimeにmessageを送る

@@ -1,6 +1,6 @@
 import { LABEL_COLOR_CODE, MESSAGE_TYPE } from "../common/constant";
 import { createIconElement } from "../common/element";
-import { chromeSendMessage, isHitToSearchNote } from "../common/utility";
+import { chromeSendMessage, isHitToSearchNote, getColorCodeForLabel } from "../common/utility";
 
 /**
  * 初期処理
@@ -185,26 +185,7 @@ function createExtendSwitchElement() {
 function createNoteLabelElement(color) {
   let labelElement = document.createElement("div");
   labelElement.className = "note-label";
-  switch(color) {
-    case "red":
-      labelElement.style = "background-color: " + LABEL_COLOR_CODE.RED;
-      break;
-    case "purple":
-      labelElement.style = "background-color: " + LABEL_COLOR_CODE.PURPLE;
-      break;
-    case "blue":
-      labelElement.style = "background-color: " + LABEL_COLOR_CODE.BLUE;
-      break;
-    case "green":
-      labelElement.style = "background-color: " + LABEL_COLOR_CODE.GREEN;
-      break;
-    case "orange":
-      labelElement.style = "background-color: " + LABEL_COLOR_CODE.ORANGE;
-      break;
-    default:
-      labelElement.style = "background-color: " + LABEL_COLOR_CODE.DEFALULT;
-      break;
-  }
+  labelElement.style = `background-color: ${getColorCodeForLabel(color)}`;
   return labelElement;
 }
 
