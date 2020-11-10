@@ -124,6 +124,36 @@ body {
   position: relative;
 }
 
+.tab {
+  &-menu {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    justify-content: center;
+    border: 1px solid $accent-color;
+    .checked {
+      background-color: $base-color;
+      color: $accent-color;
+    }
+  }
+  &-item {
+    background-color: $accent-hover-color;
+    color: $base-color;
+    border-right: 1px solid $accent-color;
+    border-left: 1px solid $accent-color;
+    flex: auto;
+    display: block;
+    padding: 10px;
+    box-sizing: border-box;
+    text-align: center;
+    &:hover {
+      opacity: .7;
+    }
+  }
+  
+}
+
 .note {
   &-list {
     list-style: none;

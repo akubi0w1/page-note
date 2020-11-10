@@ -117,6 +117,36 @@ body {
   position: relative;
 }
 
+.tab-menu {
+  display: flex;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  justify-content: center;
+  border: 1px solid #005271;
+}
+
+.tab-menu .checked {
+  background-color: #E8F1F2;
+  color: #005271;
+}
+
+.tab-item {
+  background-color: #5996ac;
+  color: #E8F1F2;
+  border-right: 1px solid #005271;
+  border-left: 1px solid #005271;
+  flex: auto;
+  display: block;
+  padding: 10px;
+  box-sizing: border-box;
+  text-align: center;
+}
+
+.tab-item:hover {
+  opacity: .7;
+}
+
 .note-list {
   list-style: none;
   width: 100%;
