@@ -1,0 +1,77 @@
+.btn {
+  padding: 1px 5px;
+  font-size: 1em;
+  border-radius: 5px;
+  border: 2px solid transparent;
+}
+
+.btn:focus {
+  outline: none;
+}
+
+.btn-white {
+  color: #005271;
+  background-color: #fff;
+}
+
+.btn-white:hover {
+  background-color: #E8F1F2;
+}
+
+._page-note-quick-view {
+  background-color: #fff;
+  padding: 10px 20px;
+  border-radius: 5px;
+  max-width: 300px;
+}
+
+._page-note-quick-view-content-header {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid #005271;
+}
+
+._page-note-quick-view-content-summary {
+  font-size: 14px;
+  font-weight: 600;
+  display: flex;
+}
+
+._page-note-quick-view-content-body {
+  padding: 8px 0;
+  font-size: 13px;
+}
+
+._page-note-quick-view-content-footer {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+}
+
+._page-note-quick-view-content-footer ul {
+  display: flex;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+._page-note-quick-view-content-footer-tag-list {
+  color: #005271;
+}
+
+._page-note-quick-view-content-footer-control {
+  color: #aaaaaa;
+}
+
+._page-note-quick-view-content-footer-control a {
+  color: #aaaaaa;
+  text-decoration: none;
+}
+
+._page-note-quick-view-content-footer-tag-item {
+  margin-right: 5px;
+}
+
+._page-note-quick-view-content-footer-tag-item::before {
+  content: "#";
+}
