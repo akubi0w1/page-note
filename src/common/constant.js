@@ -56,3 +56,10 @@ export const DB_INFO = {
   VERSION: 1,
   NAME: "pageNote"
 };
+
+/**
+ * images
+ */
+export const ICON_NOTE = "assets/icons/icon128.png";
+export const ICON_ADD_NOTE = "assets/icons/icon-plus.png";
+export const ICON_EXIST_NOTE = "assets/icons/icon-clip.png";

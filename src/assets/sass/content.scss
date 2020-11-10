@@ -1,0 +1,97 @@
+$main-color: #000000;
+$base-color: #E8F1F2;
+$accent-color: #005271;
+$accent-hover-color: #5996ac;
+$sub-color: #aaaaaa;
+$danger-color: #dc3545;
+$danger-hover-color: #e6717c;
+$danger-sub-color: #f8d8db;
+$success-color: #24963e;
+$success-sub-color: #d4edd9;
+
+$label-color: #00C0CC;
+
+.btn {
+  padding: 1px 5px;
+  font-size: 1em;
+  border-radius: 5px;
+  border: 2px solid transparent;
+  &:focus {
+    outline: none;
+  }
+  &-white {
+    color: $accent-color;
+    background-color: #fff;
+    &:hover {
+      background-color: $base-color;
+    }
+  }
+}
+
+._page-note-quick-view {
+  
+  display: flex;
+}
+
+._page-note-quick-view-content {
+  max-width: 280px;
+  min-width: 250px;
+  background-color: #fff;
+  padding: 10px 15px;
+  border-radius: 5px;
+  border-top-right-radius: 0;
+  border: 1px solid $accent-color;
+  box-sizing: border-box;
+  &-header {
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid $accent-color;
+  }
+  &-summary {
+    font-size: 14px;
+    font-weight: 600;
+    display: flex;
+  }
+  &-body {
+    padding: 8px 0;
+    font-size: 13px;
+  }
+  &-footer {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    ul {
+      display: flex;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+    &-tag-list {
+      color: $accent-color;
+    }
+    &-control {
+      color: $sub-color;
+      a {
+        color: $sub-color;
+        text-decoration: none;
+      }
+    }
+    &-tag-item {
+      margin-right: 5px;
+      &::before {
+        content: "#";
+      }
+    }
+  }
+}
+
+._page-note-quick-view-label {
+  background-color: $danger-color;
+  width: 25px;
+  height: 50px;
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
+  border: 1px solid $accent-color;
+  box-sizing: border-box;
+  border-left: 0;
+}

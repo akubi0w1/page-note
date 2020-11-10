@@ -1,7 +1,7 @@
-import { LABEL_COLOR, LABEL_COLOR_CODE, MESSAGE_TYPE } from "../common/constant";
+import { LABEL_COLOR, LABEL_COLOR_CODE, MESSAGE_TYPE, ICON_ADD_NOTE, ICON_EXIST_NOTE } from "../common/constant";
 import { validateNoteSummary, validateNoteBody, validateTag, validateLabel } from "../common/validation";
 import { createIconElement } from "../common/element";
-import { chromeSendMessage, getSelectorFromElement, getColorCodeForHighlight } from "../common/utility";
+import { chromeSendMessage, getSelectorFromElement, getColorCodeForHighlight, getColorCodeForLabel } from "../common/utility";
 
 // pageNoteWrapper.addEventListener("mousedown", mouseDown, false);
 // 座標
@@ -15,8 +15,8 @@ import { chromeSendMessage, getSelectorFromElement, getColorCodeForHighlight } f
         break;
       case MESSAGE_TYPE.GET_NOTE_BY_URL_RESPONSE:
         // ハイライト
-        highlightText(msg.payload.selector, msg.payload.label);
-        // TODO: ノート閲覧のショートカットを作成
+        msg.payload.forEach(note => { markText(note); })
+        
         break;
     }
   });
@@ -46,7 +46,7 @@ import { chromeSendMessage, getSelectorFromElement, getColorCodeForHighlight } f
 
       let buttonElem = document.createElement("button");
       buttonElem.id = "_page-note-quick-button";
-      buttonElem.style = `background-image: url(${chrome.runtime.getURL("assets/icons/icon128.png")});`;
+      buttonElem.style = `background-image: url(${chrome.runtime.getURL(ICON_ADD_NOTE)});`;
       wrapperElem.appendChild(buttonElem);
       document.body.appendChild(wrapperElem);
     }
@@ -200,7 +200,16 @@ function createContent() {
       }
     );
     removeNewNoteWindow();
-    highlightText(selectedSelector, labelValue);
+    markText({
+      url: tabUrl,
+      selector: selectedSelector,
+      selectedText: selectedText,
+      title: tabTitle,
+      summary: summaryValue,
+      body: bodyValue,
+      tags: tagsList,
+      label: labelValue
+    });
   };
   // NOTE: end on click
   submitButtonInput.appendChild(submitButton);
@@ -304,21 +313,137 @@ function createElement(tag, className) {
 
 /**
  * markタグを差し込む
- * @param {String} selector 
- * @param {LABEL_COLOR} color 
+ * @param {Object} note
+ * @param {Number} note.id
+ * @param {String} note.title
+ * @param {String} note.url
+ * @param {String} note.selector
+ * @param {String} note.selectedText
+ * @param {String} note.summary
+ * @param {String} note.body
+ * @param {String} note.label
+ * @param {Array} note.tags
  */
-function highlightText(selector, color) {
-  if(selector === "") {
+function markText(note) {
+  if(note.selector === "") {
     return;
   }
   let markElem = document.createElement("mark");
   markElem.style = `
-    background-color: ${getColorCodeForHighlight(color)};
+    background-color: ${getColorCodeForHighlight(note.label)};
     color: inherit;
   `;
-  let targetElem = document.querySelector(selector);
+  let targetElem = document.querySelector(note.selector);
   markElem.innerHTML = targetElem.innerHTML;
   targetElem.innerHTML = markElem.outerHTML;
+
+  // クイックアクセス用のアイコンを差し込む
+  const rect = targetElem.getBoundingClientRect();
+  let showIconElem = document.createElement("button");
+  // TODO: この辺sassにつっこみたい
+  showIconElem.style = `
+    background-color: transparent;
+    background-image: url(${chrome.runtime.getURL(ICON_EXIST_NOTE)});
+    margin-top: -16px;
+    position: absolute;
+    background-size: cover;
+    height: 20px;
+    width: 20px;
+    border: 0;
+  `;
+  showIconElem.addEventListener("click", function(evt) {
+    let oldQuickView = document.getElementById("_page-note-quick-view");
+    if (oldQuickView) {
+      oldQuickView.remove();
+      return;
+    }
+
+    let quickView = createQuickView(note);
+    quickView.style = `
+      top: ${rect.top}px;
+      left: ${rect.left}px;
+      position: absolute;
+    `;
+
+    document.body.appendChild(quickView);
+  });
+  targetElem.parentNode.insertBefore(showIconElem, targetElem);
+}
+
+
+/**
+ * クイックビューの窓を作る
+ * @param {Object} note
+ * @param {Number} note.id
+ * @param {String} note.title
+ * @param {String} note.url
+ * @param {String} note.selector
+ * @param {String} note.selectedText
+ * @param {String} note.summary
+ * @param {String} note.body
+ * @param {String} note.label
+ * @param {Array} note.tags
+ * @return {HTMLElement}
+ */
+function createQuickView(note) {
+  // quick view
+  let quickViewElem = document.createElement("div");
+  quickViewElem.className = "_page-note-quick-view";
+  quickViewElem.id = "_page-note-quick-view";
+
+  // content
+  let contentElem = document.createElement("div");
+  contentElem.className = "_page-note-quick-view-content";
+  
+  let headerElem = document.createElement("div");
+  headerElem.className = "_page-note-quick-view-content-header";
+  let summaryElem = document.createElement("label");
+  summaryElem.className = "_page-note-quick-view-content-summary";
+  summaryElem.innerText = note.summary;
+  let closeButtonElem = document.createElement("button");
+  closeButtonElem.className = "btn btn-white";
+  closeButtonElem.innerText = "x";
+  closeButtonElem.addEventListener("click", function() {
+    quickViewElem.remove();
+  });
+  headerElem.appendChild(summaryElem);
+  headerElem.appendChild(closeButtonElem);
+
+  let bodyElem = document.createElement("div");
+  bodyElem.className = "_page-note-quick-view-content-body";
+  bodyElem.innerText = note.body;
+
+  let footerElem = document.createElement("div");
+  footerElem.className = "_page-note-quick-view-content-footer";
+  let tagListElem = document.createElement("ul");
+  tagListElem.className = "_page-note-quick-view-content-footer-tag-list";
+  note.tags.forEach(tag => {
+    let tagElem = document.createElement("li");
+    tagElem.className = "_page-note-quick-view-content-footer-tag-item";
+    tagElem.innerText = tag;
+    tagListElem.appendChild(tagElem);
+  });
+  let controlElem = document.createElement("ul");
+  controlElem.className = "_page-note-quick-view-content-footer-control";
+  controlElem.innerHTML = `
+    <li><a href="${note.url}" target="_blank">origin</a></li>
+  `;
+  footerElem.appendChild(tagListElem);
+  footerElem.appendChild(controlElem);
+
+  contentElem.appendChild(headerElem);
+  contentElem.appendChild(bodyElem);
+  contentElem.appendChild(footerElem);
+
+  // label
+  let labelElem = document.createElement("div");
+  labelElem.className = "_page-note-quick-view-label";
+  labelElem.style = `background-color: ${getColorCodeForLabel(note.label)};`;
+
+  quickViewElem.appendChild(contentElem);
+  quickViewElem.appendChild(labelElem);
+
+  return quickViewElem;
 }
 
 // TODO: d & d

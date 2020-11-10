@@ -74,12 +74,12 @@ chrome.runtime.onInstalled.addListener(function () {
         chromeSendMessage(MESSAGE_TYPE.GET_NOTE_BY_ID_RESPONSE, await noteRepo.getById(msg.payload.id));
         break;
       case MESSAGE_TYPE.GET_NOTE_BY_URL:
-        const note = await noteRepo.getByURL(msg.payload.url);
+        const notes = await noteRepo.getByURL(msg.payload.url);
         // TODO: utilに書き出し
         chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
           chrome.tabs.sendMessage(
             tabs[0].id,
-            { type: MESSAGE_TYPE.GET_NOTE_BY_URL_RESPONSE, payload: note }
+            { type: MESSAGE_TYPE.GET_NOTE_BY_URL_RESPONSE, payload: notes }
           );
         });
         break;
@@ -141,7 +141,7 @@ class NoteRepository {
   }
 
   async getByURL(url) {
-    const result = await this.db.notes.get({url: url});
+    const result = await this.db.notes.where({ url: url }).toArray();
     return result;
   }
 
