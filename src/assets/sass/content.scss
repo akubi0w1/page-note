@@ -11,10 +11,6 @@ $success-sub-color: #d4edd9;
 
 $label-color: #00C0CC;
 
-// html {
-//   background-color: $base-color;
-// }
-
 .btn {
   padding: 1px 5px;
   font-size: 1em;
@@ -33,13 +29,19 @@ $label-color: #00C0CC;
 }
 
 ._page-note-quick-view {
-  background-color: #fff;
-  padding: 10px 20px;
-  border-radius: 5px;
-  max-width: 300px;
+  
+  display: flex;
 }
 
 ._page-note-quick-view-content {
+  max-width: 280px;
+  min-width: 250px;
+  background-color: #fff;
+  padding: 10px 15px;
+  border-radius: 5px;
+  border-top-right-radius: 0;
+  border: 1px solid $accent-color;
+  box-sizing: border-box;
   &-header {
     display: flex;
     justify-content: space-between;
@@ -83,3 +85,13 @@ $label-color: #00C0CC;
   }
 }
 
+._page-note-quick-view-label {
+  background-color: $danger-color;
+  width: 25px;
+  height: 50px;
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
+  border: 1px solid $accent-color;
+  box-sizing: border-box;
+  border-left: 0;
+}

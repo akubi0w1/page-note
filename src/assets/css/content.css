@@ -19,10 +19,18 @@
 }
 
 ._page-note-quick-view {
+  display: flex;
+}
+
+._page-note-quick-view-content {
+  max-width: 280px;
+  min-width: 250px;
   background-color: #fff;
-  padding: 10px 20px;
+  padding: 10px 15px;
   border-radius: 5px;
-  max-width: 300px;
+  border-top-right-radius: 0;
+  border: 1px solid #005271;
+  box-sizing: border-box;
 }
 
 ._page-note-quick-view-content-header {
@@ -74,4 +82,15 @@
 
 ._page-note-quick-view-content-footer-tag-item::before {
   content: "#";
+}
+
+._page-note-quick-view-label {
+  background-color: #dc3545;
+  width: 25px;
+  height: 50px;
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
+  border: 1px solid #005271;
+  box-sizing: border-box;
+  border-left: 0;
 }
