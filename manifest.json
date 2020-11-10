@@ -22,6 +22,7 @@
       "matches": ["*://*/*"],
       "css": [
         "src/assets/css/newNote.css",
+        "src/assets/css/content.css",
         "src/assets/css/all.min.css"
       ],
       "js": [
