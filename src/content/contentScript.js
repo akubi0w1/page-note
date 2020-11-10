@@ -15,9 +15,7 @@ import { chromeSendMessage, getSelectorFromElement, getColorCodeForHighlight, ge
         break;
       case MESSAGE_TYPE.GET_NOTE_BY_URL_RESPONSE:
         // ハイライト
-        msg.payload.forEach(note => {
-          markText(note.selector, note.label, note);
-        })
+        msg.payload.forEach(note => { markText(note); })
         
         break;
     }
@@ -202,7 +200,7 @@ function createContent() {
       }
     );
     removeNewNoteWindow();
-    markText(selectedSelector, labelValue, {
+    markText({
       url: tabUrl,
       selector: selectedSelector,
       selectedText: selectedText,
@@ -315,20 +313,27 @@ function createElement(tag, className) {
 
 /**
  * markタグを差し込む
- * @param {String} selector 
- * @param {LABEL_COLOR} color
  * @param {Object} note
+ * @param {Number} note.id
+ * @param {String} note.title
+ * @param {String} note.url
+ * @param {String} note.selector
+ * @param {String} note.selectedText
+ * @param {String} note.summary
+ * @param {String} note.body
+ * @param {String} note.label
+ * @param {Array} note.tags
  */
-function markText(selector, color, note) {
-  if(selector === "") {
+function markText(note) {
+  if(note.selector === "") {
     return;
   }
   let markElem = document.createElement("mark");
   markElem.style = `
-    background-color: ${getColorCodeForHighlight(color)};
+    background-color: ${getColorCodeForHighlight(note.label)};
     color: inherit;
   `;
-  let targetElem = document.querySelector(selector);
+  let targetElem = document.querySelector(note.selector);
   markElem.innerHTML = targetElem.innerHTML;
   targetElem.innerHTML = markElem.outerHTML;
 
@@ -339,33 +344,35 @@ function markText(selector, color, note) {
   showIconElem.style = `
     background-color: transparent;
     background-image: url(${chrome.runtime.getURL(ICON_EXIST_NOTE)});
-    top: calc(${rect.top}px - 2rem);
-    left: ${rect.left}px;
+    margin-top: -16px;
     position: absolute;
     background-size: cover;
-    height: 32px;
-    width: 32px;
+    height: 20px;
+    width: 20px;
     border: 0;
   `;
   showIconElem.addEventListener("click", function(evt) {
-    // TODO: windowの作成
-    console.log("open quick access note");
-    let noteWindow = document.createElement("div");
-    noteWindow.appendChild(createQuickView(note));
-    noteWindow.style = `
+    let oldQuickView = document.getElementById("_page-note-quick-view");
+    if (oldQuickView) {
+      oldQuickView.remove();
+      return;
+    }
+
+    let quickView = createQuickView(note);
+    quickView.style = `
       top: ${rect.top}px;
       left: ${rect.left}px;
       position: absolute;
     `;
 
-    document.body.appendChild(noteWindow);
+    document.body.appendChild(quickView);
   });
   targetElem.parentNode.insertBefore(showIconElem, targetElem);
 }
 
 
 /**
- * 
+ * クイックビューの窓を作る
  * @param {Object} note
  * @param {Number} note.id
  * @param {String} note.title
@@ -382,6 +389,7 @@ function createQuickView(note) {
   // quick view
   let quickViewElem = document.createElement("div");
   quickViewElem.className = "_page-note-quick-view";
+  quickViewElem.id = "_page-note-quick-view";
 
   // content
   let contentElem = document.createElement("div");
