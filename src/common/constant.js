@@ -63,3 +63,14 @@ export const DB_INFO = {
 export const ICON_NOTE = "assets/icons/icon128.png";
 export const ICON_ADD_NOTE = "assets/icons/icon-plus.png";
 export const ICON_EXIST_NOTE = "assets/icons/icon-clip.png";
+
+/**
+ * default options
+ */
+export const DEFAULT_OPTION = {
+  markText: true
+};
+
+export const OPTION_KEY = {
+  MARK_TEXT: "markText"
+};

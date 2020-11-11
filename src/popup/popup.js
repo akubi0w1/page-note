@@ -1,6 +1,7 @@
-import { LABEL_COLOR_CODE, MESSAGE_TYPE } from "../common/constant";
+import { LABEL_COLOR_CODE, MESSAGE_TYPE, OPTION_KEY } from "../common/constant";
 import { createIconElement } from "../common/element";
 import { chromeSendMessage, isHitToSearchNote, getColorCodeForLabel } from "../common/utility";
+import { saveOptions, getOptionsByKey } from "../common/options";
 
 /**
  * 初期処理
@@ -255,6 +256,7 @@ function addEventListenerToTabMenu() {
 
   let allNoteButton = document.getElementById("popup-tab-all-note");
   allNoteButton.addEventListener("click", function() {
+    showNoteList();
     hideSettingList();
     chromeSendMessage(MESSAGE_TYPE.GET_ALL_NOTE);
     for(let i = 0; i < labelElems.length; i++) {
@@ -268,6 +270,7 @@ function addEventListenerToTabMenu() {
 
   let currentPageButton = document.getElementById("popup-tab-current-page");
   currentPageButton.addEventListener("click", function() {
+    showNoteList();
     hideSettingList();
     chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
       chromeSendMessage(MESSAGE_TYPE.GET_NOTE_BY_URL, { url: tabs[0].url });
@@ -281,9 +284,9 @@ function addEventListenerToTabMenu() {
     }
   });
 
-  // TODO: setting listのイベントリスナーを追加
   let settingButton = document.getElementById("popup-tab-setting");
   settingButton.addEventListener("click", function() {
+    hideNoteList();
     clearNoteList();
     showSettingList();
 
@@ -301,15 +304,23 @@ function addEventListenerToTabMenu() {
     if(switchElem.className.indexOf("checked") > -1) {
       switchElem.className = "setting-switch";
       switchElem.innerText = "off";
-      // TODO: chrome strageに保存
-      // TODO: contentの再レンダリング
+      saveOptions({markText: false});
     } else {
       switchElem.className = "setting-switch checked";
       switchElem.innerText = "on";
-      // TODO: chrome strageに保存
-      // TODO: 再レンダリング
+      saveOptions({ markText: true });
     }
-  })
+  });
+  chrome.storage.sync.get(OPTION_KEY.MARK_TEXT, function (result) {
+    let switchElem = switchHighlightElem.nextElementSibling;
+    if(result.markText) {
+      switchElem.className = "setting-switch checked";
+      switchElem.innerText = "on";
+    } else {
+      switchElem.className = "setting-switch";
+      switchElem.innerText = "off";
+    }
+  });
 }
 
 function showSettingList() {
@@ -320,4 +331,14 @@ function showSettingList() {
 function hideSettingList() {
   let settingListElem = document.getElementsByClassName("setting-list")[0];
   settingListElem.className = "setting-list hidden";
+}
+
+function showNoteList() {
+  let noteListElem = document.getElementsByClassName("note-list")[0];
+  noteListElem.className = "note-list";
+}
+
+function hideNoteList() {
+  let noteListElem = document.getElementsByClassName("note-list")[0];
+  noteListElem.className = "note-list hidden";
 }
