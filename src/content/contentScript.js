@@ -15,8 +15,7 @@ import { chromeSendMessage, getSelectorFromElement, getColorCodeForHighlight, ge
         break;
       case MESSAGE_TYPE.GET_NOTE_BY_URL_RESPONSE:
         // ハイライト
-        msg.payload.forEach(note => { markText(note); })
-        
+        msg.payload.forEach(note => { markText(note); });
         break;
     }
   });

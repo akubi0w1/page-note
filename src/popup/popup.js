@@ -9,8 +9,9 @@ import { chromeSendMessage, isHitToSearchNote, getColorCodeForLabel } from "../c
   chrome.runtime.onMessage.addListener(function (msg, sender, sendResponse) {
     switch (msg.type) {
       case MESSAGE_TYPE.GET_ALL_NOTE_RESPONSE:
+      case MESSAGE_TYPE.GET_NOTE_BY_URL_RESPONSE:
         clearNoteList();
-        const noteList = msg.payload;
+        let noteList = msg.payload;
         /**
          * 検索のイベントリスナー
          */
@@ -35,6 +36,7 @@ import { chromeSendMessage, isHitToSearchNote, getColorCodeForLabel } from "../c
     }
   });
 
+  addEventListenerToTabMenu();
   chromeSendMessage(MESSAGE_TYPE.GET_ALL_NOTE);
 })();
 
@@ -242,3 +244,35 @@ document.getElementById("add-note-btn").onclick = function () {
 document.getElementById("open-manage-page-btn").onclick = function () {
   chrome.tabs.create({ url: "src/notelist/index.html" });
 };
+
+function addEventListenerToTabMenu() {
+  let labelElems = document.getElementsByClassName("tab-item");
+
+  let allNoteButton = document.getElementById("popup-tab-all-note");
+  allNoteButton.addEventListener("click", function() {
+    chromeSendMessage(MESSAGE_TYPE.GET_ALL_NOTE);
+    for(let i = 0; i < labelElems.length; i++) {
+      if(labelElems[i].getAttribute("for") === "popup-tab-all-note") {
+        labelElems[i].className = "tab-item checked";
+      } else {
+        labelElems[i].className = "tab-item";
+      }
+    }
+  });
+
+  let currentPageButton = document.getElementById("popup-tab-current-page");
+  currentPageButton.addEventListener("click", function() {
+    chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+      chromeSendMessage(MESSAGE_TYPE.GET_NOTE_BY_URL, { url: tabs[0].url });
+    });
+    for (let i = 0; i < labelElems.length; i++) {
+      if (labelElems[i].getAttribute("for") === "popup-tab-current-page") {
+        labelElems[i].className = "tab-item checked";
+      } else {
+        labelElems[i].className = "tab-item";
+      }
+    }
+  });
+
+  // TODO: settingに関して
+}
