@@ -49,9 +49,21 @@
         <label for="popup-tab-setting" class="tab-item">Setting</label>
       </div>
       <!-- END tab-menu -->
-      <ul class="note-list">
-      </ul>
-      <!-- END note-list -->
+      <div id="popup-content">
+        <ul class="note-list">
+        </ul>
+        <!-- END note-list -->
+
+        <ul class="setting-list hidden">
+          <li>
+            <label for="popup-setting-switch-highlight" class="setting-item">
+              Text highlight
+              <input id="popup-setting-switch-highlight" type="checkbox" name="popup-setting-switch-highlight" class="hidden" />
+              <div class="setting-switch checked">on</div>
+            </label>
+          </li>
+        </ul>
+      </div>
     </div>
     <!-- END content -->
     <script src="/dist/popup/popup.js"></script>
