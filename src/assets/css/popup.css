@@ -238,3 +238,33 @@ body {
 .note-tag-list li::before {
   content: "#";
 }
+
+.setting-list {
+  list-style: none;
+  width: 100%;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  margin-bottom: 10px;
+}
+
+.setting-item {
+  padding: 10px 20px;
+  color: #005271;
+  display: flex;
+  justify-content: space-between;
+}
+
+.setting-switch {
+  display: inline-block;
+  width: 3em;
+  color: #005271;
+  text-align: center;
+  border-radius: 5px;
+  border: 2px solid #005271;
+}
+
+.setting-switch.checked {
+  background-color: #005271;
+  color: #E8F1F2;
+}

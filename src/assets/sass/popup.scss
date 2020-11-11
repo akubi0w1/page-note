@@ -235,3 +235,32 @@ body {
     }
   }
 }
+
+.setting {
+  &-list {
+    list-style: none;
+    width: 100%;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    margin-bottom: 10px;
+  }
+  &-item {
+    padding: 10px 20px;
+    color: $accent-color;
+    display: flex;
+    justify-content: space-between;
+  }
+  &-switch {
+    display: inline-block;
+    width: 3em;
+    color: $accent-color;
+    text-align: center;
+    border-radius: 5px;
+    border: 2px solid $accent-color;
+    &.checked {
+      background-color: $accent-color;
+      color: $base-color;
+    }
+  }
+}
