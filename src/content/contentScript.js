@@ -66,6 +66,7 @@ import { getOptionsByKey } from "../common/options";
  * new note windowの描画
  */
 function renderNewNoteWindow() {
+
   let pageNoteWrapper = document.createElement("div");
   pageNoteWrapper.className = "_page-note-wrapper";
   pageNoteWrapper.id = "_page-note-wrapper";
@@ -79,6 +80,61 @@ function renderNewNoteWindow() {
   pageNoteWrapper.appendChild(pageNote);
 
   document.body.appendChild(pageNoteWrapper);
+
+  // NOTE: d and d
+  // d and dのイベントを追加
+  var x;
+  var y;
+  pageNoteWrapper.addEventListener("mousedown", mouseDown, false);
+  pageNoteWrapper.addEventListener("touchstart", mouseDown, false);
+  function mouseDown(e) {
+    document.getElementsByClassName("_page-note")[0].classList.add("drag");
+
+    if (e.type === "mousedown") {
+      var event = e;
+    } else {
+      var event = e.changedTouches[0];
+    }
+
+    let rect = pageNoteWrapper.getBoundingClientRect();
+    x = event.pageX - rect.left;
+    y = event.pageY - rect.top;
+
+    document.body.addEventListener("mousemove", mouseMove, false);
+    document.body.addEventListener("touchmove", mouseMove, false);
+  }
+
+  function mouseMove(e) {
+    var drag = document.getElementsByClassName("drag")[0];
+
+    if (e.type === "mousemove") {
+      var event = e;
+    } else {
+      var event = e.changedTouches[0];
+    }
+
+    e.preventDefault();
+
+    pageNoteWrapper.style.top = event.pageY - y + "px";
+    pageNoteWrapper.style.left = event.pageX - x + "px";
+
+    drag.addEventListener("mouseup", mouseUp, false);
+    document.body.addEventListener("mouseleave", mouseUp, false);
+    drag.addEventListener("touchend", mouseUp, false);
+    document.body.addEventListener("touchleave", mouseUp, false);
+  }
+
+  function mouseUp() {
+    var drag = document.getElementsByClassName("drag")[0];
+
+    document.body.removeEventListener("mousemove", mouseMove, false);
+    drag.removeEventListener("mouseup", mouseUp, false);
+    document.body.removeEventListener("touchmove", mouseMove, false);
+    drag.removeEventListener("touchend", mouseUp, false);
+
+    drag.classList.remove("drag");
+  }
+  // END D and D
 }
 
 /**
@@ -450,52 +506,3 @@ function createQuickView(note) {
 
   return quickViewElem;
 }
-
-// TODO: d & d
-// function mouseDown(e) {
-//   document.getElementsByClassName("_page-note")[0].classList.add("drag");
-
-//   if (e.type === "mousedown") {
-//     var event = e;
-//   } else {
-//     var event = e.changedTouches[0];
-//   }
-//   x = event.pageX - e.srcElement.offsetLeft;
-//   y = event.pageY - e.srcElement.offsetTop;
-//   console.log(x, y);
-
-//   document.body.addEventListener("mousemove", mouseMove, false);
-//   document.body.addEventListener("touchmove", mouseMove, false);
-// }
-
-// function mouseMove(e) {
-//   var drag = document.getElementsByClassName("drag")[0];
-
-//   if (e.type === "mousemove") {
-//     var event = e;
-//   } else {
-//     var event = e.changedTouches[0];
-//   }
-
-//   e.preventDefault();
-
-//   drag.style.top = event.pageY - y + "px";
-//   drag.style.left = event.pageX - x + "px";
-
-//   drag.addEventListener("mouseup", mouseUp, false);
-//   document.body.addEventListener("mouseleave", mouseUp, false);
-//   drag.addEventListener("touchend", mouseUp, false);
-//   document.body.addEventListener("touchleave", mouseUp, false);
-// }
-
-// function mouseUp() {
-//   var drag = document.getElementsByClassName("drag")[0];
-
-//   document.body.removeEventListener("mousemove", mouseMove, false);
-//   drag.removeEventListener("mouseup", mouseUp, false);
-//   document.body.removeEventListener("touchmove", mouseMove, false);
-//   drag.removeEventListener("touchend", mouseUp, false);
-
-//   drag.classList.remove("drag");
-// }
-
