@@ -1,4 +1,4 @@
-import { LABEL_COLOR, LABEL_COLOR_CODE, MESSAGE_TYPE, ICON_ADD_NOTE, ICON_EXIST_NOTE, OPTION_KEY } from "../common/constant";
+import { LABEL_COLOR, LABEL_COLOR_CODE, MESSAGE_TYPE, OPTION_KEY, ICON } from "../common/constant";
 import { validateNoteSummary, validateNoteBody, validateTag, validateLabel } from "../common/validation";
 import { createIconElement } from "../common/element";
 import { chromeSendMessage, getSelectorFromElement, getColorCodeForHighlight, getColorCodeForLabel } from "../common/utility";
@@ -51,7 +51,7 @@ import { getOptionsByKey } from "../common/options";
 
       let buttonElem = document.createElement("button");
       buttonElem.id = "_page-note-quick-button";
-      buttonElem.style = `background-image: url(${chrome.runtime.getURL(ICON_ADD_NOTE)});`;
+      buttonElem.style = `background-image: url(${chrome.runtime.getURL(ICON.ADD_NOTE)});`;
       wrapperElem.appendChild(buttonElem);
       document.body.appendChild(wrapperElem);
     }
@@ -348,7 +348,7 @@ function markText(note) {
   // TODO: この辺sassにつっこみたい
   showIconElem.style = `
     background-color: transparent;
-    background-image: url(${chrome.runtime.getURL(ICON_EXIST_NOTE)});
+    background-image: url(${chrome.runtime.getURL(ICON.EXIST_NOTE)});
     margin-top: -16px;
     position: absolute;
     background-size: cover;

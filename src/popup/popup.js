@@ -1,7 +1,7 @@
 import { LABEL_COLOR_CODE, MESSAGE_TYPE, OPTION_KEY } from "../common/constant";
 import { createIconElement } from "../common/element";
 import { chromeSendMessage, isHitToSearchNote, getColorCodeForLabel } from "../common/utility";
-import { saveOptions, getOptionsByKey } from "../common/options";
+import { saveOptions, getOptionsByKey, restoreOption } from "../common/options";
 
 /**
  * 初期処理
@@ -38,7 +38,19 @@ import { saveOptions, getOptionsByKey } from "../common/options";
   });
 
   addEventListenerToTabMenu();
+  restoreOption(OPTION_KEY.MARK_TEXT, function (result) {
+    let switchHighlightElem = document.getElementById("popup-setting-switch-highlight");
+    let switchElem = switchHighlightElem.nextElementSibling;
+    if (result.markText) {
+      switchElem.className = "setting-switch checked";
+      switchElem.innerText = "on";
+    } else {
+      switchElem.className = "setting-switch";
+      switchElem.innerText = "off";
+    }
+  });
   chromeSendMessage(MESSAGE_TYPE.GET_ALL_NOTE);
+  
 })();
 
 /**
@@ -220,6 +232,104 @@ function createNoteLabelElement(color) {
 }
 
 /**
+ * tab menuに関して処理を追加
+ */
+function addEventListenerToTabMenu() {
+  let labelElems = document.getElementsByClassName("tab-item");
+
+  // TODO: 効率化！！！
+
+  let allNoteButton = document.getElementById("popup-tab-all-note");
+  allNoteButton.addEventListener("click", function () {
+    showNoteList();
+    hideSettingList();
+    chromeSendMessage(MESSAGE_TYPE.GET_ALL_NOTE);
+    for (let i = 0; i < labelElems.length; i++) {
+      if (labelElems[i].getAttribute("for") === "popup-tab-all-note") {
+        labelElems[i].className = "tab-item checked";
+      } else {
+        labelElems[i].className = "tab-item";
+      }
+    }
+  });
+
+  let currentPageButton = document.getElementById("popup-tab-current-page");
+  currentPageButton.addEventListener("click", function () {
+    showNoteList();
+    hideSettingList();
+    chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+      chromeSendMessage(MESSAGE_TYPE.GET_NOTE_BY_URL, { url: tabs[0].url });
+    });
+    for (let i = 0; i < labelElems.length; i++) {
+      if (labelElems[i].getAttribute("for") === "popup-tab-current-page") {
+        labelElems[i].className = "tab-item checked";
+      } else {
+        labelElems[i].className = "tab-item";
+      }
+    }
+  });
+
+  let settingButton = document.getElementById("popup-tab-setting");
+  settingButton.addEventListener("click", function () {
+    hideNoteList();
+    showSettingList();
+
+    for (let i = 0; i < labelElems.length; i++) {
+      if (labelElems[i].getAttribute("for") === "popup-tab-setting") {
+        labelElems[i].className = "tab-item checked";
+      } else {
+        labelElems[i].className = "tab-item";
+      }
+    }
+  });
+  let switchHighlightElem = document.getElementById("popup-setting-switch-highlight");
+  switchHighlightElem.addEventListener("change", function () {
+    let switchElem = switchHighlightElem.nextElementSibling;
+    if (switchElem.className.indexOf("checked") > -1) {
+      switchElem.className = "setting-switch";
+      switchElem.innerText = "off";
+      saveOptions({ markText: false });
+    } else {
+      switchElem.className = "setting-switch checked";
+      switchElem.innerText = "on";
+      saveOptions({ markText: true });
+    }
+  });
+}
+
+/**
+ * tab-menuのsettingを表示
+ */
+function showSettingList() {
+  let settingListElem = document.getElementsByClassName("setting-list")[0];
+  settingListElem.className = "setting-list";
+}
+
+/**
+ * tab-menuのsettingを隠す
+ */
+function hideSettingList() {
+  let settingListElem = document.getElementsByClassName("setting-list")[0];
+  settingListElem.className = "setting-list hidden";
+}
+
+/**
+ * tab-menuのnote-listを表示
+ */
+function showNoteList() {
+  let noteListElem = document.getElementsByClassName("note-list")[0];
+  noteListElem.className = "note-list";
+}
+
+/**
+ * tab-menuのnote-listを隠す
+ */
+function hideNoteList() {
+  let noteListElem = document.getElementsByClassName("note-list")[0];
+  noteListElem.className = "note-list hidden";
+}
+
+/**
  * popupを閉じる
  */
 document.getElementById("close-btn").onclick = function() {
@@ -246,99 +356,3 @@ document.getElementById("add-note-btn").onclick = function () {
 document.getElementById("open-manage-page-btn").onclick = function () {
   chrome.tabs.create({ url: "src/notelist/index.html" });
 };
-
-
-// TODO: 上部に移動
-function addEventListenerToTabMenu() {
-  let labelElems = document.getElementsByClassName("tab-item");
-
-  // TODO: 効率化！！！
-
-  let allNoteButton = document.getElementById("popup-tab-all-note");
-  allNoteButton.addEventListener("click", function() {
-    showNoteList();
-    hideSettingList();
-    chromeSendMessage(MESSAGE_TYPE.GET_ALL_NOTE);
-    for(let i = 0; i < labelElems.length; i++) {
-      if(labelElems[i].getAttribute("for") === "popup-tab-all-note") {
-        labelElems[i].className = "tab-item checked";
-      } else {
-        labelElems[i].className = "tab-item";
-      }
-    }
-  });
-
-  let currentPageButton = document.getElementById("popup-tab-current-page");
-  currentPageButton.addEventListener("click", function() {
-    showNoteList();
-    hideSettingList();
-    chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-      chromeSendMessage(MESSAGE_TYPE.GET_NOTE_BY_URL, { url: tabs[0].url });
-    });
-    for (let i = 0; i < labelElems.length; i++) {
-      if (labelElems[i].getAttribute("for") === "popup-tab-current-page") {
-        labelElems[i].className = "tab-item checked";
-      } else {
-        labelElems[i].className = "tab-item";
-      }
-    }
-  });
-
-  let settingButton = document.getElementById("popup-tab-setting");
-  settingButton.addEventListener("click", function() {
-    hideNoteList();
-    clearNoteList();
-    showSettingList();
-
-    for (let i = 0; i < labelElems.length; i++) {
-      if (labelElems[i].getAttribute("for") === "popup-tab-setting") {
-        labelElems[i].className = "tab-item checked";
-      } else {
-        labelElems[i].className = "tab-item";
-      }
-    }
-  });
-  let switchHighlightElem = document.getElementById("popup-setting-switch-highlight");
-  switchHighlightElem.addEventListener("change", function(){
-    let switchElem = switchHighlightElem.nextElementSibling;
-    if(switchElem.className.indexOf("checked") > -1) {
-      switchElem.className = "setting-switch";
-      switchElem.innerText = "off";
-      saveOptions({markText: false});
-    } else {
-      switchElem.className = "setting-switch checked";
-      switchElem.innerText = "on";
-      saveOptions({ markText: true });
-    }
-  });
-  chrome.storage.sync.get(OPTION_KEY.MARK_TEXT, function (result) {
-    let switchElem = switchHighlightElem.nextElementSibling;
-    if(result.markText) {
-      switchElem.className = "setting-switch checked";
-      switchElem.innerText = "on";
-    } else {
-      switchElem.className = "setting-switch";
-      switchElem.innerText = "off";
-    }
-  });
-}
-
-function showSettingList() {
-  let settingListElem = document.getElementsByClassName("setting-list")[0];
-  settingListElem.className = "setting-list";
-}
-
-function hideSettingList() {
-  let settingListElem = document.getElementsByClassName("setting-list")[0];
-  settingListElem.className = "setting-list hidden";
-}
-
-function showNoteList() {
-  let noteListElem = document.getElementsByClassName("note-list")[0];
-  noteListElem.className = "note-list";
-}
-
-function hideNoteList() {
-  let noteListElem = document.getElementsByClassName("note-list")[0];
-  noteListElem.className = "note-list hidden";
-}
