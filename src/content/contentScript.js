@@ -83,7 +83,6 @@ function renderNewNoteWindow() {
 
   // NOTE: d and d
   // d and dのイベントを追加
-  // TODO: 単発のクリックだったらd and dを除外したい
   var x;
   var y;
   let pageNoteHeader = document.getElementsByClassName("_page-note-header")[0];
