@@ -84,7 +84,6 @@ function renderNewNoteWindow() {
 
   // NOTE: d and d
   // d and dのイベントを追加
-  // BUG: 一回ウィンドウを出したあと、テキスト選択ができなくなる
   var x;
   var y;
   let pageNoteHeader = document.getElementsByClassName("_page-note-header")[0];
@@ -109,6 +108,9 @@ function renderNewNoteWindow() {
 
   function mouseMove(e) {
     var drag = document.getElementsByClassName("drag")[0];
+    if (!drag) {
+      return;
+    }
 
     if (e.type === "mousemove") {
       var event = e;
@@ -129,6 +131,9 @@ function renderNewNoteWindow() {
 
   function mouseUp() {
     var drag = document.getElementsByClassName("drag")[0];
+    if (!drag) {
+      return;
+    }
 
     document.body.removeEventListener("mousemove", mouseMove, false);
     drag.removeEventListener("mouseup", mouseUp, false);
