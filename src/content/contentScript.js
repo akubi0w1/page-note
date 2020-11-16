@@ -1,7 +1,8 @@
-import { LABEL_COLOR, LABEL_COLOR_CODE, MESSAGE_TYPE, ICON_ADD_NOTE, ICON_EXIST_NOTE } from "../common/constant";
+import { LABEL_COLOR, LABEL_COLOR_CODE, MESSAGE_TYPE, OPTION_KEY, ICON } from "../common/constant";
 import { validateNoteSummary, validateNoteBody, validateTag, validateLabel } from "../common/validation";
 import { createIconElement } from "../common/element";
 import { chromeSendMessage, getSelectorFromElement, getColorCodeForHighlight, getColorCodeForLabel } from "../common/utility";
+import { getOptionsByKey } from "../common/options";
 
 // pageNoteWrapper.addEventListener("mousedown", mouseDown, false);
 // 座標
@@ -15,7 +16,11 @@ import { chromeSendMessage, getSelectorFromElement, getColorCodeForHighlight, ge
         break;
       case MESSAGE_TYPE.GET_NOTE_BY_URL_RESPONSE:
         // ハイライト
-        msg.payload.forEach(note => { markText(note); })
+        chrome.storage.sync.get(OPTION_KEY.MARK_TEXT, function(option) {
+          if (typeof option.markText !== "undefined" && option.markText) {
+            msg.payload.forEach(note => { markText(note); });
+          }
+        }); 
         
         break;
     }
@@ -46,7 +51,7 @@ import { chromeSendMessage, getSelectorFromElement, getColorCodeForHighlight, ge
 
       let buttonElem = document.createElement("button");
       buttonElem.id = "_page-note-quick-button";
-      buttonElem.style = `background-image: url(${chrome.runtime.getURL(ICON_ADD_NOTE)});`;
+      buttonElem.style = `background-image: url(${chrome.runtime.getURL(ICON.ADD_NOTE)});`;
       wrapperElem.appendChild(buttonElem);
       document.body.appendChild(wrapperElem);
     }
@@ -343,7 +348,7 @@ function markText(note) {
   // TODO: この辺sassにつっこみたい
   showIconElem.style = `
     background-color: transparent;
-    background-image: url(${chrome.runtime.getURL(ICON_EXIST_NOTE)});
+    background-image: url(${chrome.runtime.getURL(ICON.EXIST_NOTE)});
     margin-top: -16px;
     position: absolute;
     background-size: cover;

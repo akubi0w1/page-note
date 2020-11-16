@@ -7,7 +7,7 @@ body {
   background-color: #E8F1F2;
   width: 450px;
   position: relative;
-  min-height: 40px;
+  height: 500px;
 }
 
 .h1, .h2, .h3, .h4, .h5, .h6 {
@@ -117,6 +117,36 @@ body {
   position: relative;
 }
 
+.tab-menu {
+  display: flex;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  justify-content: center;
+  border: 1px solid #005271;
+}
+
+.tab-menu .checked {
+  background-color: #E8F1F2;
+  color: #005271;
+}
+
+.tab-item {
+  background-color: #5996ac;
+  color: #E8F1F2;
+  border-right: 1px solid #005271;
+  border-left: 1px solid #005271;
+  flex: auto;
+  display: block;
+  padding: 10px;
+  box-sizing: border-box;
+  text-align: center;
+}
+
+.tab-item:hover {
+  opacity: .7;
+}
+
 .note-list {
   list-style: none;
   width: 100%;
@@ -151,14 +181,14 @@ body {
   margin-block-start: 0.5em;
   margin-block-end: 0.5em;
   font-weight: normal;
-  font-size: 1.3em;
+  font-size: 1.2em;
 }
 
 .note-body {
   border-top: 1px solid #5996ac;
   margin-top: 5px;
   padding-top: 5px;
-  font-size: 1.2em;
+  font-size: 1.1em;
   line-height: 1.5em;
 }
 
@@ -207,4 +237,34 @@ body {
 
 .note-tag-list li::before {
   content: "#";
+}
+
+.setting-list {
+  list-style: none;
+  width: 100%;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  margin-bottom: 10px;
+}
+
+.setting-item {
+  padding: 10px 20px;
+  color: #005271;
+  display: flex;
+  justify-content: space-between;
+}
+
+.setting-switch {
+  display: inline-block;
+  width: 3em;
+  color: #005271;
+  text-align: center;
+  border-radius: 5px;
+  border: 2px solid #005271;
+}
+
+.setting-switch.checked {
+  background-color: #005271;
+  color: #E8F1F2;
 }

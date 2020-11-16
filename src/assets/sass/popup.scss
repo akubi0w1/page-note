@@ -18,7 +18,7 @@ body {
   background-color: $base-color;
   width: $popup-width;
   position: relative;
-  min-height: 40px;
+  height: 500px;
 }
 
 .h1, .h2, .h3, .h4, .h5, .h6 {
@@ -124,6 +124,36 @@ body {
   position: relative;
 }
 
+.tab {
+  &-menu {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    justify-content: center;
+    border: 1px solid $accent-color;
+    .checked {
+      background-color: $base-color;
+      color: $accent-color;
+    }
+  }
+  &-item {
+    background-color: $accent-hover-color;
+    color: $base-color;
+    border-right: 1px solid $accent-color;
+    border-left: 1px solid $accent-color;
+    flex: auto;
+    display: block;
+    padding: 10px;
+    box-sizing: border-box;
+    text-align: center;
+    &:hover {
+      opacity: .7;
+    }
+  }
+  
+}
+
 .note {
   &-list {
     list-style: none;
@@ -155,13 +185,13 @@ body {
     margin-block-start: 0.5em;
     margin-block-end: 0.5em;
     font-weight: normal;
-    font-size: 1.3em;
+    font-size: 1.2em;
   }
   &-body {
     border-top: 1px solid $accent-hover-color;
     margin-top: 5px;
     padding-top: 5px;
-    font-size: 1.2em;
+    font-size: 1.1em;
     line-height: 1.5em;
   }
   &-label {
@@ -202,6 +232,35 @@ body {
       &::before {
         content: "#";
       }
+    }
+  }
+}
+
+.setting {
+  &-list {
+    list-style: none;
+    width: 100%;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    margin-bottom: 10px;
+  }
+  &-item {
+    padding: 10px 20px;
+    color: $accent-color;
+    display: flex;
+    justify-content: space-between;
+  }
+  &-switch {
+    display: inline-block;
+    width: 3em;
+    color: $accent-color;
+    text-align: center;
+    border-radius: 5px;
+    border: 2px solid $accent-color;
+    &.checked {
+      background-color: $accent-color;
+      color: $base-color;
     }
   }
 }

@@ -75,6 +75,7 @@ chrome.runtime.onInstalled.addListener(function () {
         break;
       case MESSAGE_TYPE.GET_NOTE_BY_URL:
         const notes = await noteRepo.getByURL(msg.payload.url);
+        chromeSendMessage(MESSAGE_TYPE.GET_NOTE_BY_URL_RESPONSE, notes);
         // TODO: utilに書き出し
         chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
           chrome.tabs.sendMessage(
