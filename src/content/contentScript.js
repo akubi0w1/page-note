@@ -83,10 +83,12 @@ function renderNewNoteWindow() {
 
   // NOTE: d and d
   // d and dのイベントを追加
+  // TODO: 単発のクリックだったらd and dを除外したい
   var x;
   var y;
-  pageNoteWrapper.addEventListener("mousedown", mouseDown, false);
-  pageNoteWrapper.addEventListener("touchstart", mouseDown, false);
+  let pageNoteHeader = document.getElementsByClassName("_page-note-header")[0];
+  pageNoteHeader.addEventListener("mousedown", mouseDown, false);
+  pageNoteHeader.addEventListener("touchstart", mouseDown, false);
   function mouseDown(e) {
     document.getElementsByClassName("_page-note")[0].classList.add("drag");
 
