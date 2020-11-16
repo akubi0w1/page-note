@@ -66,6 +66,7 @@ import { getOptionsByKey } from "../common/options";
  * new note windowの描画
  */
 function renderNewNoteWindow() {
+  removeNewNoteWindow();
 
   let pageNoteWrapper = document.createElement("div");
   pageNoteWrapper.className = "_page-note-wrapper";
@@ -83,6 +84,7 @@ function renderNewNoteWindow() {
 
   // NOTE: d and d
   // d and dのイベントを追加
+  // BUG: 一回ウィンドウを出したあと、テキスト選択ができなくなる
   var x;
   var y;
   let pageNoteHeader = document.getElementsByClassName("_page-note-header")[0];
@@ -142,7 +144,10 @@ function renderNewNoteWindow() {
  * new note windowの削除
  */
 function removeNewNoteWindow() {
-  document.getElementById("_page-note-wrapper").remove();
+  let NewNoteWindow = document.getElementById("_page-note-wrapper");
+  if(NewNoteWindow) {
+    document.getElementById("_page-note-wrapper").remove();
+  }
 }
 
 /**
