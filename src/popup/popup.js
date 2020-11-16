@@ -237,8 +237,6 @@ function createNoteLabelElement(color) {
 function addEventListenerToTabMenu() {
   let labelElems = document.getElementsByClassName("tab-item");
 
-  // TODO: 効率化！！！
-
   let allNoteButton = document.getElementById("popup-tab-all-note");
   allNoteButton.addEventListener("click", function () {
     showNoteList();
