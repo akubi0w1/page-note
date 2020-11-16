@@ -1,6 +1,6 @@
 import { LABEL_COLOR, LABEL_COLOR_CODE, MESSAGE_TYPE, OPTION_KEY, ICON } from "../common/constant";
 import { validateNoteSummary, validateNoteBody, validateTag, validateLabel } from "../common/validation";
-import { createIconElement } from "../common/element";
+import { createIconElement, addDragAndDrop } from "../common/element";
 import { chromeSendMessage, getSelectorFromElement, getColorCodeForHighlight, getColorCodeForLabel } from "../common/utility";
 import { getOptionsByKey } from "../common/options";
 
@@ -66,6 +66,8 @@ import { getOptionsByKey } from "../common/options";
  * new note windowの描画
  */
 function renderNewNoteWindow() {
+  removeNewNoteWindow();
+
   let pageNoteWrapper = document.createElement("div");
   pageNoteWrapper.className = "_page-note-wrapper";
   pageNoteWrapper.id = "_page-note-wrapper";
@@ -79,13 +81,18 @@ function renderNewNoteWindow() {
   pageNoteWrapper.appendChild(pageNote);
 
   document.body.appendChild(pageNoteWrapper);
+
+  addDragAndDrop("_page-note-header", "_page-note-wrapper");
 }
 
 /**
  * new note windowの削除
  */
 function removeNewNoteWindow() {
-  document.getElementById("_page-note-wrapper").remove();
+  let NewNoteWindow = document.getElementById("_page-note-wrapper");
+  if(NewNoteWindow) {
+    document.getElementById("_page-note-wrapper").remove();
+  }
 }
 
 /**
@@ -111,6 +118,7 @@ function createHeader() {
   headerTools.appendChild(closeButton);
   
   let header = createElement("div", "_page-note-header");
+  header.id = "_page-note-header";
   header.appendChild(headerItem);
   header.appendChild(headerTools);
   return header;
@@ -450,52 +458,3 @@ function createQuickView(note) {
 
   return quickViewElem;
 }
-
-// TODO: d & d
-// function mouseDown(e) {
-//   document.getElementsByClassName("_page-note")[0].classList.add("drag");
-
-//   if (e.type === "mousedown") {
-//     var event = e;
-//   } else {
-//     var event = e.changedTouches[0];
-//   }
-//   x = event.pageX - e.srcElement.offsetLeft;
-//   y = event.pageY - e.srcElement.offsetTop;
-//   console.log(x, y);
-
-//   document.body.addEventListener("mousemove", mouseMove, false);
-//   document.body.addEventListener("touchmove", mouseMove, false);
-// }
-
-// function mouseMove(e) {
-//   var drag = document.getElementsByClassName("drag")[0];
-
-//   if (e.type === "mousemove") {
-//     var event = e;
-//   } else {
-//     var event = e.changedTouches[0];
-//   }
-
-//   e.preventDefault();
-
-//   drag.style.top = event.pageY - y + "px";
-//   drag.style.left = event.pageX - x + "px";
-
-//   drag.addEventListener("mouseup", mouseUp, false);
-//   document.body.addEventListener("mouseleave", mouseUp, false);
-//   drag.addEventListener("touchend", mouseUp, false);
-//   document.body.addEventListener("touchleave", mouseUp, false);
-// }
-
-// function mouseUp() {
-//   var drag = document.getElementsByClassName("drag")[0];
-
-//   document.body.removeEventListener("mousemove", mouseMove, false);
-//   drag.removeEventListener("mouseup", mouseUp, false);
-//   document.body.removeEventListener("touchmove", mouseMove, false);
-//   drag.removeEventListener("touchend", mouseUp, false);
-
-//   drag.classList.remove("drag");
-// }
-
