@@ -11,3 +11,6 @@ dist/
 # fontawesome
 webfonts
 all.min.css
+
+# secret keys
+secret.js

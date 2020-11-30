@@ -3,7 +3,7 @@ const path = require('path');
 module.exports = {
   mode: 'development',
   entry: {
-    "content/content": './src/content/contentScript.js',
+    "content/content": ['@babel/polyfill', './src/content/contentScript.js'],
     "popup/popup": './src/popup/popup.js',
     "background/background": ['@babel/polyfill' , './src/background/background.js'],
     "editnote/editnote": './src/editnote/editnote.js',

@@ -1,4 +1,5 @@
 import { MESSAGE_TYPE, LABEL_COLOR_CODE, HIGHLIGHT_COLOR_CODE, LABEL_COLOR } from "./constant";
+import { TEXT_SUMMARIZATION_API } from "./secret";
 
 /**
  * runtimeにmessageを送る
@@ -246,4 +247,44 @@ export function getColorCodeForHighlight(color) {
     default:
       return HIGHLIGHT_COLOR_CODE.DEFALULT;
   };
+}
+
+
+/**
+ * 自動要約
+ * @param {String} text 
+ * @param {Number} lineNumber 
+ * @param {String} separator 
+ */
+export async function autoSummarization(text, lineNumber=1, separator="。") {
+  const sentences = text
+    .split(separator)
+    .filter(sentence => sentence !== "");
+  // TODO: エラーをどっかに出したい
+    if (sentences.length < 2) {
+    console.log("センテンスが1しかない");
+    return;
+  }
+  if(sentences.length > 10) {
+    console.log("Too many sentences. please decrement number of sentences");
+    
+    return;
+  }
+  if(sentences.some(sentence => sentence.length > 200)) {
+    console.log("Too large sentence is exist. please under 200 characters in 1 sententce.");
+    return;
+  }
+
+  let formdata = new FormData();
+  formdata.append("apikey", TEXT_SUMMARIZATION_API.KEY);
+  formdata.append("sentences", text);
+  formdata.append("linenumber", lineNumber);
+  formdata.append("separator", separator);
+
+  const response = await fetch(TEXT_SUMMARIZATION_API.URL, {
+    method: TEXT_SUMMARIZATION_API.METHOD,
+    body: formdata
+  });
+
+  console.log(response.json());
 }
