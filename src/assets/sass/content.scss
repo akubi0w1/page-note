@@ -11,6 +11,8 @@ $success-sub-color: #d4edd9;
 
 $label-color: #00C0CC;
 
+$font-family: "Arial, Helvetica, sans-serif";
+
 .btn {
   padding: 1px 5px;
   font-size: 1em;
@@ -28,12 +30,12 @@ $label-color: #00C0CC;
   }
 }
 
-._page-note-quick-view {
-  
+#_page-note-quick-view {
   display: flex;
 }
 
-._page-note-quick-view-content {
+#_page-note-quick-view ._page-note-quick-view-content {
+  font-family: $font-family;
   max-width: 280px;
   min-width: 250px;
   background-color: #fff;
@@ -85,7 +87,7 @@ $label-color: #00C0CC;
   }
 }
 
-._page-note-quick-view-label {
+#_page-note-quick-view ._page-note-quick-view-label {
   background-color: $danger-color;
   width: 25px;
   height: 50px;
