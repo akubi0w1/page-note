@@ -11,6 +11,8 @@ $label-color: #00C0CC;
 
 $window-width: 300px;
 
+$font-family: "Arial, Helvetica, sans-serif";
+
 // html {
 //   background-color: $base-color;
 // }
@@ -74,13 +76,17 @@ $window-width: 300px;
   }
 }
 
-._page-note {
+#_page-note-wrapper ._page-note {
   position: relative;
   width: $window-width;
   // height: 100px;
   box-shadow: 0 10px 25px 0 rgba(0, 0, 0, .5);
   background-color: #fff;
   // z-index: 3000;
+  font-family: $font-family;
+  input, textarea {
+    font-family: $font-family;
+  }
   &-header {
     background-color: $accent-color;
     display: flex;
@@ -104,7 +110,7 @@ $window-width: 300px;
   }
 }
 
-._page-note-content-info {
+#_page-note-wrapper ._page-note-content-info {
   font-size: 15px;
   display: block;
   a {
@@ -115,7 +121,7 @@ $window-width: 300px;
   }
 }
 
-._page-note-content-form {
+#_page-note-wrapper ._page-note-content-form {
   &-item {
     margin-bottom: 10px;
   }
