@@ -18,11 +18,12 @@
   background-color: #E8F1F2;
 }
 
-._page-note-quick-view {
+#_page-note-quick-view {
   display: flex;
 }
 
-._page-note-quick-view-content {
+#_page-note-quick-view ._page-note-quick-view-content {
+  font-family: "Arial, Helvetica, sans-serif";
   max-width: 280px;
   min-width: 250px;
   background-color: #fff;
@@ -33,58 +34,58 @@
   box-sizing: border-box;
 }
 
-._page-note-quick-view-content-header {
+#_page-note-quick-view ._page-note-quick-view-content-header {
   display: flex;
   justify-content: space-between;
   border-bottom: 1px solid #005271;
 }
 
-._page-note-quick-view-content-summary {
+#_page-note-quick-view ._page-note-quick-view-content-summary {
   font-size: 14px;
   font-weight: 600;
   display: flex;
 }
 
-._page-note-quick-view-content-body {
+#_page-note-quick-view ._page-note-quick-view-content-body {
   padding: 8px 0;
   font-size: 13px;
 }
 
-._page-note-quick-view-content-footer {
+#_page-note-quick-view ._page-note-quick-view-content-footer {
   display: flex;
   justify-content: space-between;
   font-size: 13px;
 }
 
-._page-note-quick-view-content-footer ul {
+#_page-note-quick-view ._page-note-quick-view-content-footer ul {
   display: flex;
   list-style: none;
   margin: 0;
   padding: 0;
 }
 
-._page-note-quick-view-content-footer-tag-list {
+#_page-note-quick-view ._page-note-quick-view-content-footer-tag-list {
   color: #005271;
 }
 
-._page-note-quick-view-content-footer-control {
+#_page-note-quick-view ._page-note-quick-view-content-footer-control {
   color: #aaaaaa;
 }
 
-._page-note-quick-view-content-footer-control a {
+#_page-note-quick-view ._page-note-quick-view-content-footer-control a {
   color: #aaaaaa;
   text-decoration: none;
 }
 
-._page-note-quick-view-content-footer-tag-item {
+#_page-note-quick-view ._page-note-quick-view-content-footer-tag-item {
   margin-right: 5px;
 }
 
-._page-note-quick-view-content-footer-tag-item::before {
+#_page-note-quick-view ._page-note-quick-view-content-footer-tag-item::before {
   content: "#";
 }
 
-._page-note-quick-view-label {
+#_page-note-quick-view ._page-note-quick-view-label {
   background-color: #dc3545;
   width: 25px;
   height: 50px;
