@@ -148,6 +148,7 @@ function createContent() {
   submitButton.type = "submit";
   submitButton.innerText = "save";
   submitButton.onclick = function(evt) {
+    // TODO: errorlistの初期化
     evt.preventDefault();
 
     var errorStack = [];
