@@ -62,29 +62,45 @@
           </div>
 
           <div class="_page-note-content-form-item">
-            <label class="_page-note-content-form-input-label">selected text</label>
-            <label class="_page-note-content-info">resi---------------ba</label>
+            <div class="_page-note-content-form-title">
+              <label class="_page-note-content-form-input-label">selected text</label>
+              <div>
+                <button id="_page-note-btn-copy-to-summary" class="btn btn-sub-outline">to summary</button>
+                <button id="_page-note-btn-copy-to-body" class="btn btn-sub-outline">to body</button>
+              </div>
+            </div>
+            
+            <label class="_page-note-content-info">選択されたテキストがここに入ります</label>
           </div>
 
-          <div class="_page-note-content-form-item">
+          <!-- <div class="_page-note-content-form-item">
             <label class="_page-note-content-form-input-label">origin page</label>
             <label class="_page-note-content-info">
               <a href="#" target="_blank">page title</a>
             </label>
-          </div>
+          </div> -->
           
           <div class="_page-note-content-form-item">
-            <label class="_page-note-content-form-input-label">summary (require)</label>
+            <div class="_page-note-content-form-title">
+              <label class="_page-note-content-form-input-label">summary (require)</label>
+            </div>
             <input type="text" class="_page-note-content-form-input-text" />
           </div>
           
           <div class="_page-note-content-form-item">
-            <label class="_page-note-content-form-input-label">detail (require)</label>
+            <div class="_page-note-content-form-title">
+              <label class="_page-note-content-form-input-label">detail (require)</label>
+              <div>
+                <button id="_page-note-btn-summarization" class="btn btn-sub-outline">summarization</button>
+              </div>
+            </div>    
             <textarea class="_page-note-content-form-input-textarea"></textarea>
           </div>
           
           <div class="_page-note-content-form-item">
-            <label class="_page-note-content-form-input-label">tags</label>
+            <div class="_page-note-content-form-title">
+              <label class="_page-note-content-form-input-label">tags</label>
+            </div>
             <input type="text" class="_page-note-content-form-input-text" />
           </div>
           
