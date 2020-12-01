@@ -21,7 +21,7 @@
 #_page-note-wrapper .btn {
   box-sizing: border-box;
   border: 2px solid transparent;
-  padding: 3px 5px;
+  padding: 1px 5px;
   border-radius: 5px;
   box-shadow: none;
   min-height: 0;
@@ -41,6 +41,18 @@
   opacity: .7;
 }
 
+#_page-note-wrapper .btn-accent-outline {
+  color: #005271;
+  border-color: #005271;
+  background-color: #fff;
+}
+
+#_page-note-wrapper .btn-accent-outline:hover {
+  color: #E8F1F2;
+  border-color: #005271;
+  background-color: #005271;
+}
+
 #_page-note-wrapper .btn-base {
   color: #005271;
   border-color: #E8F1F2;
@@ -49,6 +61,18 @@
 
 #_page-note-wrapper .btn-base:hover {
   opacity: .7;
+}
+
+#_page-note-wrapper .btn-sub-outline {
+  color: #aaaaaa;
+  border-color: #aaaaaa;
+  background-color: #fff;
+}
+
+#_page-note-wrapper .btn-sub-outline:hover {
+  color: #fff;
+  border-color: #aaaaaa;
+  background-color: #aaaaaa;
 }
 
 #_page-note-wrapper .btn-submit {
@@ -63,7 +87,7 @@
 
 #_page-note-wrapper ._page-note {
   position: relative;
-  width: 300px;
+  width: 320px;
   box-shadow: 0 10px 25px 0 rgba(0, 0, 0, 0.5);
   background-color: #fff;
   font-family: "Arial, Helvetica, sans-serif";
@@ -99,7 +123,7 @@
 }
 
 #_page-note-wrapper ._page-note-content-info {
-  font-size: 15px;
+  font-size: 13px;
   display: block;
 }
 
@@ -113,6 +137,13 @@
 
 #_page-note-wrapper ._page-note-content-form-item {
   margin-bottom: 10px;
+}
+
+#_page-note-wrapper ._page-note-content-form-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 4px;
 }
 
 #_page-note-wrapper ._page-note-content-form-color-label {
@@ -129,15 +160,14 @@
   font-size: 14px;
   color: #aaaaaa;
   display: block;
-  margin-bottom: 4px;
 }
 
 #_page-note-wrapper ._page-note-content-form-input-text {
   box-sizing: border-box;
-  font-size: 15px;
+  font-size: 14px;
   border: 0;
   border-bottom: 1px solid #aaaaaa;
-  padding: 5px 8px;
+  padding: 3px 0px;
   width: 100%;
   background-color: transparent;
 }

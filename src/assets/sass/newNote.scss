@@ -9,7 +9,7 @@ $danger-sub-color: #f8d8db;
 
 $label-color: #00C0CC;
 
-$window-width: 300px;
+$window-width: 320px;
 
 $font-family: "Arial, Helvetica, sans-serif";
 
@@ -42,7 +42,7 @@ $font-family: "Arial, Helvetica, sans-serif";
   .btn {
     box-sizing: border-box;
     border: 2px solid transparent;
-    padding: 3px 5px;
+    padding: 1px 5px;
     border-radius: 5px;
     box-shadow: none;
     min-height: 0;
@@ -57,12 +57,32 @@ $font-family: "Arial, Helvetica, sans-serif";
         opacity: .7;
       }
     }
+    &-accent-outline {
+      color: $accent-color;
+      border-color: $accent-color;
+      background-color: #fff;
+      &:hover {
+        color: $base-color;
+        border-color: $accent-color;
+        background-color: $accent-color;
+      }
+    }
     &-base {
       color: $accent-color;
       border-color: $base-color;
       background-color: $base-color;
       &:hover {
         opacity: .7;
+      }
+    }
+    &-sub-outline {
+      color: $sub-color;
+      border-color: $sub-color;
+      background-color: #fff;
+      &:hover {
+        color: #fff;
+        border-color: $sub-color;
+        background-color: $sub-color;
       }
     }
     &-submit {
@@ -111,7 +131,7 @@ $font-family: "Arial, Helvetica, sans-serif";
 }
 
 #_page-note-wrapper ._page-note-content-info {
-  font-size: 15px;
+  font-size: 13px;
   display: block;
   a {
     color: $accent-color;
@@ -124,6 +144,12 @@ $font-family: "Arial, Helvetica, sans-serif";
 #_page-note-wrapper ._page-note-content-form {
   &-item {
     margin-bottom: 10px;
+  }
+  &-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 4px;
   }
   &-color-label {
     display: inline-flex;
@@ -140,14 +166,13 @@ $font-family: "Arial, Helvetica, sans-serif";
       color: $sub-color;
       // font-weight: bold;
       display: block;
-      margin-bottom: 4px;
     }
     &-text {
       box-sizing: border-box;
-      font-size: 15px;
+      font-size: 14px;
       border: 0;
       border-bottom: 1px solid $sub-color;
-      padding: 5px 8px;
+      padding: 3px 0px;
       width: 100%;
       background-color: transparent;
       &:focus {

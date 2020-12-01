@@ -126,7 +126,7 @@ function createHeader() {
 
 // TODO: 改良...
 /**
- * 内容部分を作成
+ * new note内容部分を作成
  * 
  * @return {HTMLElement}
  */
@@ -251,14 +251,22 @@ function createContent() {
   // selected text info
   let selectedTextInfo = createElement("div", "_page-note-content-form-item");
   selectedTextInfo.innerHTML = `
-  <label class="_page-note-content-form-input-label">selected text</label>
+  <div class="_page-note-content-form-title">
+    <label class="_page-note-content-form-input-label">selected text</label>
+    <div>
+      <button id="_page-note-copy-to-summary" class="btn btn-sub-outline">to summary</button>
+      <button id="_page-note-copy-to-body" class="btn btn-sub-outline">to body</button>
+    </div>
+  </div>
   <label class="_page-note-content-info">${selectedText}</label>
   `;
   
   // selected origin page info
   let originInfo = createElement("div", "_page-note-content-form-item");
   originInfo.innerHTML = `
-  <label class="_page-note-content-form-input-label">origin page</label>
+  <div class="_page-note-content-form-title">
+    <label class="_page-note-content-form-input-label">origin page</label>
+  </div>
   <label class="_page-note-content-info">
     <a href="${tabUrl}" target="_blank">${tabTitle}</a>
   </label>
@@ -266,32 +274,41 @@ function createContent() {
 
   // summary
   let summaryForm = createElement("div", "_page-note-content-form-item");
-  let summaryLabel = createElement("label", "_page-note-content-form-input-label");
-  summaryLabel.innerText = "summary (required)";
+  let summaryTitle = createElement("div", "_page-note-content-form-title");
+  summaryTitle.innerHTML = `
+    <label class="_page-note-content-form-input-label">summary (require)</label>
+  `;
   let summaryInput = createElement("input", "_page-note-content-form-input-text");
   summaryInput.name = "summary";
   summaryInput.type = "text";
-  summaryInput.value = selectedText;
-  summaryForm.appendChild(summaryLabel);
+  // summaryInput.value = selectedText;
+  summaryForm.appendChild(summaryTitle);
   summaryForm.appendChild(summaryInput);
 
   // body
   let bodyForm = createElement("div", "_page-note-content-form-item");
-  let bodyLabel = createElement("label", "_page-note-content-form-input-label");
-  bodyLabel.innerText = "body";
+  let bodyTitle = createElement("div", "_page-note-content-form-title");
+  bodyTitle.innerHTML = `
+    <label class="_page-note-content-form-input-label">body</label>
+    <div>
+      <button id="_page-note-btn-summarization" class="btn btn-sub-outline">summarization</button>
+    </div>
+  `;
   let bodyInput = createElement("textarea", "_page-note-content-form-input-textarea");
   bodyInput.name = "body";
-  bodyForm.appendChild(bodyLabel);
+  bodyForm.appendChild(bodyTitle);
   bodyForm.appendChild(bodyInput);
 
   // tags
   let tagsForm = createElement("div", "_page-note-content-form-item");
-  let tagsLabel = createElement("label", "_page-note-content-form-input-label");
-  tagsLabel.innerText = "tags (divide comma)";
+  let tagsTitle = createElement("div", "_page-note-content-form-title");
+  tagsTitle.innerHTML = `
+    <label class="_page-note-content-form-input-label">tags (divide comma)</label>
+  `;
   let tagsInput = createElement("input", "_page-note-content-form-input-text");
   tagsInput.name = "tags";
   tagsInput.type = "text";
-  tagsForm.appendChild(tagsLabel);
+  tagsForm.appendChild(tagsTitle);
   tagsForm.appendChild(tagsInput);
 
   // errorList
@@ -301,8 +318,10 @@ function createContent() {
   form.appendChild(submitButtonInput);
   form.appendChild(labelInput);
   form.appendChild(errorBar);
-  form.appendChild(selectedTextInfo);
-  form.appendChild(originInfo);
+  if (selectedText !== "") {
+    form.appendChild(selectedTextInfo);
+  }
+  // form.appendChild(originInfo);
   form.appendChild(summaryForm);
   form.appendChild(bodyForm);
   form.appendChild(tagsForm);
