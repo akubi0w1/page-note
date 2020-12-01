@@ -263,8 +263,7 @@ export async function autoSummarization(text, lineNumber=1, separator="。") {
   const sentences = text
     .split(separator)
     .filter(sentence => sentence !== "");
-  // TODO: エラーをどっかに出したい
-    if (sentences.length < 2) {
+  if (sentences.length < 2) {
     throw new PageNoteError("only one sentence", "only one sentence. need more 2 sentences");
   }
   if(sentences.length > 10) {
