@@ -1,5 +1,6 @@
 import { MESSAGE_TYPE, LABEL_COLOR_CODE, HIGHLIGHT_COLOR_CODE, LABEL_COLOR } from "./constant";
 import { TEXT_SUMMARIZATION_API } from "./secret";
+import PageNoteError from "./error";
 
 /**
  * runtimeにmessageを送る
@@ -255,6 +256,8 @@ export function getColorCodeForHighlight(color) {
  * @param {String} text 
  * @param {Number} lineNumber 
  * @param {String} separator 
+ * @returns {String}
+ * @throws {PageNoteError}
  */
 export async function autoSummarization(text, lineNumber=1, separator="。") {
   const sentences = text
@@ -262,17 +265,13 @@ export async function autoSummarization(text, lineNumber=1, separator="。") {
     .filter(sentence => sentence !== "");
   // TODO: エラーをどっかに出したい
     if (sentences.length < 2) {
-    console.log("センテンスが1しかない");
-    return;
+    throw new PageNoteError("only one sentence", "only one sentence. need more 2 sentences");
   }
   if(sentences.length > 10) {
-    console.log("Too many sentences. please decrement number of sentences");
-    
-    return;
+    throw new PageNoteError("too many sentences", "Too many sentences. Please reduce the number of sentences.");
   }
   if(sentences.some(sentence => sentence.length > 200)) {
-    console.log("Too large sentence is exist. please under 200 characters in 1 sententce.");
-    return;
+    throw new PageNoteError("too long sentence is exist", "Too long sentence is exist. Please under 200 characters per sentence.");
   }
 
   let formdata = new FormData();
@@ -286,5 +285,10 @@ export async function autoSummarization(text, lineNumber=1, separator="。") {
     body: formdata
   });
 
-  console.log(response.json());
+  const resJson = await response.json();
+
+  if (resJson.status !== 0) {
+    throw new PageNoteError("failed to api call", "Summarization is failure.");
+  }
+  return resJson.summary.join("。");
 }

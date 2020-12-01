@@ -1,7 +1,7 @@
 import { LABEL_COLOR, LABEL_COLOR_CODE, MESSAGE_TYPE, OPTION_KEY, ICON } from "../common/constant";
 import { validateNoteSummary, validateNoteBody, validateTag, validateLabel } from "../common/validation";
 import { createIconElement, addDragAndDrop } from "../common/element";
-import { chromeSendMessage, getSelectorFromElement, getColorCodeForHighlight, getColorCodeForLabel } from "../common/utility";
+import { chromeSendMessage, getSelectorFromElement, getColorCodeForHighlight, getColorCodeForLabel, autoSummarization } from "../common/utility";
 import { getOptionsByKey } from "../common/options";
 
 // pageNoteWrapper.addEventListener("mousedown", mouseDown, false);
@@ -131,6 +131,12 @@ function createHeader() {
  * @return {HTMLElement}
  */
 function createContent() {
+  const clearErrorBar = () => {
+    if (document.getElementById("_page-note-content-form-error-bar")) {
+      document.getElementById("_page-note-content-form-error-bar").remove();
+    }
+  };
+
   const selectedText = document.getSelection().toString();
   let selectedSelector = "";
   if (selectedText) {
@@ -141,6 +147,7 @@ function createContent() {
 
 
   let form = createElement("form", "_page-note-content-form");
+  form.method = "GET";
 
   // submitButton
   let submitButtonInput = createElement("div", "_page-note-content-form-item al-right ps-top-right");
@@ -148,8 +155,9 @@ function createContent() {
   submitButton.type = "submit";
   submitButton.innerText = "save";
   submitButton.onclick = function(evt) {
-    // TODO: errorlistの初期化
+    
     evt.preventDefault();
+    clearErrorBar();
 
     var errorStack = [];
 
@@ -187,8 +195,10 @@ function createContent() {
       errorStack.push(err.message);
     }
 
+    // happen error
     if (errorStack.length > 0) {
       let errorBarElem = createElement("div", "_page-note-error-bar");
+      errorBarElem.id = "_page-note-content-form-error-bar";
       let ulElem = document.createElement("ul");
       errorStack.forEach(err => {
         let liElem = document.createElement("li");
@@ -250,17 +260,41 @@ function createContent() {
 
   // selected text info
   let selectedTextInfo = createElement("div", "_page-note-content-form-item");
-  selectedTextInfo.innerHTML = `
-  <div class="_page-note-content-form-title">
-    <label class="_page-note-content-form-input-label">selected text</label>
-    <div>
-      <button id="_page-note-copy-to-summary" class="btn btn-sub-outline">to summary</button>
-      <button id="_page-note-copy-to-body" class="btn btn-sub-outline">to body</button>
-    </div>
-  </div>
-  <label class="_page-note-content-info">${selectedText}</label>
-  `;
-  
+  let selectedTextTitle = createElement("div", "_page-note-content-form-title");
+  let selectedTextLabel = createElement("div", "_page-note-content-form-input-label");
+  selectedTextLabel.innerText = "selected text";
+  let selectedTextValue = createElement("label", "_page-note-content-info");
+  if(selectedText.length > 60) {
+    selectedTextValue.innerText = selectedText.substring(0, 60) + "...";
+  } else {
+    selectedTextValue.innerText = selectedText;
+  }
+  let selectedTextControl = document.createElement("div");
+  let copyToSummaryBtn = document.createElement("button");
+  copyToSummaryBtn.className = "btn btn-sub-outline";
+  copyToSummaryBtn.id = "_page-note-btn-copy-to-summary";
+  copyToSummaryBtn.innerText = "to summary";
+  copyToSummaryBtn.type = "button";
+  copyToSummaryBtn.style.marginRight = "5px";
+  copyToSummaryBtn.addEventListener("click", function(evt) {
+    summaryInput.value = selectedText;
+  });
+  let copyToBodyBtn = document.createElement("button");
+  copyToBodyBtn.className = "btn btn-sub-outline";
+  copyToBodyBtn.id = "_page-note-btn-copy-to-body";
+  copyToBodyBtn.innerText = "to body";
+  copyToBodyBtn.type = "button";
+  copyToBodyBtn.addEventListener("click", function() {
+    bodyInput.value = selectedText;
+  });
+  selectedTextControl.appendChild(copyToSummaryBtn);
+  selectedTextControl.appendChild(copyToBodyBtn);
+  selectedTextTitle.appendChild(selectedTextLabel);
+  selectedTextTitle.appendChild(selectedTextControl);
+  selectedTextInfo.appendChild(selectedTextTitle);
+  selectedTextInfo.appendChild(selectedTextValue);
+
+
   // selected origin page info
   let originInfo = createElement("div", "_page-note-content-form-item");
   originInfo.innerHTML = `
@@ -281,21 +315,45 @@ function createContent() {
   let summaryInput = createElement("input", "_page-note-content-form-input-text");
   summaryInput.name = "summary";
   summaryInput.type = "text";
-  // summaryInput.value = selectedText;
+  summaryInput.autocomplete = "off";
   summaryForm.appendChild(summaryTitle);
   summaryForm.appendChild(summaryInput);
 
   // body
   let bodyForm = createElement("div", "_page-note-content-form-item");
   let bodyTitle = createElement("div", "_page-note-content-form-title");
-  bodyTitle.innerHTML = `
-    <label class="_page-note-content-form-input-label">body</label>
-    <div>
-      <button id="_page-note-btn-summarization" class="btn btn-sub-outline">summarization</button>
-    </div>
-  `;
+  let bodyLabel = createElement("label", "_page-note-content-form-input-label");
+  bodyLabel.innerText = "body";
+  let bodyControl = document.createElement("div");
+  let bodySummarizationBtn = createElement("button", "btn btn-sub-outline")
+  bodySummarizationBtn.id = "_page-note-btn-summarization";
+  bodySummarizationBtn.innerText = "summarization";
+  bodySummarizationBtn.type = "button";
+  bodySummarizationBtn.addEventListener("click", async function(evt) {
+    try {
+      clearErrorBar();
+      bodyInput.readOnly = true;
+      const summarizationText = await autoSummarization(bodyInput.value);
+      // TODO: もとに戻すボタンの実装...
+      bodyInput.value = summarizationText;
+    } catch (err) {
+      // IDEA: errorlistじゃなくて、別の場所or別のbarを作りたい。気もする
+      let errorBarElem = createElement("div", "_page-note-error-bar");
+      errorBarElem.id = "_page-note-content-form-error-bar";
+      let ulElem = document.createElement("ul");
+      let liElem = document.createElement("li");
+      liElem.innerText = err.message;
+      ulElem.appendChild(liElem);
+      errorBarElem.appendChild(ulElem);
+      document.getElementById("errorList").appendChild(errorBarElem);
+    }
+    bodyInput.readOnly = false;
+  });
   let bodyInput = createElement("textarea", "_page-note-content-form-input-textarea");
   bodyInput.name = "body";
+  bodyControl.appendChild(bodySummarizationBtn);
+  bodyTitle.appendChild(bodyLabel);
+  bodyTitle.appendChild(bodyControl);
   bodyForm.appendChild(bodyTitle);
   bodyForm.appendChild(bodyInput);
 
@@ -308,6 +366,7 @@ function createContent() {
   let tagsInput = createElement("input", "_page-note-content-form-input-text");
   tagsInput.name = "tags";
   tagsInput.type = "text";
+  tagsInput.autocomplete = "off";
   tagsForm.appendChild(tagsTitle);
   tagsForm.appendChild(tagsInput);
 
@@ -328,6 +387,7 @@ function createContent() {
 
   let content = createElement("div", "_page-note-content");
   content.appendChild(form);
+
   return content;
 
 }
