@@ -309,5 +309,8 @@ export function calcLineNumberForSummarization(text, separator, percentage) {
   if (sentenceCount === lineNumber) {
     lineNumber -= 1;
   }
+  if (lineNumber === 0) {
+    lineNumber = 1;
+  }
   return lineNumber;
 }
