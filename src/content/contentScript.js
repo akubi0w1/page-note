@@ -333,8 +333,9 @@ function createContent() {
     try {
       clearErrorBar();
       bodyInput.readOnly = true;
+      // TODO: optionの適用
       const summarizationText = await autoSummarization(bodyInput.value);
-      // TODO: もとに戻すボタンの実装...
+      // IDEA: もとに戻すボタンの実装...
       bodyInput.value = summarizationText;
     } catch (err) {
       // IDEA: errorlistじゃなくて、別の場所or別のbarを作りたい。気もする

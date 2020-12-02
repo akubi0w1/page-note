@@ -18,7 +18,7 @@ import { saveOptions, getOptionsByKey, restoreOption } from "../common/options";
          */
         const searchButton = document.getElementById("search-bar-submit");
         searchButton.addEventListener("click", evt => {
-          event.preventDefault();
+          evt.preventDefault();
           let form = document.getElementById("search-bar-form");
           let keywords = form.keyword.value
             .split(" ")
@@ -37,20 +37,12 @@ import { saveOptions, getOptionsByKey, restoreOption } from "../common/options";
     }
   });
 
+  // tab menuの設定
   addEventListenerToTabMenu();
-  restoreOption(OPTION_KEY.MARK_TEXT, function (result) {
-    let switchHighlightElem = document.getElementById("popup-setting-switch-highlight");
-    let switchElem = switchHighlightElem.nextElementSibling;
-    if (result.markText) {
-      switchElem.className = "setting-switch checked";
-      switchElem.innerText = "on";
-    } else {
-      switchElem.className = "setting-switch";
-      switchElem.innerText = "off";
-    }
-  });
+  addEventListenerToSettingTab();
+  restoreSetting();
+
   chromeSendMessage(MESSAGE_TYPE.GET_ALL_NOTE);
-  
 })();
 
 /**
@@ -237,6 +229,7 @@ function createNoteLabelElement(color) {
 function addEventListenerToTabMenu() {
   let labelElems = document.getElementsByClassName("tab-item");
 
+  // all note tab
   let allNoteButton = document.getElementById("popup-tab-all-note");
   allNoteButton.addEventListener("click", function () {
     showNoteList();
@@ -251,6 +244,7 @@ function addEventListenerToTabMenu() {
     }
   });
 
+  // current page tab
   let currentPageButton = document.getElementById("popup-tab-current-page");
   currentPageButton.addEventListener("click", function () {
     showNoteList();
@@ -267,6 +261,7 @@ function addEventListenerToTabMenu() {
     }
   });
 
+  // setting tab
   let settingButton = document.getElementById("popup-tab-setting");
   settingButton.addEventListener("click", function () {
     hideNoteList();
@@ -280,7 +275,6 @@ function addEventListenerToTabMenu() {
       }
     }
   });
-  addEventListenerToSettingTab();
 }
 
 /**
@@ -315,8 +309,11 @@ function hideNoteList() {
   noteListElem.className = "note-list hidden";
 }
 
+/**
+ * tab-menuのsettingについてイベントリスナーの追加
+ */
 function addEventListenerToSettingTab() {
-  // highlight
+  // decoration: highlight
   let switchHighlightElem = document.getElementById("popup-setting-switch-highlight");
   switchHighlightElem.addEventListener("change", function () {
     let switchElem = switchHighlightElem.nextElementSibling;
@@ -328,6 +325,53 @@ function addEventListenerToSettingTab() {
       switchElem.className = "setting-switch checked";
       switchElem.innerText = "on";
       saveOptions({ markText: true });
+    }
+  });
+
+  // summarization: separator
+  let selectSeparatorElem = document.getElementById("popup-setting-select-summarization-separator");
+  selectSeparatorElem.addEventListener("change", function() {
+    saveOptions({ summarizationSeparator: this.value });
+  });
+
+  // summarization: percentage
+  let selectPercentageElem = document.getElementById("popup-setting-select-summarization-percentage");
+  selectPercentageElem.addEventListener("change", function() {
+    saveOptions({ summarizationPercentage: parseFloat(this.value) });
+  });
+}
+
+/**
+ * 現状のoptionをsetting tabに反映する
+ */
+function restoreSetting() {
+  restoreOption(OPTION_KEY.MARK_TEXT, function (result) {
+    let switchHighlightElem = document.getElementById("popup-setting-switch-highlight");
+    let switchElem = switchHighlightElem.nextElementSibling;
+    if (result.markText) {
+      switchElem.className = "setting-switch checked";
+      switchElem.innerText = "on";
+    } else {
+      switchElem.className = "setting-switch";
+      switchElem.innerText = "off";
+    }
+  });
+
+  restoreOption(OPTION_KEY.SUMMARIZATION_SEPARATOR, function (result) {
+    let selectSeparatorElem = document.getElementById("popup-setting-select-summarization-separator");
+    for (let i = 0; i < selectSeparatorElem.childElementCount; i++) {
+      if (selectSeparatorElem.children[i].value === result.summarizationSeparator) {
+        selectSeparatorElem.children[i].selected = true;
+      }
+    }
+  });
+  
+  restoreOption(OPTION_KEY.SUMMAEIZATION_PERCENTAGE, function (result) {
+    let selectPercentageElem = document.getElementById("popup-setting-select-summarization-percentage");
+    for (let i = 0; i < selectPercentageElem.childElementCount; i++) {
+      if (selectPercentageElem.children[i].value === result.summarizationPercentage.toString()) {
+        selectPercentageElem.children[i].selected = true;
+      }
     }
   });
 }
