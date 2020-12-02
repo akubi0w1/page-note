@@ -291,3 +291,23 @@ export async function autoSummarization(text, lineNumber=1, separator="。") {
   }
   return resJson.summary.join("。");
 }
+
+
+/**
+ * 自動要約の文章数を計算する
+ * @param {String} text 
+ * @param {String} separator 
+ * @param {Number} percentage 0 to 1
+ * @returns {Number}
+ */
+export function calcLineNumberForSummarization(text, separator, percentage) {
+  const sentenceCount = text
+    .split(separator)
+    .filter(sentence => sentence !== "")
+    .length;
+  let lineNumber = parseInt(sentenceCount * percentage);
+  if (sentenceCount === lineNumber) {
+    lineNumber -= 1;
+  }
+  return lineNumber;
+}

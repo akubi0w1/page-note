@@ -1,7 +1,7 @@
 import { LABEL_COLOR, LABEL_COLOR_CODE, MESSAGE_TYPE, OPTION_KEY, ICON, DEFAULT_OPTION } from "../common/constant";
 import { validateNoteSummary, validateNoteBody, validateTag, validateLabel } from "../common/validation";
 import { createIconElement, addDragAndDrop } from "../common/element";
-import { chromeSendMessage, getSelectorFromElement, getColorCodeForHighlight, getColorCodeForLabel, autoSummarization } from "../common/utility";
+import { chromeSendMessage, getSelectorFromElement, getColorCodeForHighlight, getColorCodeForLabel, autoSummarization, calcLineNumberForSummarization } from "../common/utility";
 import { getAllOptions, getOptionsByKey, restoreOption } from "../common/options";
 
 // pageNoteWrapper.addEventListener("mousedown", mouseDown, false);
@@ -335,14 +335,7 @@ function createContent() {
       async function(result) {
         try {
           bodyInput.readOnly = true;
-          const sentenceCount = bodyInput.value
-            .split(result.summarizationSeparator)
-            .filter(text => text !== "")
-            .length;
-          let lineNumber = parseInt(sentenceCount * result.summarizationPercentage);
-          if (sentenceCount === lineNumber) {
-            lineNumber -= 1;
-          }
+          const lineNumber = calcLineNumberForSummarization(bodyInput.value, result.summarizationSeparator, result.summarizationPercentage);
           const summarizationText = await autoSummarization(bodyInput.value, lineNumber, result.summarizationSeparator);
           // IDEA: もとに戻すボタンの実装...
           bodyInput.value = summarizationText;
