@@ -280,21 +280,7 @@ function addEventListenerToTabMenu() {
       }
     }
   });
-  // TODO: この辺、renderSettingContentみたいな関数欲しいね
-  // setting. 設定項目の管理
-  let switchHighlightElem = document.getElementById("popup-setting-switch-highlight");
-  switchHighlightElem.addEventListener("change", function () {
-    let switchElem = switchHighlightElem.nextElementSibling;
-    if (switchElem.className.indexOf("checked") > -1) {
-      switchElem.className = "setting-switch";
-      switchElem.innerText = "off";
-      saveOptions({ markText: false });
-    } else {
-      switchElem.className = "setting-switch checked";
-      switchElem.innerText = "on";
-      saveOptions({ markText: true });
-    }
-  });
+  addEventListenerToSettingTab();
 }
 
 /**
@@ -327,6 +313,23 @@ function showNoteList() {
 function hideNoteList() {
   let noteListElem = document.getElementsByClassName("note-list")[0];
   noteListElem.className = "note-list hidden";
+}
+
+function addEventListenerToSettingTab() {
+  // highlight
+  let switchHighlightElem = document.getElementById("popup-setting-switch-highlight");
+  switchHighlightElem.addEventListener("change", function () {
+    let switchElem = switchHighlightElem.nextElementSibling;
+    if (switchElem.className.indexOf("checked") > -1) {
+      switchElem.className = "setting-switch";
+      switchElem.innerText = "off";
+      saveOptions({ markText: false });
+    } else {
+      switchElem.className = "setting-switch checked";
+      switchElem.innerText = "on";
+      saveOptions({ markText: true });
+    }
+  });
 }
 
 /**
