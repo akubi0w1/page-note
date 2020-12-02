@@ -1,8 +1,8 @@
-import { LABEL_COLOR, LABEL_COLOR_CODE, MESSAGE_TYPE, OPTION_KEY, ICON } from "../common/constant";
+import { LABEL_COLOR, LABEL_COLOR_CODE, MESSAGE_TYPE, OPTION_KEY, ICON, DEFAULT_OPTION } from "../common/constant";
 import { validateNoteSummary, validateNoteBody, validateTag, validateLabel } from "../common/validation";
 import { createIconElement, addDragAndDrop } from "../common/element";
 import { chromeSendMessage, getSelectorFromElement, getColorCodeForHighlight, getColorCodeForLabel, autoSummarization } from "../common/utility";
-import { getOptionsByKey } from "../common/options";
+import { getAllOptions, getOptionsByKey, restoreOption } from "../common/options";
 
 // pageNoteWrapper.addEventListener("mousedown", mouseDown, false);
 // 座標
@@ -20,8 +20,7 @@ import { getOptionsByKey } from "../common/options";
           if (typeof option.markText !== "undefined" && option.markText) {
             msg.payload.forEach(note => { markText(note); });
           }
-        }); 
-        
+        });
         break;
     }
   });
@@ -329,26 +328,38 @@ function createContent() {
   bodySummarizationBtn.id = "_page-note-btn-summarization";
   bodySummarizationBtn.innerText = "summarization";
   bodySummarizationBtn.type = "button";
-  bodySummarizationBtn.addEventListener("click", async function(evt) {
-    try {
-      clearErrorBar();
-      bodyInput.readOnly = true;
-      // TODO: optionの適用
-      const summarizationText = await autoSummarization(bodyInput.value);
-      // IDEA: もとに戻すボタンの実装...
-      bodyInput.value = summarizationText;
-    } catch (err) {
-      // IDEA: errorlistじゃなくて、別の場所or別のbarを作りたい。気もする
-      let errorBarElem = createElement("div", "_page-note-error-bar");
-      errorBarElem.id = "_page-note-content-form-error-bar";
-      let ulElem = document.createElement("ul");
-      let liElem = document.createElement("li");
-      liElem.innerText = err.message;
-      ulElem.appendChild(liElem);
-      errorBarElem.appendChild(ulElem);
-      document.getElementById("errorList").appendChild(errorBarElem);
-    }
-    bodyInput.readOnly = false;
+  bodySummarizationBtn.addEventListener("click", function(evt) {
+    clearErrorBar();
+    restoreOption(
+      { summarizationSeparator: DEFAULT_OPTION.summarizationSeparator, summarizationPercentage: DEFAULT_OPTION.summarizationPercentage },
+      async function(result) {
+        try {
+          bodyInput.readOnly = true;
+          const sentenceCount = bodyInput.value
+            .split(result.summarizationSeparator)
+            .filter(text => text !== "")
+            .length;
+          let lineNumber = parseInt(sentenceCount * result.summarizationPercentage);
+          if (sentenceCount === lineNumber) {
+            lineNumber -= 1;
+          }
+          const summarizationText = await autoSummarization(bodyInput.value, lineNumber, result.summarizationSeparator);
+          // IDEA: もとに戻すボタンの実装...
+          bodyInput.value = summarizationText;
+        } catch (err) {
+          // IDEA: errorlistじゃなくて、別の場所or別のbarを作りたい。気もする
+          let errorBarElem = createElement("div", "_page-note-error-bar");
+          errorBarElem.id = "_page-note-content-form-error-bar";
+          let ulElem = document.createElement("ul");
+          let liElem = document.createElement("li");
+          liElem.innerText = err.message;
+          ulElem.appendChild(liElem);
+          errorBarElem.appendChild(ulElem);
+          document.getElementById("errorList").appendChild(errorBarElem);
+        }
+        bodyInput.readOnly = false;
+      }
+    );
   });
   let bodyInput = createElement("textarea", "_page-note-content-form-input-textarea");
   bodyInput.name = "body";
