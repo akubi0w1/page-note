@@ -280,6 +280,8 @@ function addEventListenerToTabMenu() {
       }
     }
   });
+  // TODO: この辺、renderSettingContentみたいな関数欲しいね
+  // setting. 設定項目の管理
   let switchHighlightElem = document.getElementById("popup-setting-switch-highlight");
   switchHighlightElem.addEventListener("change", function () {
     let switchElem = switchHighlightElem.nextElementSibling;
