@@ -2,6 +2,7 @@
 <html>
 
   <head>
+    <meta charset="utf-8">
     <link rel="stylesheet" href="/src/assets/css/popup.css" />
     <link rel="stylesheet" href="/src/assets/css/all.min.css" />
 
@@ -55,12 +56,34 @@
         <!-- END note-list -->
 
         <ul class="setting-list hidden">
+          <span class="setting-separator">Page decoration</span>
           <li>
             <label for="popup-setting-switch-highlight" class="setting-item">
               Text highlight
               <input id="popup-setting-switch-highlight" type="checkbox" name="popup-setting-switch-highlight" class="hidden" />
               <div class="setting-switch"></div>
             </label>
+          </li>
+          <span class="setting-separator">Auto summarization</span>
+          <li>
+            <div class="setting-item">
+              <label>Summarization separator</label>
+              <select id="popup-setting-select-summarization-separator" name="popup-setting-summarization-separator" class="setting-select">
+                <option value="。">。</option>
+                <option value=".">.</option>
+              </select>
+            </div>
+          </li>
+          <li>
+            <div class="setting-item">
+              <label>Percentage to summarize</label>
+              <select id="popup-setting-select-summarization-percentage" name="popup-setting-summarize-percentage" class="setting-select">
+                <option value="0.1">10%</option>
+                <option value="0.3">30%</option>
+                <option value="0.5">50%</option>
+                <option value="0.7">70%</option>
+              </select>
+            </div>
           </li>
         </ul>
       </div>

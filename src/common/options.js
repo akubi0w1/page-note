@@ -4,7 +4,9 @@ export function saveOptions(options = {}) {
 
 export function getAllOptions() {
   chrome.storage.sync.get({
-    markText: true
+    markText: true,
+    summarizationSeparator: "。",
+    summarizationPercentage: 0.1
   }, function (result) { console.log(result); });
 };
 

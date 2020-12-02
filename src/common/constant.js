@@ -69,10 +69,14 @@ export const ICON = {
 /**
  * default options
  */
-export const DEFAULT_OPTION = {
-  markText: true
+export const OPTION_KEY = {
+  MARK_TEXT: "markText",
+  SUMMARIZATION_SEPARATOR: "summarizationSeparator",
+  SUMMAEIZATION_PERCENTAGE: "summarizationPercentage"
 };
 
-export const OPTION_KEY = {
-  MARK_TEXT: "markText"
+export const DEFAULT_OPTION = {
+  markText: true,
+  summarizationSeparator: "。",
+  summarizationPercentage: 0.1
 };
