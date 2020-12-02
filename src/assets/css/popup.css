@@ -253,6 +253,7 @@ body {
   color: #005271;
   display: flex;
   justify-content: space-between;
+  align-items: center;
 }
 
 .setting-switch {
@@ -273,6 +274,7 @@ body {
   border: 1px solid #aaaaaa;
   border-radius: 5px;
   padding: 2px;
+  font-size: 12px;
 }
 
 .setting-select:focus {

@@ -250,6 +250,7 @@ body {
     color: $accent-color;
     display: flex;
     justify-content: space-between;
+    align-items: center;
   }
   &-switch {
     display: inline-block;
@@ -266,8 +267,8 @@ body {
   &-select {
     border: 1px solid $sub-color;
     border-radius: 5px;
-    // width: 4em;
     padding: 2px;
+    font-size: 12px;
     &:focus {
       outline: none;
     }
