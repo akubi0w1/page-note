@@ -246,14 +246,15 @@ body {
   margin: 0;
   padding: 0;
   margin-bottom: 10px;
+  padding: 10px 20px;
 }
 
 .setting-item {
-  padding: 10px 20px;
   color: #005271;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-bottom: 10px;
 }
 
 .setting-switch {
@@ -290,4 +291,16 @@ body {
 
 .setting-input-text:focus {
   outline: none;
+}
+
+.setting-separator {
+  display: block;
+  margin-top: 20px;
+  margin-bottom: 10px;
+  font-weight: 600;
+  color: #5996ac;
+}
+
+.setting-separator:first-child {
+  margin-top: 0;
 }

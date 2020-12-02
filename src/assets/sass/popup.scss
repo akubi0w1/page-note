@@ -244,13 +244,14 @@ body {
     margin: 0;
     padding: 0;
     margin-bottom: 10px;
+    padding: 10px 20px;
   }
   &-item {
-    padding: 10px 20px;
     color: $accent-color;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    margin-bottom: 10px;
   }
   &-switch {
     display: inline-block;
@@ -282,6 +283,16 @@ body {
       &:focus {
         outline: none;
       }
+    }
+  }
+  &-separator {
+    display: block;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    font-weight: 600;
+    color: $accent-hover-color;
+    &:first-child {
+      margin-top: 0;
     }
   }
 }
