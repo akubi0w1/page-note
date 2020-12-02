@@ -268,3 +268,24 @@ body {
   background-color: #005271;
   color: #E8F1F2;
 }
+
+.setting-select {
+  border: 1px solid #aaaaaa;
+  border-radius: 5px;
+  padding: 2px;
+}
+
+.setting-select:focus {
+  outline: none;
+}
+
+.setting-input-text {
+  background-color: transparent;
+  border: 0;
+  border-bottom: 1px solid #005271;
+  width: 40px;
+}
+
+.setting-input-text:focus {
+  outline: none;
+}

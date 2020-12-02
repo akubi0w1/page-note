@@ -263,4 +263,24 @@ body {
       color: $base-color;
     }
   }
+  &-select {
+    border: 1px solid $sub-color;
+    border-radius: 5px;
+    // width: 4em;
+    padding: 2px;
+    &:focus {
+      outline: none;
+    }
+  }
+  &-input {
+    &-text {
+      background-color: transparent;
+      border: 0;
+      border-bottom: 1px solid $accent-color;
+      width: 40px;
+      &:focus {
+        outline: none;
+      }
+    }
+  }
 }
