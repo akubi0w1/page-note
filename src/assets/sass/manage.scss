@@ -213,11 +213,12 @@ a {
     display: flex;
     justify-content: space-between;
     margin-bottom: 5px;
+    font-size: smaller;
   }
   .form-label {
     display: block;
     color: $accent-color;
-    font-size: smaller;
+    // font-size: smaller;
   }
   .form-color-label {
     display: inline-flex;

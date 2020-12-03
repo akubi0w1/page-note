@@ -218,12 +218,12 @@ a:hover {
   display: flex;
   justify-content: space-between;
   margin-bottom: 5px;
+  font-size: smaller;
 }
 
 .form .form-label {
   display: block;
   color: #005271;
-  font-size: smaller;
 }
 
 .form .form-color-label {
