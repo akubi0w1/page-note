@@ -81,6 +81,18 @@ a:hover {
   opacity: .7;
 }
 
+.btn-sub-outline {
+  background-color: #fff;
+  color: #aaaaaa;
+  border-color: #aaaaaa;
+}
+
+.btn-sub-outline:hover {
+  background-color: #aaaaaa;
+  color: #fff;
+  border-color: #aaaaaa;
+}
+
 .notify-bar {
   border-radius: 5px;
 }
@@ -192,15 +204,26 @@ a:hover {
   border-right: 0px solid #aaaaaa;
 }
 
+.form {
+  max-width: 400px;
+  box-sizing: border-box;
+}
+
 .form .form-item {
   display: block;
   margin-bottom: 20px;
 }
 
+.form .form-title {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 5px;
+  font-size: smaller;
+}
+
 .form .form-label {
   display: block;
   color: #005271;
-  font-size: smaller;
 }
 
 .form .form-color-label {
@@ -215,11 +238,12 @@ a:hover {
 
 .form .input-text, .form .input-textarea {
   font-size: .9em;
-  width: 400px;
+  width: 100%;
 }
 
 .form .input-text {
   border: 0;
+  box-sizing: border-box;
   border-bottom: 1px solid #aaaaaa;
 }
 
@@ -229,6 +253,7 @@ a:hover {
 
 .form .input-textarea {
   border: 1px solid #aaaaaa;
+  box-sizing: border-box;
   resize: vertical;
   min-height: 160px;
 }

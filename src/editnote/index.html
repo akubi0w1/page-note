@@ -33,49 +33,55 @@
     </div>
     <!-- END infomation -->
 
-    <div class="ml-10 mt-10">
-      <form class="form" id="edit-note">
-
-        <div class="form-item">
+    <form class="form ml-10 mt-10" id="edit-note">
+      <div class="form-item">
+        <div class="form-title">
           <label class="form-label">Label(required)</label>
-          <div style="display: flex; align-items: center;" class="mt-10">
-            <input id="label-color-red" type="radio" name="labelColor" value="red" checked class="input-radio" />
-            <label for="label-color-red" class="form-color-label" style="background-color: #ff389b;"></label>
-
-            <input id="label-color-purple" type="radio" name="labelColor" value="purple" class="input-radio" />
-            <label for="label-color-purple" class="form-color-label" style="background-color: #9b38ff;"></label>
-
-            <input id="label-color-blue" type="radio" name="labelColor" value="blue" class="input-radio" />
-            <label for="label-color-blue" class="form-color-label" style="background-color: #389bff;"></label>
-
-            <input id="label-color-green" type="radio" name="labelColor" value="green" class="input-radio" />
-            <label for="label-color-green" class="form-color-label" style="background-color: #00cc33;"></label>
-
-            <input id="label-color-orange" type="radio" name="labelColor" value="orange" class="input-radio" />
-            <label for="label-color-orange" class="form-color-label" style="background-color: #ff9b38;"></label>
-          </div>
         </div>
+        <div style="display: flex; align-items: center;" class="mt-10">
+          <input id="label-color-red" type="radio" name="labelColor" value="red" checked class="input-radio" />
+          <label for="label-color-red" class="form-color-label" style="background-color: #ff389b;"></label>
 
-        <div class="form-item">
+          <input id="label-color-purple" type="radio" name="labelColor" value="purple" class="input-radio" />
+          <label for="label-color-purple" class="form-color-label" style="background-color: #9b38ff;"></label>
+
+          <input id="label-color-blue" type="radio" name="labelColor" value="blue" class="input-radio" />
+          <label for="label-color-blue" class="form-color-label" style="background-color: #389bff;"></label>
+
+          <input id="label-color-green" type="radio" name="labelColor" value="green" class="input-radio" />
+          <label for="label-color-green" class="form-color-label" style="background-color: #00cc33;"></label>
+
+          <input id="label-color-orange" type="radio" name="labelColor" value="orange" class="input-radio" />
+          <label for="label-color-orange" class="form-color-label" style="background-color: #ff9b38;"></label>
+        </div>
+      </div>
+
+      <div class="form-item">
+        <div class="form-title">
           <label class="form-label">Summary(required)</label>
-          <input type="text" class="input-text" name="summary">
         </div>
+        <input type="text" class="input-text" name="summary">
+      </div>
 
-        <div class="form-item">
+      <div class="form-item">
+        <div class="form-title">
           <label class="form-label">Body</label>
-          <textarea name="body" class="input-textarea"></textarea>
+          <button id="summarization-btn" type="button" class="btn btn-sub-outline">summarization</button>
         </div>
+        <textarea name="body" class="input-textarea"></textarea>
+      </div>
 
-        <div class="form-item">
-          <label class="form-label">Tags(devide comma)</label>
-          <input type="text" class="input-text" name="tags">
+      <div class="form-item">
+        <div class="form-title">
+          <label class="form-label">Tags(devide space)</label>
         </div>
+        <input type="text" class="input-text" name="tags">
+      </div>
 
-        <div class="form-item">
-          <button class="btn btn-accent" id="edit-note-save">save</button>
-        </div>
-      </form>
-    </div>
+      <div class="form-item">
+        <button class="btn btn-accent" id="edit-note-save">save</button>
+      </div>
+    </form>
   </div>
   <!-- END container -->
   <div class="footer"></div>

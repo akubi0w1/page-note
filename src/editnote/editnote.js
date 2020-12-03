@@ -1,6 +1,7 @@
-import { LABEL_COLOR, MESSAGE_TYPE } from "../common/constant";
+import { LABEL_COLOR, MESSAGE_TYPE, DEFAULT_OPTION } from "../common/constant";
 import { validateNoteSummary, validateNoteBody, validateTag, validateLabel } from "../common/validation";
-import { chromeSendMessage } from "../common/utility";
+import { autoSummarization, calcLineNumberForSummarization, chromeSendMessage } from "../common/utility";
+import { restoreOption } from "../common/options";
 
 (function(){
   /**
@@ -117,6 +118,28 @@ import { chromeSendMessage } from "../common/utility";
     });
     return;
   }
+
+  /**
+   * summarizationのイベントを追加
+   */
+  document.getElementById("summarization-btn").addEventListener("click", function() {
+    const form = document.getElementById("edit-note");
+    clearNotify("notify");
+    restoreOption(
+      { summarizationSeparator: DEFAULT_OPTION.summarizationSeparator, summarizationPercentage: DEFAULT_OPTION.summarizationPercentage },
+      async function(result) {
+        try {
+          form.body.readOnly = true;
+          const lineNumber = calcLineNumberForSummarization(form.body.value, result.summarizationSeparator, result.summarizationPercentage);
+          const summarizedText = await autoSummarization(form.body.value, lineNumber, result.summarizationSeparator);
+          form.body.value = summarizedText;
+        } catch (err) {
+          document.getElementById("notify").appendChild(createNotifyBarElement([err.message], "error"));
+        }
+        form.body.readOnly = false;
+      }
+    );
+  });
 
   // get data request
   chromeSendMessage(MESSAGE_TYPE.GET_NOTE_BY_ID, { id });
