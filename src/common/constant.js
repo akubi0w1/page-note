@@ -63,7 +63,12 @@ export const DB_INFO = {
 export const ICON = {
   NOTE: "assets/icons/icon128.png",
   ADD_NOTE: "assets/icons/icon-plus.png",
-  EXIST_NOTE: "assets/icons/icon-clip.png"
+  CLIP_NOTE: "assets/icons/icon-clip.png",
+  CLIP_NOTE_RED: "assets/icons/icon-clip-red.png",
+  CLIP_NOTE_PURPLE: "assets/icons/icon-clip-purple.png",
+  CLIP_NOTE_GREEN: "assets/icons/icon-clip-green.png",
+  CLIP_NOTE_BLUE: "assets/icons/icon-clip-blue.png",
+  CLIP_NOTE_ORANGE: "assets/icons/icon-clip-orange.png"
 };
 
 /**
