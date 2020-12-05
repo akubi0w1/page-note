@@ -438,10 +438,28 @@ function markText(note) {
   // クイックアクセス用のアイコンを差し込む
   const rect = targetElem.getBoundingClientRect();
   let showIconElem = document.createElement("button");
+  let iconURL = ICON.CLIP_NOTE;
+  switch(note.label) {
+    case "red":
+      iconURL = ICON.CLIP_NOTE_RED;
+      break;
+    case "purple":
+      iconURL = ICON.CLIP_NOTE_PURPLE;
+      break;
+    case "blue":
+      iconURL = ICON.CLIP_NOTE_BLUE;
+      break;
+    case "green":
+      iconURL = ICON.CLIP_NOTE_GREEN;
+      break;
+    case "orange":
+      iconURL = ICON.CLIP_NOTE_ORANGE;
+      break;
+  }
   // TODO: この辺sassにつっこみたい
   showIconElem.style = `
     background-color: transparent;
-    background-image: url(${chrome.runtime.getURL(ICON.EXIST_NOTE)});
+    background-image: url(${chrome.runtime.getURL(iconURL)});
     margin-top: -16px;
     position: absolute;
     background-size: cover;
