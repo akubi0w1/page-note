@@ -458,8 +458,8 @@ function markText(note) {
 
     let quickView = createQuickView(note);
     quickView.style = `
-      top: ${rect.top}px;
-      left: ${rect.left}px;
+      top: ${evt.pageY}px;
+      left: ${evt.pageX}px;
       position: absolute;
     `;
 

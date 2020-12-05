@@ -87,7 +87,6 @@ import { restoreOption } from "../common/options";
               label: labelValue
             }
           );
-
           // notify success to send request
           clearNotify("notify");
           document.getElementById("notify").appendChild(createNotifyBarElement(["success: send request"], "success"));
