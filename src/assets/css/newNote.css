@@ -122,6 +122,10 @@
   list-style: none;
 }
 
+#_page-note-wrapper ._page-note-error-bar li {
+  word-break: break-all;
+}
+
 #_page-note-wrapper ._page-note-content-info {
   font-size: 13px;
   display: block;
