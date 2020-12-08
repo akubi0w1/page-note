@@ -22,6 +22,22 @@ import { getAllOptions, getOptionsByKey, restoreOption } from "../common/options
           }
         });
         break;
+      case MESSAGE_TYPE.AUTO_SUMMARIZATION_RESPONSE:
+        let bodyInput = document.getElementsByClassName("_page-note-content-form-input-textarea")[0];
+        if (msg.payload.status === "success") {
+          bodyInput.value = msg.payload.text;
+        } else {
+          let errorBarElem = createElement("div", "_page-note-error-bar");
+          errorBarElem.id = "_page-note-content-form-error-bar";
+          let ulElem = document.createElement("ul");
+          let liElem = document.createElement("li");
+          liElem.innerText = msg.payload.text;
+          ulElem.appendChild(liElem);
+          errorBarElem.appendChild(ulElem);
+          document.getElementById("errorList").appendChild(errorBarElem);
+        }
+        bodyInput.readOnly = false;
+        break;
     }
   });
 
@@ -324,7 +340,7 @@ function createContent() {
   let bodyLabel = createElement("label", "_page-note-content-form-input-label");
   bodyLabel.innerText = "body";
   let bodyControl = document.createElement("div");
-  let bodySummarizationBtn = createElement("button", "btn btn-sub-outline")
+  let bodySummarizationBtn = createElement("button", "btn btn-sub-outline");
   bodySummarizationBtn.id = "_page-note-btn-summarization";
   bodySummarizationBtn.innerText = "summarization";
   bodySummarizationBtn.type = "button";
@@ -332,25 +348,10 @@ function createContent() {
     clearErrorBar();
     restoreOption(
       { summarizationSeparator: DEFAULT_OPTION.summarizationSeparator, summarizationPercentage: DEFAULT_OPTION.summarizationPercentage },
-      async function(result) {
-        try {
-          bodyInput.readOnly = true;
-          const lineNumber = calcLineNumberForSummarization(bodyInput.value, result.summarizationSeparator, result.summarizationPercentage);
-          const summarizationText = await autoSummarization(bodyInput.value, lineNumber, result.summarizationSeparator);
-          // IDEA: もとに戻すボタンの実装...
-          bodyInput.value = summarizationText;
-        } catch (err) {
-          // IDEA: errorlistじゃなくて、別の場所or別のbarを作りたい。気もする
-          let errorBarElem = createElement("div", "_page-note-error-bar");
-          errorBarElem.id = "_page-note-content-form-error-bar";
-          let ulElem = document.createElement("ul");
-          let liElem = document.createElement("li");
-          liElem.innerText = err.message;
-          ulElem.appendChild(liElem);
-          errorBarElem.appendChild(ulElem);
-          document.getElementById("errorList").appendChild(errorBarElem);
-        }
-        bodyInput.readOnly = false;
+      function(result) {
+        bodyInput.readOnly = true;
+        const lineNumber = calcLineNumberForSummarization(bodyInput.value, result.summarizationSeparator, result.summarizationPercentage);
+        chromeSendMessage(MESSAGE_TYPE.AUTO_SUMMARIZATION, { text: bodyInput.value, lineNumber: lineNumber, separator: result.summarizationSeparator});
       }
     );
   });

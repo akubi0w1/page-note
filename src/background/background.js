@@ -1,6 +1,8 @@
 import Dexie from "dexie";
 import { MESSAGE_TYPE, DB_INFO } from "../common/constant";
+import { TEXT_SUMMARIZATION_API } from "../common/secret";
 import { chromeSendMessage, downloadFile } from "../common/utility";
+import PageNoteError from "../common/error";
 
 chrome.runtime.onInstalled.addListener(function () {
   // create contextMenu
@@ -97,6 +99,29 @@ chrome.runtime.onInstalled.addListener(function () {
         noteRepo.bulkInsert(msg.payload.notes);
         chromeSendMessage(MESSAGE_TYPE.GET_ALL_NOTE_RESPONSE, await noteRepo.getAll());
         break;
+      case MESSAGE_TYPE.AUTO_SUMMARIZATION:
+        const {text, lineNumber, separator} = msg.payload;
+        let summarizationResponse = {};
+        try {
+          const summariedText = await autoSummarization(text, lineNumber, separator);
+          // TODO: utilに書き出し
+          summarizationResponse = {
+            status: "success",
+            text: summariedText
+          }
+        } catch(err) {
+          summarizationResponse = {
+            status: "failure",
+            text: err.message
+          }
+        }
+        chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+          chrome.tabs.sendMessage(
+            tabs[0].id,
+            { type: MESSAGE_TYPE.AUTO_SUMMARIZATION_RESPONSE, payload: summarizationResponse }
+          );
+        });
+        break;
     }
   });
 
@@ -122,6 +147,9 @@ function createDB() {
   return conn;
 }
 
+/**
+ * Repository
+ */
 class NoteRepository {
   /**
    * 
@@ -218,3 +246,43 @@ class NoteRepository {
   }
 }
 
+/**
+ * 自動要約
+ * @param {String} text 
+ * @param {Number} lineNumber 
+ * @param {String} separator 
+ * @returns {String}
+ * @throws {PageNoteError}
+ */
+async function autoSummarization(text, lineNumber = 1, separator = "。") {
+  const sentences = text
+    .split(separator)
+    .filter(sentence => sentence !== "");
+  if (sentences.length < 2) {
+    throw new PageNoteError("only one sentence", "only one sentence. need more 2 sentences");
+  }
+  if (sentences.length > 10) {
+    throw new PageNoteError("too many sentences", "Too many sentences. Please reduce the number of sentences.");
+  }
+  if (sentences.some(sentence => sentence.length > 200)) {
+    throw new PageNoteError("too long sentence is exist", "Too long sentence is exist. Please under 200 characters per sentence.");
+  }
+
+  let formdata = new FormData();
+  formdata.append("apikey", TEXT_SUMMARIZATION_API.KEY);
+  formdata.append("sentences", text);
+  formdata.append("linenumber", lineNumber);
+  formdata.append("separator", separator);
+
+  const response = await fetch(TEXT_SUMMARIZATION_API.URL, {
+    method: TEXT_SUMMARIZATION_API.METHOD,
+    body: formdata
+  });
+
+  const resJson = await response.json();
+
+  if (resJson.status !== 0) {
+    throw new PageNoteError("failed to api call", "Summarization is failure.");
+  }
+  return resJson.summary.join("。");
+}

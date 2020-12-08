@@ -92,6 +92,15 @@ import { restoreOption } from "../common/options";
           document.getElementById("notify").appendChild(createNotifyBarElement(["success: send request"], "success"));
         };
         break;
+      case MESSAGE_TYPE.AUTO_SUMMARIZATION_RESPONSE:
+        const form = document.getElementById("edit-note");
+        if (msg.payload.status === "success") {
+          form.body.value = msg.payload.text;
+        } else {
+          document.getElementById("notify").appendChild(createNotifyBarElement([msg.payload.text], "error"));
+        }
+        form.body.readOnly = false;
+        break;
     }
   });
 
@@ -126,16 +135,10 @@ import { restoreOption } from "../common/options";
     clearNotify("notify");
     restoreOption(
       { summarizationSeparator: DEFAULT_OPTION.summarizationSeparator, summarizationPercentage: DEFAULT_OPTION.summarizationPercentage },
-      async function(result) {
-        try {
-          form.body.readOnly = true;
-          const lineNumber = calcLineNumberForSummarization(form.body.value, result.summarizationSeparator, result.summarizationPercentage);
-          const summarizedText = await autoSummarization(form.body.value, lineNumber, result.summarizationSeparator);
-          form.body.value = summarizedText;
-        } catch (err) {
-          document.getElementById("notify").appendChild(createNotifyBarElement([err.message], "error"));
-        }
-        form.body.readOnly = false;
+      function(result) {
+        form.body.readOnly = true;
+        const lineNumber = calcLineNumberForSummarization(form.body.value, result.summarizationSeparator, result.summarizationPercentage);
+        chromeSendMessage(MESSAGE_TYPE.AUTO_SUMMARIZATION, {text: form.body.value, lineNumber: lineNumber, separator: result.summarizationSeparator});
       }
     );
   });
