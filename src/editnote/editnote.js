@@ -1,7 +1,7 @@
 import { LABEL_COLOR, MESSAGE_TYPE, DEFAULT_OPTION } from "../common/constant";
 import { validateNoteSummary, validateNoteBody, validateTag, validateLabel } from "../common/validation";
 import { autoSummarization, calcLineNumberForSummarization, chromeSendMessage } from "../common/utility";
-import { restoreOption } from "../common/options";
+import { restoreOption } from "../options/options";
 
 (function(){
   /**

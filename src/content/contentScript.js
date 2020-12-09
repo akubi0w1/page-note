@@ -2,7 +2,7 @@ import { LABEL_COLOR, LABEL_COLOR_CODE, MESSAGE_TYPE, OPTION_KEY, ICON, DEFAULT_
 import { validateNoteSummary, validateNoteBody, validateTag, validateLabel } from "../common/validation";
 import { createIconElement, addDragAndDrop } from "../common/element";
 import { chromeSendMessage, getSelectorFromElement, getColorCodeForHighlight, getColorCodeForLabel, autoSummarization, calcLineNumberForSummarization } from "../common/utility";
-import { getAllOptions, getOptionsByKey, restoreOption } from "../common/options";
+import { getAllOptions, getOptionsByKey, restoreOption } from "../options/options";
 
 // pageNoteWrapper.addEventListener("mousedown", mouseDown, false);
 // 座標
