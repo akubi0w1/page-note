@@ -1,7 +1,7 @@
 import { LABEL_COLOR_CODE, MESSAGE_TYPE, OPTION_KEY } from "../common/constant";
 import { createIconElement } from "../common/element";
 import { chromeSendMessage, isHitToSearchNote, getColorCodeForLabel } from "../common/utility";
-import { saveOptions, getOptionsByKey, restoreOption } from "../common/options";
+import { saveOptions, getOptionsByKey, restoreOption } from "../options/options";
 
 /**
  * 初期処理

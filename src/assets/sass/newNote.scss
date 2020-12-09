@@ -127,6 +127,9 @@ $font-family: "Arial, Helvetica, sans-serif";
       padding: 5px 10px;
       list-style: none;
     }
+    li {
+      word-break: break-all;
+    }
   }
 }
 
