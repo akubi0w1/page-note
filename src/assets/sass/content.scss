@@ -44,6 +44,7 @@ $font-family: "Arial, Helvetica, sans-serif";
   border-top-right-radius: 0;
   border: 1px solid $accent-color;
   box-sizing: border-box;
+  box-shadow: rgba(0, 0, 0, 0.2) 0px 10px 10px 0px;
   &-header {
     display: flex;
     justify-content: space-between;
@@ -96,4 +97,5 @@ $font-family: "Arial, Helvetica, sans-serif";
   border: 1px solid $accent-color;
   box-sizing: border-box;
   border-left: 0;
+  box-shadow: rgba(0, 0, 0, 0.2) 0px 10px 10px 0px;
 }

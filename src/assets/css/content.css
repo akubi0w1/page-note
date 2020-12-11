@@ -32,6 +32,7 @@
   border-top-right-radius: 0;
   border: 1px solid #005271;
   box-sizing: border-box;
+  box-shadow: rgba(0, 0, 0, 0.2) 0px 10px 10px 0px;
 }
 
 #_page-note-quick-view ._page-note-quick-view-content-header {
@@ -94,4 +95,5 @@
   border: 1px solid #005271;
   box-sizing: border-box;
   border-left: 0;
+  box-shadow: rgba(0, 0, 0, 0.2) 0px 10px 10px 0px;
 }
