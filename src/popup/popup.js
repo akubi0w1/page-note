@@ -346,6 +346,10 @@ function addEventListenerToSettingTab() {
  */
 function restoreSetting() {
   restoreOption(OPTION_KEY.MARK_TEXT, function (result) {
+    if (typeof result.markText === "undefined") {
+      saveOptions({ markText: true });
+      return;
+    }
     let switchHighlightElem = document.getElementById("popup-setting-switch-highlight");
     let switchElem = switchHighlightElem.nextElementSibling;
     if (result.markText) {
@@ -358,6 +362,10 @@ function restoreSetting() {
   });
 
   restoreOption(OPTION_KEY.SUMMARIZATION_SEPARATOR, function (result) {
+    if (typeof result.summarizationSeparator === "undefined") {
+      saveOptions({ summarizationSeparator: "。" });
+      return;
+    }
     let selectSeparatorElem = document.getElementById("popup-setting-select-summarization-separator");
     for (let i = 0; i < selectSeparatorElem.childElementCount; i++) {
       if (selectSeparatorElem.children[i].value === result.summarizationSeparator) {
@@ -367,6 +375,10 @@ function restoreSetting() {
   });
   
   restoreOption(OPTION_KEY.SUMMAEIZATION_PERCENTAGE, function (result) {
+    if (typeof result.summarizationPercentage === "undefined") {
+      saveOptions({ summarizationPercentage: 0.1 });
+      return;
+    }
     let selectPercentageElem = document.getElementById("popup-setting-select-summarization-percentage");
     for (let i = 0; i < selectPercentageElem.childElementCount; i++) {
       if (selectPercentageElem.children[i].value === result.summarizationPercentage.toString()) {
