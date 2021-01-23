@@ -4,6 +4,8 @@
 
 ## how to install
 
+npmがインストールされている必要があります。[こちら](https://nodejs.org/en/)からインストールしてください。
+
 ```shell
 // リポジトリのクローン
 $ git clone https://github.com/akubi0w1/page-
