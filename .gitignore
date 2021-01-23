@@ -1,16 +1,17 @@
 .DS_Store
+.metals/
 
 # file
 *.bak
 
 # node
 node_modules
-package-lock.json
+# package-lock.json
 dist/
 
 # fontawesome
-webfonts
-all.min.css
+# webfonts
+# all.min.css
 
 # secret keys
 secret.js
